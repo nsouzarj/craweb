@@ -1,0 +1,79 @@
+<div class="request-list-container">
+  <div class="page-header">
+    <h1>Gerenciamento de Solicitações</h1>
+    <button mat-raised-button color="primary" routerLink="/solicitacoes/novo">
+      <mat-icon>add</mat-icon>
+      Nova Solicitação
+    </button>
+  </div>
+
+  <mat-card>
+    <mat-card-content>
+      <table mat-table [dataSource]="solicitacoes" *ngIf="!loading">
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef>ID</th>
+          <td mat-cell *matCellDef="let solicitacao">{{ solicitacao.id }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="complemento">
+          <th mat-header-cell *matHeaderCellDef>Descrição</th>
+          <td mat-cell *matCellDef="let solicitacao">{{ solicitacao.complemento || '-' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="tipoSolicitacao">
+          <th mat-header-cell *matHeaderCellDef>Tipo</th>
+          <td mat-cell *matCellDef="let solicitacao">
+            {{ solicitacao.tipoSolicitacao?.especie || '-' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="processo">
+          <th mat-header-cell *matHeaderCellDef>Processo</th>
+          <td mat-cell *matCellDef="let solicitacao">
+            {{ solicitacao.processo?.numeroprocesso || '-' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="correspondente">
+          <th mat-header-cell *matHeaderCellDef>Correspondente</th>
+          <td mat-cell *matCellDef="let solicitacao">
+            {{ solicitacao.correspondente?.nome || '-' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let solicitacao">
+            <mat-chip [ngClass]="getStatusClass(solicitacao.status)">
+              {{ solicitacao.status || 'Pendente' }}
+            </mat-chip>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Ações</th>
+          <td mat-cell *matCellDef="let solicitacao">
+            <button mat-icon-button [routerLink]="['/solicitacoes/visualizar', solicitacao.id]">
+              <mat-icon>visibility</mat-icon>
+            </button>
+            <button mat-icon-button [routerLink]="['/solicitacoes/editar', solicitacao.id]">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <div class="loading-container" *ngIf="loading">
+        <mat-spinner></mat-spinner>
+        <p>Carregando solicitações...</p>
+      </div>
+      
+      <div class="no-data" *ngIf="!loading && solicitacoes.length === 0">
+        <p>Nenhuma solicitação encontrada.</p>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

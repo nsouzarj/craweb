@@ -1,0 +1,90 @@
+<div class="profile-container">
+  <mat-card class="profile-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>person</mat-icon>
+        Meu Perfil
+      </mat-card-title>
+      <mat-card-subtitle>
+        Informações pessoais e configurações da conta
+      </mat-card-subtitle>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <div class="profile-content" *ngIf="currentUser && !loading; else loadingTemplate">
+        <div class="profile-section">
+          <h3>Informações Pessoais</h3>
+          <div class="info-grid">
+            <div class="info-item">
+              <label>Nome Completo</label>
+              <span>{{ currentUser.nomecompleto }}</span>
+            </div>
+            <div class="info-item">
+              <label>Login</label>
+              <span>{{ currentUser.login }}</span>
+            </div>
+            <div class="info-item">
+              <label>Email Principal</label>
+              <span>{{ currentUser.emailprincipal || 'Não informado' }}</span>
+            </div>
+            <div class="info-item">
+              <label>Tipo de Usuário</label>
+              <span class="user-type">{{ getUserRoleText() }}</span>
+            </div>
+            <div class="info-item">
+              <label>Status</label>
+              <span class="status" [class.active]="currentUser.ativo">
+                {{ currentUser.ativo ? 'Ativo' : 'Inativo' }}
+              </span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="profile-section">
+          <h3>Configurações</h3>
+          <div class="settings-grid">
+            <div class="setting-item">
+              <mat-icon>lock</mat-icon>
+              <div class="setting-content">
+                <h4>Alterar Senha</h4>
+                <p>Atualize sua senha de acesso</p>
+              </div>
+              <button mat-raised-button color="primary" disabled>
+                Alterar
+              </button>
+            </div>
+            
+            <div class="setting-item">
+              <mat-icon>notifications</mat-icon>
+              <div class="setting-content">
+                <h4>Notificações</h4>
+                <p>Configure suas preferências de notificação</p>
+              </div>
+              <button mat-raised-button color="primary" disabled>
+                Configurar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <ng-template #loadingTemplate>
+        <div class="loading-container">
+          <mat-spinner diameter="40"></mat-spinner>
+          <p>Carregando informações do perfil...</p>
+        </div>
+      </ng-template>
+    </mat-card-content>
+    
+    <mat-card-actions align="end">
+      <button mat-button (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+        Voltar
+      </button>
+      <button mat-raised-button color="warn" (click)="logout()">
+        <mat-icon>exit_to_app</mat-icon>
+        Sair
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

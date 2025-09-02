@@ -1,0 +1,98 @@
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.app-title {
+  font-size: 18px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.user-welcome {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+.user-info {
+  padding: 16px;
+  text-align: center;
+  background-color: #f5f5f5;
+  margin: -8px -8px 8px -8px;
+}
+
+.user-name {
+  font-weight: 500;
+  font-size: 16px;
+  color: #333;
+}
+
+.user-email {
+  font-size: 14px;
+  color: #666;
+  margin-top: 4px;
+}
+
+.user-role {
+  font-size: 12px;
+  color: #3f51b5;
+  margin-top: 4px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .user-welcome {
+    display: none;
+  }
+  
+  .app-title {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-content {
+    padding: 0 8px;
+  }
+  
+  .header-left {
+    gap: 8px;
+  }
+  
+  .app-title {
+    font-size: 14px;
+    max-width: 150px;
+  }
+  
+  .header-right {
+    gap: 8px;
+  }
+}

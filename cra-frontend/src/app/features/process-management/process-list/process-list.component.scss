@@ -1,0 +1,48 @@
+.process-list-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.processes-table {
+  width: 100%;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px;
+  gap: 20px;
+}
+
+.status-em-andamento { 
+  background-color: #2196f3 !important; 
+  color: white !important; 
+}
+
+.status-suspenso { 
+  background-color: #ff9800 !important; 
+  color: white !important; 
+}
+
+.status-arquivado { 
+  background-color: #9e9e9e !important; 
+  color: white !important; 
+}
+
+.status-finalizado { 
+  background-color: #4caf50 !important; 
+  color: white !important; 
+}

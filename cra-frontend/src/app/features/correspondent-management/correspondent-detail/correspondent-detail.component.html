@@ -1,0 +1,189 @@
+<div class="correspondent-detail-container" *ngIf="!loading">
+  <div class="page-header">
+    <button mat-icon-button (click)="goBack()" class="back-button">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <div class="header-content">
+      <h1>{{ correspondent?.nome }}</h1>
+      <div class="header-badges">
+        <mat-chip class="type-chip"  *ngIf="correspondent?.tipo">
+          <span style="color:white">{{ getFormattedType(correspondent?.tipo) }} </span> 
+        </mat-chip>
+        <mat-chip [class]="correspondent?.ativo ? 'status-active' : 'status-inactive'">
+          {{ correspondent?.ativo ? 'Ativo' : 'Inativo' }}
+        </mat-chip>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button mat-raised-button color="primary" (click)="editCorrespondent()">
+        <mat-icon>edit</mat-icon>
+        Editar
+      </button>
+    </div>
+  </div>
+
+  <div class="content-grid">
+    <!-- Basic Information -->
+    <mat-card class="info-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>person</mat-icon>
+          Informações Básicas
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="info-grid">
+          <div class="info-item">
+            <label>ID</label>
+            <span>{{ correspondent?.id }}</span>
+          </div>
+          <div class="info-item">
+            <label>Nome</label>
+            <span>{{ correspondent?.nome }}</span>
+          </div>
+          <div class="info-item">
+            <label>Tipo</label>
+            <span>{{ getFormattedType(correspondent?.tipo) }}</span>
+          </div>
+          <div class="info-item">
+            <label>CPF/CNPJ</label>
+            <span>{{ correspondent?.cpfcnpj || 'Não informado' }}</span>
+          </div>
+          <div class="info-item">
+            <label>OAB</label>
+            <span>{{ correspondent?.oab || 'Não informado' }}</span>
+          </div>
+          <div class="info-item">
+            <label>Status</label>
+            <span class="status" [class.active]="correspondent?.ativo">
+              {{ correspondent?.ativo ? 'Ativo' : 'Inativo' }}
+            </span>
+          </div>
+          <div class="info-item">
+            <label>Data de Cadastro</label>
+            <span>{{ correspondent?.datacadastro ? (correspondent?.datacadastro | date:'dd/MM/yyyy HH:mm') : 'Não informado' }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Contact Information -->
+    <mat-card class="info-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>contact_phone</mat-icon>
+          Informações de Contato
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="info-grid">
+          <div class="info-item">
+            <label>Email Principal</label>
+            <span>{{ correspondent?.emailprimario || 'Não informado' }}</span>
+          </div>
+          <div class="info-item">
+            <label>Email Secundário</label>
+            <span>{{ correspondent?.emailsecundario || 'Não informado' }}</span>
+          </div>
+          <div class="info-item">
+            <label>Telefone</label>
+            <span>{{ correspondent?.telefoneprimario || 'Não informado' }}</span>
+          </div>
+          <div class="info-item">
+            <label>Celular</label>
+            <span>{{ correspondent?.telefonecelularprimario || 'Não informado' }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Address Information -->
+    <mat-card class="info-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>location_on</mat-icon>
+          Endereço
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="info-grid">
+          <div class="info-item">
+            <label>Logradouro</label>
+            <span>{{ correspondent?.endereco?.logradouro || 'Não informado' }}</span>
+          </div>
+          <div class="info-item">
+            <label>Número</label>
+            <span>{{ correspondent?.endereco?.numero || 'S/N' }}</span>
+          </div>
+          <div class="info-item">
+            <label>Complemento</label>
+            <span>{{ correspondent?.endereco?.complemento || 'Não informado' }}</span>
+          </div>
+          <div class="info-item">
+            <label>Bairro</label>
+            <span>{{ correspondent?.endereco?.bairro || 'Não informado' }}</span>
+          </div>
+          <div class="info-item">
+            <label>Cidade</label>
+            <span>{{ correspondent?.endereco?.cidade || 'Não informado' }}</span>
+          </div>
+          <div class="info-item">
+            <label>UF</label>
+            <span>{{ correspondent?.endereco?.uf?.sigla || 'Não informado' }}</span>
+          </div>
+          <div class="info-item">
+            <label>CEP</label>
+            <span>{{ correspondent?.endereco?.cep || 'Não informado' }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Additional Information -->
+    <mat-card class="info-card full-width" *ngIf="correspondent?.observacoes">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>notes</mat-icon>
+          Observações
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p class="observations">{{ correspondent?.observacoes }}</p>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Actions -->
+    <mat-card class="info-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>settings</mat-icon>
+          Ações
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="actions-list">
+          <button mat-stroked-button (click)="toggleCorrespondentStatus()">
+            <mat-icon>{{ correspondent?.ativo ? 'block' : 'check_circle' }}</mat-icon>
+            {{ correspondent?.ativo ? 'Desativar Correspondente' : 'Ativar Correspondente' }}
+          </button>
+
+          <button mat-stroked-button (click)="duplicateCorrespondent()" color="accent">
+            <mat-icon>content_copy</mat-icon>
+            Duplicar Correspondente
+          </button>
+
+          <button mat-stroked-button (click)="deleteCorrespondent()" color="warn">
+            <mat-icon>delete</mat-icon>
+            Excluir Correspondente
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+
+<!-- Loading State -->
+<div class="loading-container" *ngIf="loading">
+  <mat-spinner></mat-spinner>
+  <p>Carregando informações do correspondente...</p>
+</div>

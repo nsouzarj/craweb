@@ -1,0 +1,160 @@
+package br.adv.cra.service;
+
+import br.adv.cra.entity.Comarca;
+import br.adv.cra.entity.Correspondente;
+import br.adv.cra.entity.Processo;
+import br.adv.cra.entity.Solicitacao;
+import br.adv.cra.entity.Usuario;
+import br.adv.cra.repository.SolicitacaoRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+@RequiredArgsConstructor
+@Transactional
+public class SolicitacaoService {
+    
+    private final SolicitacaoRepository solicitacaoRepository;
+    
+    public Solicitacao salvar(Solicitacao solicitacao) {
+        if (solicitacao.getDatasolictacao() == null) {
+            solicitacao.setDatasolictacao(LocalDateTime.now());
+        }
+        return solicitacaoRepository.save(solicitacao);
+    }
+    
+    public Solicitacao atualizar(Solicitacao solicitacao) {
+        if (!solicitacaoRepository.existsById(solicitacao.getId())) {
+            throw new RuntimeException("Solicitação não encontrada");
+        }
+        // Ensure the datasolictacao is not null
+        if (solicitacao.getDatasolictacao() == null) {
+            solicitacao.setDatasolictacao(LocalDateTime.now());
+        }
+        return solicitacaoRepository.save(solicitacao);
+    }
+    
+    public Solicitacao concluir(Long id, String observacaoConclusao) {
+        Solicitacao solicitacao = buscarPorId(id)
+                .orElseThrow(() -> new RuntimeException("Solicitação não encontrada"));
+        
+        solicitacao.setDataconclusao(LocalDateTime.now());
+        if (observacaoConclusao != null && !observacaoConclusao.trim().isEmpty()) {
+            String observacaoAtual = solicitacao.getObservacao() != null ? solicitacao.getObservacao() : "";
+            solicitacao.setObservacao(observacaoAtual + "\n\nConclusão: " + observacaoConclusao);
+        }
+        
+        return solicitacaoRepository.save(solicitacao);
+    }
+    
+    public void deletar(Long id) {
+        if (!solicitacaoRepository.existsById(id)) {
+            throw new RuntimeException("Solicitação não encontrada");
+        }
+        solicitacaoRepository.deleteById(id);
+    }
+    
+    @Transactional(readOnly = true)
+    public Optional<Solicitacao> buscarPorId(Long id) {
+        return solicitacaoRepository.findById(id);
+    }
+    
+    @Transactional(readOnly = true)
+    public List<Solicitacao> listarTodas() {
+        return solicitacaoRepository.findAll();
+    }
+    
+    @Transactional(readOnly = true)
+    public List<Solicitacao> buscarPorUsuario(Usuario usuario) {
+        return solicitacaoRepository.findByUsuario(usuario);
+    }
+    
+    @Transactional(readOnly = true)
+    public List<Solicitacao> buscarPorProcesso(Processo processo) {
+        return solicitacaoRepository.findByProcesso(processo);
+    }
+    
+    @Transactional(readOnly = true)
+    public List<Solicitacao> buscarPorComarca(Comarca comarca) {
+        return solicitacaoRepository.findByComarca(comarca);
+    }
+    
+    @Transactional(readOnly = true)
+    public List<Solicitacao> buscarPorCorrespondente(Correspondente correspondente) {
+        return solicitacaoRepository.findByCorrespondente(correspondente);
+    }
+    
+    @Transactional(readOnly = true)
+    public List<Solicitacao> buscarPorPeriodo(LocalDateTime inicio, LocalDateTime fim) {
+        return solicitacaoRepository.findByDatasolictacaoBetween(inicio, fim);
+    }
+    
+    @Transactional(readOnly = true)
+    public List<Solicitacao> listarPendentes() {
+        return solicitacaoRepository.findPendentes();
+    }
+    
+    @Transactional(readOnly = true)
+    public List<Solicitacao> listarConcluidas() {
+        return solicitacaoRepository.findConcluidas();
+    }
+    
+    @Transactional(readOnly = true)
+    public List<Solicitacao> listarPagas() {
+        return solicitacaoRepository.findByPagoTrue();
+    }
+    
+    @Transactional(readOnly = true)
+    public List<Solicitacao> listarNaoPagas() {
+        return solicitacaoRepository.findByPagoFalse();
+    }
+    
+    @Transactional(readOnly = true)
+    public List<Solicitacao> listarAtrasadas() {
+        return solicitacaoRepository.findAtrasadas(LocalDateTime.now());
+    }
+    
+    @Transactional(readOnly = true)
+    public List<Solicitacao> buscarPorTexto(String texto) {
+        return solicitacaoRepository.findByTextoContaining(texto);
+    }
+    
+    @Transactional(readOnly = true)
+    public List<Solicitacao> buscarPorGrupo(Integer grupo) {
+        return solicitacaoRepository.findByGrupo(grupo);
+    }
+    
+    @Transactional(readOnly = true)
+    public List<Solicitacao> buscarPorStatusExterno(String statusexterno) {
+        return solicitacaoRepository.findByStatusexterno(statusexterno);
+    }
+    
+    @Transactional(readOnly = true)
+    public Long contarPorUsuario(Usuario usuario) {
+        return solicitacaoRepository.countByUsuario(usuario);
+    }
+    
+    @Transactional(readOnly = true)
+    public Long contarPendentes() {
+        return solicitacaoRepository.countPendentes();
+    }
+    
+    public Solicitacao marcarComoPago(Long id) {
+        Solicitacao solicitacao = buscarPorId(id)
+                .orElseThrow(() -> new RuntimeException("Solicitação não encontrada"));
+        solicitacao.setPago("true");
+        return solicitacaoRepository.save(solicitacao);
+    }
+    
+    public Solicitacao marcarComoNaoPago(Long id) {
+        Solicitacao solicitacao = buscarPorId(id)
+                .orElseThrow(() -> new RuntimeException("Solicitação não encontrada"));
+        solicitacao.setPago("false");
+        return solicitacaoRepository.save(solicitacao);
+    }
+}
