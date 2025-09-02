@@ -26,22 +26,36 @@ public class DatabaseLoader {
     public void loadData() {
         log.info("Loading initial data...");
         
-        // Check if we already have data
-        if (orgaoRepository.count() == 0) {
-            log.info("No orgaos found, loading initial data...");
+        // Check if we already have the specific orgaos by description to avoid duplicates
+        List<String> orgaoDescriptions = Arrays.asList(
+            "Tribunal de Justiça",
+            "Tribunal Regional Federal",
+            "Superior Tribunal de Justiça",
+            "Tribunal Superior do Trabalho",
+            "Tribunal Regional do Trabalho"
+        );
+        
+        // Check if any of the required orgaos are missing
+        boolean allOrgaosExist = orgaoDescriptions.stream()
+            .allMatch(desc -> !orgaoRepository.findByDescricaoContaining(desc).isEmpty());
+        
+        if (!allOrgaosExist) {
+            log.info("Some orgaos are missing, checking which ones to load...");
             
-            List<Orgao> orgaos = Arrays.asList(
-                new Orgao(null, "Tribunal de Justiça"),
-                new Orgao(null, "Tribunal Regional Federal"),
-                new Orgao(null, "Superior Tribunal de Justiça"),
-                new Orgao(null, "Tribunal Superior do Trabalho"),
-                new Orgao(null, "Tribunal Regional do Trabalho")
-            );
+            // Only create orgaos that don't already exist
+            List<Orgao> orgaosToCreate = orgaoDescriptions.stream()
+                .filter(desc -> orgaoRepository.findByDescricaoContaining(desc).isEmpty())
+                .map(desc -> new Orgao(null, desc))
+                .toList();
             
-            orgaoRepository.saveAll(orgaos);
-            log.info("Loaded {} orgaos", orgaos.size());
+            if (!orgaosToCreate.isEmpty()) {
+                List<Orgao> savedOrgaos = orgaoRepository.saveAll(orgaosToCreate);
+                log.info("Loaded {} new orgaos", savedOrgaos.size());
+            } else {
+                log.info("All required orgaos already exist, no new data loaded.");
+            }
         } else {
-            log.info("Orgaos already exist, skipping data load. Total count: {}", orgaoRepository.count());
+            log.info("All required orgaos already exist, skipping data load. Total count: {}", orgaoRepository.count());
         }
     }
 }

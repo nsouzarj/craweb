@@ -4,6 +4,8 @@ import br.adv.cra.entity.Comarca;
 import br.adv.cra.entity.Orgao;
 import br.adv.cra.entity.Processo;
 import br.adv.cra.repository.ProcessoRepository;
+import br.adv.cra.repository.OrgaoRepository;
+import br.adv.cra.dto.ProcessoDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,16 +19,108 @@ import java.util.Optional;
 public class ProcessoService {
     
     private final ProcessoRepository processoRepository;
+    private final OrgaoRepository orgaoRepository;
     
     public Processo salvar(Processo processo) {
-        return processoRepository.save(processo);
+        // Sempre desassocia o órgão do processo antes de salvar para evitar criação acidental
+        Orgao orgao = processo.getOrgao();
+        processo.setOrgao(null);
+        
+        // Salva o processo primeiro sem o órgão
+        Processo savedProcesso = processoRepository.save(processo);
+        
+        // Agora associa o órgão existente, se fornecido
+        if (orgao != null && orgao.getId() != null) {
+            // Verifica se o órgão existe
+            Optional<Orgao> orgaoExistente = orgaoRepository.findById(orgao.getId());
+            if (orgaoExistente.isPresent()) {
+                // Associa o órgão existente ao processo salvo
+                savedProcesso.setOrgao(orgaoExistente.get());
+                // Atualiza o processo com a associação ao órgão
+                savedProcesso = processoRepository.save(savedProcesso);
+            } else {
+                throw new RuntimeException("Órgão com ID " + orgao.getId() + " não encontrado");
+            }
+        } else if (orgao != null && orgao.getDescricao() != null) {
+            // Se foi fornecido um órgão com descrição mas sem ID, tenta encontrar pelo nome
+            List<Orgao> orgaos = orgaoRepository.findByDescricaoContaining(orgao.getDescricao());
+            if (!orgaos.isEmpty()) {
+                // Usa o primeiro órgão encontrado
+                savedProcesso.setOrgao(orgaos.get(0));
+                // Atualiza o processo com a associação ao órgão
+                savedProcesso = processoRepository.save(savedProcesso);
+            } else {
+                throw new RuntimeException("Órgão com descrição '" + orgao.getDescricao() + "' não encontrado");
+            }
+        }
+        
+        return savedProcesso;
+    }
+    
+    public Processo salvarComDTO(ProcessoDTO processoDTO) {
+        Processo processo = new Processo();
+        processo.setId(processoDTO.getId());
+        processo.setNumeroprocesso(processoDTO.getNumeroprocesso());
+        processo.setNumeroprocessopesq(processoDTO.getNumeroprocessopesq());
+        processo.setParte(processoDTO.getParte());
+        processo.setAdverso(processoDTO.getAdverso());
+        processo.setPosicao(processoDTO.getPosicao());
+        processo.setStatus(processoDTO.getStatus());
+        processo.setCartorio(processoDTO.getCartorio());
+        processo.setAssunto(processoDTO.getAssunto());
+        processo.setLocalizacao(processoDTO.getLocalizacao());
+        processo.setNumerointegracao(processoDTO.getNumerointegracao());
+        processo.setNumorgao(processoDTO.getNumorgao());
+        processo.setProceletronico(processoDTO.getProceletronico());
+        processo.setQuantsoli(processoDTO.getQuantsoli());
+        processo.setDatadistribuicao(processoDTO.getDatadistribuicao());
+        processo.setObservacao(processoDTO.getObservacao());
+        
+        // Salva o processo primeiro sem o órgão
+        Processo savedProcesso = processoRepository.save(processo);
+        
+        // Agora associa o órgão existente, se fornecido
+        if (processoDTO.getOrgaoId() != null) {
+            Optional<Orgao> orgaoExistente = orgaoRepository.findById(processoDTO.getOrgaoId());
+            if (orgaoExistente.isPresent()) {
+                savedProcesso.setOrgao(orgaoExistente.get());
+                // Atualiza o processo com a associação ao órgão
+                savedProcesso = processoRepository.save(savedProcesso);
+            } else {
+                throw new RuntimeException("Órgão com ID " + processoDTO.getOrgaoId() + " não encontrado");
+            }
+        }
+        
+        return savedProcesso;
     }
     
     public Processo atualizar(Processo processo) {
         if (!processoRepository.existsById(processo.getId())) {
             throw new RuntimeException("Processo não encontrado");
         }
-        return processoRepository.save(processo);
+        
+        // Para atualização, também precisamos garantir que não criamos órgãos acidentalmente
+        Orgao orgao = processo.getOrgao();
+        processo.setOrgao(null);
+        
+        // Atualiza o processo primeiro sem o órgão
+        Processo updatedProcesso = processoRepository.save(processo);
+        
+        // Agora associa o órgão existente, se fornecido
+        if (orgao != null && orgao.getId() != null) {
+            // Verifica se o órgão existe
+            Optional<Orgao> orgaoExistente = orgaoRepository.findById(orgao.getId());
+            if (orgaoExistente.isPresent()) {
+                // Associa o órgão existente ao processo atualizado
+                updatedProcesso.setOrgao(orgaoExistente.get());
+                // Atualiza o processo com a associação ao órgão
+                updatedProcesso = processoRepository.save(updatedProcesso);
+            } else {
+                throw new RuntimeException("Órgão com ID " + orgao.getId() + " não encontrado");
+            }
+        }
+        
+        return updatedProcesso;
     }
     
     public void deletar(Long id) {

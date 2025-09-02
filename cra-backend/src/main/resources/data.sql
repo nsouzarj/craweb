@@ -3,11 +3,11 @@
 -- ===================================================================
 
 -- Órgãos data
-INSERT INTO orgao (descricao) VALUES ('Tribunal de Justiça');
-INSERT INTO orgao (descricao) VALUES ('Tribunal Regional Federal');
-INSERT INTO orgao (descricao) VALUES ('Superior Tribunal de Justiça');
-INSERT INTO orgao (descricao) VALUES ('Tribunal Superior do Trabalho');
-INSERT INTO orgao (descricao) VALUES ('Tribunal Regional do Trabalho');
+INSERT INTO orgao (descricao) VALUES ('Tribunal de Justiça') ON CONFLICT DO NOTHING;
+INSERT INTO orgao (descricao) VALUES ('Tribunal Regional Federal') ON CONFLICT DO NOTHING;
+INSERT INTO orgao (descricao) VALUES ('Superior Tribunal de Justiça') ON CONFLICT DO NOTHING;
+INSERT INTO orgao (descricao) VALUES ('Tribunal Superior do Trabalho') ON CONFLICT DO NOTHING;
+INSERT INTO orgao (descricao) VALUES ('Tribunal Regional do Trabalho') ON CONFLICT DO NOTHING;
 
 -- Tipo de Solicitação data
 INSERT INTO tiposolicitacao (idtiposolicitacao, especie, descricao, tipo, visualizar) VALUES 
