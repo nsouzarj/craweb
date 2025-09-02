@@ -98,6 +98,154 @@
   color: #666;
 }
 
+/* Charts Section */
+.charts-section {
+  margin-bottom: 40px;
+}
+
+.charts-section h2 {
+  margin: 0 0 20px 0;
+  color: #333;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 20px;
+}
+
+.chart-card {
+  padding: 20px;
+}
+
+.chart-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+}
+
+/* Bar Chart */
+.bar-chart {
+  width: 100%;
+  height: 250px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  padding: 20px 10px;
+  border-bottom: 1px solid #eee;
+  border-left: 1px solid #eee;
+  position: relative;
+}
+
+.chart-bars {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  width: 100%;
+  height: 100%;
+  gap: 20px;
+}
+
+.bar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  max-width: 80px;
+}
+
+.bar {
+  width: 100%;
+  min-height: 5px;
+  border-radius: 4px 4px 0 0;
+  transition: height 0.5s ease;
+}
+
+.bar-label {
+  margin-top: 10px;
+  font-size: 12px;
+  text-align: center;
+  color: #666;
+}
+
+.bar-value {
+  margin-top: 5px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Pie Chart */
+.pie-chart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.pie-chart-container {
+  position: relative;
+  width: 200px;
+  height: 200px;
+}
+
+.pie-svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.pie-segment {
+  transition: stroke-dasharray 0.5s ease;
+}
+
+.pie-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.pie-total {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+}
+
+.pie-label {
+  font-size: 14px;
+  color: #666;
+}
+
+.pie-legend {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.legend-color {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+}
+
+.legend-label {
+  font-size: 14px;
+  color: #333;
+}
+
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -173,5 +321,13 @@
   
   .actions-grid {
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+  
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .chart-card {
+    padding: 15px;
   }
 }

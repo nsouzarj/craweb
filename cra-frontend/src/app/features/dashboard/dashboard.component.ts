@@ -22,6 +22,12 @@ interface DashboardStats {
   solicitacoesPendentes: number;
 }
 
+interface ChartData {
+  labels: string[];
+  values: number[];
+  colors: string[];
+}
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -39,6 +45,19 @@ export class DashboardComponent implements OnInit {
     processosEmAndamento: 0,
     totalSolicitacoes: 0,
     solicitacoesPendentes: 0
+  };
+
+  // Chart data
+  entityTypeChart: ChartData = {
+    labels: ['Usuários', 'Correspondentes', 'Processos', 'Solicitações'],
+    values: [0, 0, 0, 0],
+    colors: ['#667eea', '#f093fb', '#4facfe', '#43e97b']
+  };
+
+  entityStatusChart: ChartData = {
+    labels: ['Ativos', 'Inativos', 'Em Andamento', 'Pendentes'],
+    values: [0, 0, 0, 0],
+    colors: ['#43e97b', '#f5576c', '#4facfe', '#ffcc00']
   };
 
   constructor(
@@ -109,6 +128,9 @@ export class DashboardComponent implements OnInit {
           solicitacoesPendentes: solicitacoesPendentes.length
         };
 
+        // Update chart data
+        this.updateChartData();
+
         this.loading = false;
       },
       error: (error) => {
@@ -116,5 +138,55 @@ export class DashboardComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  private updateChartData(): void {
+    // Update entity type chart
+    this.entityTypeChart.values = [
+      this.stats.totalUsers,
+      this.stats.totalCorrespondentes,
+      this.stats.totalProcessos,
+      this.stats.totalSolicitacoes
+    ];
+
+    // Update entity status chart
+    this.entityStatusChart.values = [
+      this.stats.activeUsers + this.stats.activeCorrespondentes,
+      (this.stats.totalUsers - this.stats.activeUsers) + (this.stats.totalCorrespondentes - this.stats.activeCorrespondentes),
+      this.stats.processosEmAndamento,
+      this.stats.solicitacoesPendentes
+    ];
+  }
+
+  // Chart helper methods
+  getBarHeight(value: number, maxValue: number): string {
+    if (maxValue === 0) return '0%';
+    return `${(value / maxValue) * 100}%`;
+  }
+
+  getMaxValue(values: number[]): number {
+    return Math.max(...values, 1); // Return at least 1 to avoid division by zero
+  }
+
+  getPieStrokeDasharray(value: number, values: number[]): string {
+    const total = values.reduce((sum, val) => sum + val, 0);
+    if (total === 0) return '0, 100';
+    const percentage = (value / total) * 100;
+    return `${percentage}, 100`;
+  }
+
+  getPieStrokeDashoffset(index: number, values: number[]): string {
+    let offset = 0;
+    for (let i = 0; i < index; i++) {
+      const total = values.reduce((sum, val) => sum + val, 0);
+      if (total === 0) return '0';
+      offset += (values[i] / total) * 100;
+    }
+    return `-${offset}`;
+  }
+
+  getTotalEntities(): number {
+    return this.stats.totalUsers + this.stats.totalCorrespondentes + 
+           this.stats.totalProcessos + this.stats.totalSolicitacoes;
   }
 }
