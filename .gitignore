@@ -5,6 +5,7 @@ node_modules/
 cra-frontend/build/
 cra-frontend/dist/
 cra-frontend/node_modules
+cra-frontend/.angular
 cra-backend/.vscode
 cra-frontend/.vscode
 cra-backend/logs
