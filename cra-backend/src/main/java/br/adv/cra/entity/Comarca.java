@@ -28,7 +28,7 @@ public class Comarca implements Serializable {
     @Column(name = "nome", nullable = false)
     private String nome;
     
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {})
     @JoinColumn(name = "uf_id", nullable = false)
     private Uf uf;
 }

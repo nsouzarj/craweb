@@ -86,6 +86,8 @@ public class ProcessoController {
             processo.setId(id);
             Processo processoAtualizado = processoService.atualizar(processo);
             return ResponseEntity.ok(processoAtualizado);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao atualizar processo: " + e.getMessage());
         }

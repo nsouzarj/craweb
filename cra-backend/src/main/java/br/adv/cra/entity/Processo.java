@@ -43,10 +43,12 @@ public class Processo implements Serializable {
     
     private String numerointegracao;
     
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {})
+    @JoinColumn(name = "comarca_idcomarca")
     private Comarca comarca;
     
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {})
+    @JoinColumn(name = "orgao_idorgao")
     private Orgao orgao;
     
     private Integer numorgao;
