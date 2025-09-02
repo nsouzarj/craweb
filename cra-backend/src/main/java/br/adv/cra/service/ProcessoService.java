@@ -21,6 +21,31 @@ public class ProcessoService {
     private final ProcessoRepository processoRepository;
     private final OrgaoRepository orgaoRepository;
     
+    /**
+     * Obtém um órgão existente pelo ID
+     * @param orgaoId ID do órgão
+     * @return Optional com o órgão encontrado
+     */
+    private Optional<Orgao> getOrgaoExistente(Long orgaoId) {
+        if (orgaoId == null) {
+            return Optional.empty();
+        }
+        return orgaoRepository.findById(orgaoId);
+    }
+    
+    /**
+     * Obtém um órgão existente pela descrição
+     * @param descricao Descrição do órgão
+     * @return Optional com o órgão encontrado
+     */
+    private Optional<Orgao> getOrgaoExistentePorDescricao(String descricao) {
+        if (descricao == null || descricao.isEmpty()) {
+            return Optional.empty();
+        }
+        List<Orgao> orgaos = orgaoRepository.findByDescricaoContaining(descricao);
+        return orgaos.isEmpty() ? Optional.empty() : Optional.of(orgaos.get(0));
+    }
+    
     public Processo salvar(Processo processo) {
         // Sempre desassocia o órgão do processo antes de salvar para evitar criação acidental
         Orgao orgao = processo.getOrgao();
@@ -32,7 +57,7 @@ public class ProcessoService {
         // Agora associa o órgão existente, se fornecido
         if (orgao != null && orgao.getId() != null) {
             // Verifica se o órgão existe
-            Optional<Orgao> orgaoExistente = orgaoRepository.findById(orgao.getId());
+            Optional<Orgao> orgaoExistente = getOrgaoExistente(orgao.getId());
             if (orgaoExistente.isPresent()) {
                 // Associa o órgão existente ao processo salvo
                 savedProcesso.setOrgao(orgaoExistente.get());
@@ -43,10 +68,10 @@ public class ProcessoService {
             }
         } else if (orgao != null && orgao.getDescricao() != null) {
             // Se foi fornecido um órgão com descrição mas sem ID, tenta encontrar pelo nome
-            List<Orgao> orgaos = orgaoRepository.findByDescricaoContaining(orgao.getDescricao());
-            if (!orgaos.isEmpty()) {
-                // Usa o primeiro órgão encontrado
-                savedProcesso.setOrgao(orgaos.get(0));
+            Optional<Orgao> orgaoExistente = getOrgaoExistentePorDescricao(orgao.getDescricao());
+            if (orgaoExistente.isPresent()) {
+                // Usa o órgão encontrado
+                savedProcesso.setOrgao(orgaoExistente.get());
                 // Atualiza o processo com a associação ao órgão
                 savedProcesso = processoRepository.save(savedProcesso);
             } else {
@@ -81,7 +106,7 @@ public class ProcessoService {
         
         // Agora associa o órgão existente, se fornecido
         if (processoDTO.getOrgaoId() != null) {
-            Optional<Orgao> orgaoExistente = orgaoRepository.findById(processoDTO.getOrgaoId());
+            Optional<Orgao> orgaoExistente = getOrgaoExistente(processoDTO.getOrgaoId());
             if (orgaoExistente.isPresent()) {
                 savedProcesso.setOrgao(orgaoExistente.get());
                 // Atualiza o processo com a associação ao órgão
@@ -109,7 +134,7 @@ public class ProcessoService {
         // Agora associa o órgão existente, se fornecido
         if (orgao != null && orgao.getId() != null) {
             // Verifica se o órgão existe
-            Optional<Orgao> orgaoExistente = orgaoRepository.findById(orgao.getId());
+            Optional<Orgao> orgaoExistente = getOrgaoExistente(orgao.getId());
             if (orgaoExistente.isPresent()) {
                 // Associa o órgão existente ao processo atualizado
                 updatedProcesso.setOrgao(orgaoExistente.get());
