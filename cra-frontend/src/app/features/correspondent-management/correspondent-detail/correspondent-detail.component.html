@@ -1,25 +1,23 @@
 <div class="correspondent-detail-container" *ngIf="!loading">
   <div class="page-header">
-    <button mat-icon-button (click)="goBack()" class="back-button">
+    <button mat-icon-button (click)="goBack()">
       <mat-icon>arrow_back</mat-icon>
     </button>
     <div class="header-content">
       <h1>{{ correspondent?.nome }}</h1>
       <div class="header-badges">
-        <mat-chip class="type-chip"  *ngIf="correspondent?.tipo">
-          <span style="color:white">{{ getFormattedType(correspondent?.tipo) }} </span> 
+        <mat-chip class="type-chip" *ngIf="correspondent?.tipo">
+          {{ getFormattedType(correspondent?.tipo) }}
         </mat-chip>
         <mat-chip [class]="correspondent?.ativo ? 'status-active' : 'status-inactive'">
           {{ correspondent?.ativo ? 'Ativo' : 'Inativo' }}
         </mat-chip>
       </div>
     </div>
-    <div class="header-actions">
-      <button mat-raised-button color="primary" (click)="editCorrespondent()">
-        <mat-icon>edit</mat-icon>
-        Editar
-      </button>
-    </div>
+    <button mat-raised-button color="primary" (click)="editCorrespondent()">
+      <mat-icon>edit</mat-icon>
+      Editar
+    </button>
   </div>
 
   <div class="content-grid">
@@ -32,36 +30,36 @@
         </mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <div class="info-grid">
+        <div class="info-list">
           <div class="info-item">
-            <label>ID</label>
-            <span>{{ correspondent?.id }}</span>
+            <span class="info-label">ID:</span>
+            <span class="info-value">{{ correspondent?.id }}</span>
           </div>
           <div class="info-item">
-            <label>Nome</label>
-            <span>{{ correspondent?.nome }}</span>
+            <span class="info-label">Nome:</span>
+            <span class="info-value">{{ correspondent?.nome }}</span>
           </div>
           <div class="info-item">
-            <label>Tipo</label>
-            <span>{{ getFormattedType(correspondent?.tipo) }}</span>
+            <span class="info-label">Tipo:</span>
+            <span class="info-value">{{ getFormattedType(correspondent?.tipo) }}</span>
           </div>
           <div class="info-item">
-            <label>CPF/CNPJ</label>
-            <span>{{ correspondent?.cpfcnpj || 'Não informado' }}</span>
+            <span class="info-label">CPF/CNPJ:</span>
+            <span class="info-value">{{ correspondent?.cpfcnpj || 'Não informado' }}</span>
           </div>
           <div class="info-item">
-            <label>OAB</label>
-            <span>{{ correspondent?.oab || 'Não informado' }}</span>
+            <span class="info-label">OAB:</span>
+            <span class="info-value">{{ correspondent?.oab || 'Não informado' }}</span>
           </div>
           <div class="info-item">
-            <label>Status</label>
-            <span class="status" [class.active]="correspondent?.ativo">
+            <span class="info-label">Status:</span>
+            <span class="info-value" [class.active-status]="correspondent?.ativo" [class.inactive-status]="!correspondent?.ativo">
               {{ correspondent?.ativo ? 'Ativo' : 'Inativo' }}
             </span>
           </div>
           <div class="info-item">
-            <label>Data de Cadastro</label>
-            <span>{{ correspondent?.datacadastro ? (correspondent?.datacadastro | date:'dd/MM/yyyy HH:mm') : 'Não informado' }}</span>
+            <span class="info-label">Data de Cadastro:</span>
+            <span class="info-value">{{ correspondent?.datacadastro ? (correspondent?.datacadastro | date:'dd/MM/yyyy HH:mm') : 'Não informado' }}</span>
           </div>
         </div>
       </mat-card-content>
@@ -76,22 +74,22 @@
         </mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <div class="info-grid">
+        <div class="info-list">
           <div class="info-item">
-            <label>Email Principal</label>
-            <span>{{ correspondent?.emailprimario || 'Não informado' }}</span>
+            <span class="info-label">Email Principal:</span>
+            <span class="info-value">{{ correspondent?.emailprimario || 'Não informado' }}</span>
           </div>
           <div class="info-item">
-            <label>Email Secundário</label>
-            <span>{{ correspondent?.emailsecundario || 'Não informado' }}</span>
+            <span class="info-label">Email Secundário:</span>
+            <span class="info-value">{{ correspondent?.emailsecundario || 'Não informado' }}</span>
           </div>
           <div class="info-item">
-            <label>Telefone</label>
-            <span>{{ correspondent?.telefoneprimario || 'Não informado' }}</span>
+            <span class="info-label">Telefone:</span>
+            <span class="info-value">{{ correspondent?.telefoneprimario || 'Não informado' }}</span>
           </div>
           <div class="info-item">
-            <label>Celular</label>
-            <span>{{ correspondent?.telefonecelularprimario || 'Não informado' }}</span>
+            <span class="info-label">Celular:</span>
+            <span class="info-value">{{ correspondent?.telefonecelularprimario || 'Não informado' }}</span>
           </div>
         </div>
       </mat-card-content>
@@ -106,41 +104,41 @@
         </mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <div class="info-grid">
+        <div class="info-list">
           <div class="info-item">
-            <label>Logradouro</label>
-            <span>{{ correspondent?.endereco?.logradouro || 'Não informado' }}</span>
+            <span class="info-label">Logradouro:</span>
+            <span class="info-value">{{ correspondent?.endereco?.logradouro || 'Não informado' }}</span>
           </div>
           <div class="info-item">
-            <label>Número</label>
-            <span>{{ correspondent?.endereco?.numero || 'S/N' }}</span>
+            <span class="info-label">Número:</span>
+            <span class="info-value">{{ correspondent?.endereco?.numero || 'S/N' }}</span>
           </div>
           <div class="info-item">
-            <label>Complemento</label>
-            <span>{{ correspondent?.endereco?.complemento || 'Não informado' }}</span>
+            <span class="info-label">Complemento:</span>
+            <span class="info-value">{{ correspondent?.endereco?.complemento || 'Não informado' }}</span>
           </div>
           <div class="info-item">
-            <label>Bairro</label>
-            <span>{{ correspondent?.endereco?.bairro || 'Não informado' }}</span>
+            <span class="info-label">Bairro:</span>
+            <span class="info-value">{{ correspondent?.endereco?.bairro || 'Não informado' }}</span>
           </div>
           <div class="info-item">
-            <label>Cidade</label>
-            <span>{{ correspondent?.endereco?.cidade || 'Não informado' }}</span>
+            <span class="info-label">Cidade:</span>
+            <span class="info-value">{{ correspondent?.endereco?.cidade || 'Não informado' }}</span>
           </div>
           <div class="info-item">
-            <label>UF</label>
-            <span>{{ correspondent?.endereco?.uf?.sigla || 'Não informado' }}</span>
+            <span class="info-label">UF:</span>
+            <span class="info-value">{{ correspondent?.endereco?.uf?.sigla || 'Não informado' }}</span>
           </div>
           <div class="info-item">
-            <label>CEP</label>
-            <span>{{ correspondent?.endereco?.cep || 'Não informado' }}</span>
+            <span class="info-label">CEP:</span>
+            <span class="info-value">{{ correspondent?.endereco?.cep || 'Não informado' }}</span>
           </div>
         </div>
       </mat-card-content>
     </mat-card>
 
-    <!-- Additional Information -->
-    <mat-card class="info-card full-width" *ngIf="correspondent?.observacoes">
+    <!-- Observations -->
+    <mat-card class="info-card" *ngIf="correspondent?.observacoes">
       <mat-card-header>
         <mat-card-title>
           <mat-icon>notes</mat-icon>
@@ -182,7 +180,6 @@
   </div>
 </div>
 
-<!-- Loading State -->
 <div class="loading-container" *ngIf="loading">
   <mat-spinner></mat-spinner>
   <p>Carregando informações do correspondente...</p>

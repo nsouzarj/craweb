@@ -6,8 +6,8 @@ import { ProcessoService } from '../../core/services/processo.service';
 import { SolicitacaoService } from '../../core/services/solicitacao.service';
 import { User } from '../../shared/models/user.model';
 import { Correspondente } from '../../shared/models/correspondente.model';
-import { Processo, ProcessStatus } from '../../shared/models/processo.model';
-import { Solicitacao, SolicitacaoStatus } from '../../shared/models/solicitacao.model';
+import { Processo } from '../../shared/models/processo.model';
+import { Solicitacao } from '../../shared/models/solicitacao.model';
 import { forkJoin } from 'rxjs';
 import { catchError, of } from 'rxjs';
 
@@ -99,13 +99,13 @@ export class DashboardComponent implements OnInit {
     // Add process requests
     requests.push(
       this.processoService.getProcessos().pipe(catchError(() => of([]))),
-      this.processoService.searchByStatus(ProcessStatus.EM_ANDAMENTO).pipe(catchError(() => of([])))
+      this.processoService.searchByStatus('EM_ANDAMENTO').pipe(catchError(() => of([])))
     );
 
     // Add solicitacao requests
     requests.push(
       this.solicitacaoService.getSolicitacoes().pipe(catchError(() => of([]))),
-      this.solicitacaoService.searchByStatus(SolicitacaoStatus.PENDENTE).pipe(catchError(() => of([])))
+      this.solicitacaoService.searchByStatus('Pendente').pipe(catchError(() => of([])))
     );
 
     forkJoin(requests).subscribe({

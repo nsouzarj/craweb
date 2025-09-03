@@ -45,6 +45,7 @@ export class SolicitacaoService {
    * @returns Observable containing the created service request
    */
   createSolicitacao(solicitacao: Solicitacao): Observable<Solicitacao> {
+    console.log(solicitacao);
     return this.http.post<Solicitacao>(this.apiUrl, solicitacao)
       .pipe(catchError(this.handleError));
   }
@@ -57,6 +58,7 @@ export class SolicitacaoService {
    * @returns Observable containing the updated service request
    */
   updateSolicitacao(id: number, solicitacao: Solicitacao): Observable<Solicitacao> {
+        console.log(solicitacao);
     return this.http.put<Solicitacao>(`${this.apiUrl}/${id}`, solicitacao)
       .pipe(catchError(this.handleError));
   }
@@ -78,7 +80,7 @@ export class SolicitacaoService {
    * @param status The service request status to search for
    * @returns Observable containing array of matching service requests
    */
-  searchByStatus(status: SolicitacaoStatus): Observable<Solicitacao[]> {
+  searchByStatus(status: string): Observable<Solicitacao[]> {
     return this.http.get<Solicitacao[]>(`${this.apiUrl}/buscar/status/${status}`)
       .pipe(catchError(this.handleError));
   }
@@ -138,7 +140,7 @@ export class SolicitacaoService {
    * @param status The service request status to get statistics for
    * @returns Observable containing the count of service requests with the specified status
    */
-  getStatusStatistics(status: SolicitacaoStatus): Observable<number> {
+  getStatusStatistics(status: string): Observable<number> {
     return this.http.get<number>(`${this.apiUrl}/estatisticas/status/${status}`)
       .pipe(catchError(this.handleError));
   }
@@ -149,7 +151,8 @@ export class SolicitacaoService {
    * @returns Observable containing array of pending service requests
    */
   getPendingRequests(): Observable<Solicitacao[]> {
-    return this.searchByStatus(SolicitacaoStatus.PENDENTE);
+    // Assuming 'Pendente' is the pending status, this should be updated based on actual status values from backend
+    return this.searchByStatus('Pendente');
   }
 
   /**
@@ -160,6 +163,16 @@ export class SolicitacaoService {
   getOverdueRequests(): Observable<Solicitacao[]> {
     const today = new Date().toISOString().split('T')[0];
     return this.http.get<Solicitacao[]>(`${this.apiUrl}/vencidas?data=${today}`)
+      .pipe(catchError(this.handleError));
+  }
+
+  /**
+   * Retrieves all available service request statuses
+   * 
+   * @returns Observable containing array of service request statuses
+   */
+  getSolicitacaoStatuses(): Observable<SolicitacaoStatus[]> {
+    return this.http.get<SolicitacaoStatus[]>(`${environment.apiUrl}/api/status-solicitacao`)
       .pipe(catchError(this.handleError));
   }
 

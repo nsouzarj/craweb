@@ -7,9 +7,63 @@
     </button>
   </div>
 
+  <!-- Filter Section -->
+  <mat-card class="filter-card">
+    <mat-card-content>
+      <div class="filter-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Status da Solicitação</mat-label>
+          <mat-select [(value)]="filterStatus" (selectionChange)="applyFilter()">
+            <mat-option value="">Todos</mat-option>
+            <mat-option *ngFor="let status of statuses" [value]="status.status">
+              {{ status.status }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Pesquisar</mat-label>
+          <input matInput [(ngModel)]="filterSearch" (input)="applyFilter()" placeholder="Digite para pesquisar...">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Processo</mat-label>
+          <input matInput [(ngModel)]="filterProcesso" (input)="applyFilter()" placeholder="Número do processo...">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Comarca</mat-label>
+          <mat-select [(value)]="filterComarca" (selectionChange)="applyFilter()">
+            <mat-option value="">Todas</mat-option>
+            <mat-option *ngFor="let comarca of comarcas" [value]="comarca.id">
+              {{ comarca.nome }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Órgão</mat-label>
+          <mat-select [(value)]="filterOrgao" (selectionChange)="applyFilter()">
+            <mat-option value="">Todos</mat-option>
+            <mat-option *ngFor="let orgao of orgaos" [value]="orgao.id">
+              {{ orgao.descricao }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="filter-actions">
+          <button mat-raised-button (click)="clearFilters()">
+            <mat-icon>clear</mat-icon>
+            Limpar
+          </button>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
   <mat-card>
     <mat-card-content>
-      <table mat-table [dataSource]="solicitacoes" *ngIf="!loading">
+      <table mat-table [dataSource]="filteredSolicitacoes" *ngIf="!loading">
         <ng-container matColumnDef="id">
           <th mat-header-cell *matHeaderCellDef>ID</th>
           <td mat-cell *matCellDef="let solicitacao">{{ solicitacao.id }}</td>
@@ -23,7 +77,7 @@
         <ng-container matColumnDef="tipoSolicitacao">
           <th mat-header-cell *matHeaderCellDef>Tipo</th>
           <td mat-cell *matCellDef="let solicitacao">
-            {{ solicitacao.tipoSolicitacao?.especie || '-' }}
+            {{ solicitacao.tipoSolicitacao?.especie }} - {{ solicitacao.tipoSolicitacao?.tipo }}
           </td>
         </ng-container>
 
@@ -44,8 +98,8 @@
         <ng-container matColumnDef="status">
           <th mat-header-cell *matHeaderCellDef>Status</th>
           <td mat-cell *matCellDef="let solicitacao">
-            <mat-chip [ngClass]="getStatusClass(solicitacao.status)">
-              {{ solicitacao.status || 'Pendente' }}
+            <mat-chip [ngClass]="getStatusClass(solicitacao.statusSolicitacao?.status)">
+              {{ solicitacao.statusSolicitacao?.status || 'Pendente' }}
             </mat-chip>
           </td>
         </ng-container>
@@ -53,12 +107,14 @@
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>Ações</th>
           <td mat-cell *matCellDef="let solicitacao">
-            <button mat-icon-button [routerLink]="['/solicitacoes/visualizar', solicitacao.id]">
-              <mat-icon>visibility</mat-icon>
-            </button>
-            <button mat-icon-button [routerLink]="['/solicitacoes/editar', solicitacao.id]">
-              <mat-icon>edit</mat-icon>
-            </button>
+            <div class="action-buttons">
+              <button mat-icon-button [routerLink]="['/solicitacoes/visualizar', solicitacao.id]">
+                <mat-icon>visibility</mat-icon>
+              </button>
+              <button mat-icon-button [routerLink]="['/solicitacoes/editar', solicitacao.id]">
+                <mat-icon>edit</mat-icon>
+              </button>
+            </div>
           </td>
         </ng-container>
 
@@ -71,7 +127,7 @@
         <p>Carregando solicitações...</p>
       </div>
       
-      <div class="no-data" *ngIf="!loading && solicitacoes.length === 0">
+      <div class="no-data" *ngIf="!loading && filteredSolicitacoes.length === 0">
         <p>Nenhuma solicitação encontrada.</p>
       </div>
     </mat-card-content>

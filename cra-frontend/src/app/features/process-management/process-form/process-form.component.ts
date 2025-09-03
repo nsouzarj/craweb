@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProcessoService } from '../../../core/services/processo.service';
 import { ComarcaService } from '../../../core/services/comarca.service';
 import { OrgaoService } from '../../../core/services/orgao.service';
-import { Processo, ProcessStatus } from '../../../shared/models/processo.model';
+import { Processo } from '../../../shared/models/processo.model';
 import { Comarca } from '../../../shared/models/comarca.model';
 import { Orgao } from '../../../shared/models/orgao.model';
 
@@ -38,7 +38,7 @@ export class ProcessFormComponent implements OnInit {
       adverso: [''],
       assunto: [''],
       proceletronico: [''], // Added processo eletronico field
-      status: [ProcessStatus.EM_ANDAMENTO],
+      status: ['EM_ANDAMENTO'], // Changed from ProcessStatus.EM_ANDAMENTO to string
       observacoes: [''], // This should match the form field name
       ativo: [true],
       orgao: [null],

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Processo, ProcessStatus, Orgao } from '../../shared/models/processo.model';
+import { Processo, Orgao } from '../../shared/models/processo.model';
 import { Comarca } from '../../shared/models/comarca.model';
 import { ComarcaService } from './comarca.service';
 import { environment } from '../../../environments/environment';
@@ -16,7 +16,6 @@ import { environment } from '../../../environments/environment';
 })
 export class ProcessoService {
   private apiUrl = `${environment.apiUrl}/api/processos`;
-
   constructor(
     private http: HttpClient,
     private comarcaService: ComarcaService
@@ -130,7 +129,7 @@ export class ProcessoService {
    * @param status The process status to search for
    * @returns Observable containing array of matching processes
    */
-  searchByStatus(status: ProcessStatus): Observable<Processo[]> {
+  searchByStatus(status: string): Observable<Processo[]> {
     return this.http.get<Processo[]>(`${this.apiUrl}/buscar/status/${status}`)
       .pipe(catchError(this.handleError));
   }
@@ -175,8 +174,18 @@ export class ProcessoService {
    * @param status The process status to get statistics for
    * @returns Observable containing the count of processes with the specified status
    */
-  getStatusStatistics(status: ProcessStatus): Observable<number> {
+  getStatusStatistics(status: string): Observable<number> {
     return this.http.get<number>(`${this.apiUrl}/estatisticas/status/${status}`)
+      .pipe(catchError(this.handleError));
+  }
+
+  /**
+   * Retrieves all process statuses from the backend
+   * 
+   * @returns Observable containing array of process statuses
+   */
+  getProcessoStatuses(): Observable<{id: number, status: string}[]> {
+    return this.http.get<{id: number, status: string}[]>(`${this.apiUrl}/status`)
       .pipe(catchError(this.handleError));
   }
 

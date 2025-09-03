@@ -70,6 +70,9 @@ public class SecurityConfig {
                         .requestMatchers("/api/correspondentes/**").hasAnyRole("ADMIN", "ADVOGADO", "CORRESPONDENTE")
                         .requestMatchers("/api/processos/**").hasAnyRole("ADMIN", "ADVOGADO", "CORRESPONDENTE")
                         .requestMatchers("/api/solicitacoes/**").hasAnyRole("ADMIN", "ADVOGADO", "CORRESPONDENTE")
+                        .requestMatchers("/api/status-solicitacao/**").hasAnyRole("ADMIN", "ADVOGADO", "CORRESPONDENTE")
+                        .requestMatchers("/api/tipos-processo/**").hasAnyRole("ADMIN", "ADVOGADO", "CORRESPONDENTE")
+                        .requestMatchers("/api/tipos-solicitacao/**").hasAnyRole("ADMIN", "ADVOGADO", "CORRESPONDENTE")
                         .anyRequest().authenticated()
                 );
         

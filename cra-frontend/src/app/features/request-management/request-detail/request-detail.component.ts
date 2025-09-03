@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SolicitacaoService } from '../../../core/services/solicitacao.service';
-import { Solicitacao, SolicitacaoStatus } from '../../../shared/models/solicitacao.model';
-import { ProcessStatus } from '../../../shared/models/processo.model';
+import { Solicitacao } from '../../../shared/models/solicitacao.model';
 
 @Component({
   selector: 'app-request-detail',
@@ -55,48 +54,21 @@ export class RequestDetailComponent implements OnInit {
     this.router.navigate(['/solicitacoes']);
   }
 
-  getStatusText(status: SolicitacaoStatus | undefined): string {
-    switch (status) {
-      case SolicitacaoStatus.PENDENTE:
-        return 'Pendente';
-      case SolicitacaoStatus.EM_ANDAMENTO:
-        return 'Em Andamento';
-      case SolicitacaoStatus.FINALIZADA:
-        return 'Finalizada';
-      case SolicitacaoStatus.CANCELADA:
-        return 'Cancelada';
-      default:
-        return 'Pendente';
-    }
+  getStatusText(status: string | undefined): string {
+    // Since we're now using dynamic statuses from endpoints, we'll just return the status value
+    // In a real implementation, you might want to map these to user-friendly labels
+    return status || 'Pendente';
   }
 
   getProcessStatusText(status: string | undefined): string {
-    switch (status) {
-      case ProcessStatus.EM_ANDAMENTO:
-        return 'Em Andamento';
-      case ProcessStatus.SUSPENSO:
-        return 'Suspenso';
-      case ProcessStatus.ARQUIVADO:
-        return 'Arquivado';
-      case ProcessStatus.FINALIZADO:
-        return 'Finalizado';
-      default:
-        return status || 'Não informado';
-    }
+    // Since we're now using dynamic statuses from endpoints, we'll just return the status value
+    // In a real implementation, you might want to map these to user-friendly labels
+    return status || 'Não informado';
   }
 
-  getStatusClass(status: SolicitacaoStatus | undefined): string {
-    switch (status) {
-      case SolicitacaoStatus.PENDENTE:
-        return 'status-pendente';
-      case SolicitacaoStatus.EM_ANDAMENTO:
-        return 'status-andamento';
-      case SolicitacaoStatus.FINALIZADA:
-        return 'status-finalizada';
-      case SolicitacaoStatus.CANCELADA:
-        return 'status-cancelada';
-      default:
-        return 'status-pendente';
-    }
+  getStatusClass(status: string | undefined): string {
+    if (!status) return 'status-pendente';
+    // Convert status to a CSS class-friendly format
+    return `status-${status.toLowerCase().replace('_', '-')}`;
   }
 }

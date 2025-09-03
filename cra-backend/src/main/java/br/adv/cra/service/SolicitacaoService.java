@@ -4,8 +4,10 @@ import br.adv.cra.entity.Comarca;
 import br.adv.cra.entity.Correspondente;
 import br.adv.cra.entity.Processo;
 import br.adv.cra.entity.Solicitacao;
+import br.adv.cra.entity.StatusSolicitacao;
 import br.adv.cra.entity.Usuario;
 import br.adv.cra.repository.SolicitacaoRepository;
+import br.adv.cra.repository.StatusSolicitacaoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +22,7 @@ import java.util.Optional;
 public class SolicitacaoService {
     
     private final SolicitacaoRepository solicitacaoRepository;
+    private final StatusSolicitacaoRepository statusSolicitacaoRepository;
     
     public Solicitacao salvar(Solicitacao solicitacao) {
         if (solicitacao.getDatasolictacao() == null) {
@@ -36,6 +39,28 @@ public class SolicitacaoService {
         if (solicitacao.getDatasolictacao() == null) {
             solicitacao.setDatasolictacao(LocalDateTime.now());
         }
+        return solicitacaoRepository.save(solicitacao);
+    }
+    
+    public Solicitacao setStatus(Long solicitacaoId, Long statusId) {
+        Solicitacao solicitacao = buscarPorId(solicitacaoId)
+                .orElseThrow(() -> new RuntimeException("Solicitação não encontrada"));
+        
+        StatusSolicitacao status = statusSolicitacaoRepository.findById(statusId)
+                .orElseThrow(() -> new RuntimeException("Status não encontrado"));
+        
+        solicitacao.setStatusSolicitacao(status);
+        return solicitacaoRepository.save(solicitacao);
+    }
+    
+    public Solicitacao setStatusPorNome(Long solicitacaoId, String statusNome) {
+        Solicitacao solicitacao = buscarPorId(solicitacaoId)
+                .orElseThrow(() -> new RuntimeException("Solicitação não encontrada"));
+        
+        StatusSolicitacao status = statusSolicitacaoRepository.findByStatus(statusNome)
+                .orElseThrow(() -> new RuntimeException("Status não encontrado"));
+        
+        solicitacao.setStatusSolicitacao(status);
         return solicitacaoRepository.save(solicitacao);
     }
     

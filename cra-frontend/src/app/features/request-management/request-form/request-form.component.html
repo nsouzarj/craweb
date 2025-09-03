@@ -25,10 +25,9 @@
         <mat-form-field class="full-width" appearance="outline">
           <mat-label>Status</mat-label>
           <mat-select formControlName="status">
-            <mat-option value="PENDENTE">Pendente</mat-option>
-            <mat-option value="EM_ANDAMENTO">Em Andamento</mat-option>
-            <mat-option value="FINALIZADA">Finalizada</mat-option>
-            <mat-option value="CANCELADA">Cancelada</mat-option>
+            <mat-option *ngFor="let status of statuses" [value]="status.idstatus">
+              {{ status.status }}
+            </mat-option>
           </mat-select>
         </mat-form-field>
 

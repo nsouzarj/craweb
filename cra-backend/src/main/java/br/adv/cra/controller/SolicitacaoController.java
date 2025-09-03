@@ -2,7 +2,9 @@ package br.adv.cra.controller;
 
 import br.adv.cra.entity.Correspondente;
 import br.adv.cra.entity.Solicitacao;
+import br.adv.cra.entity.StatusSolicitacao;
 import br.adv.cra.service.SolicitacaoService;
+import br.adv.cra.service.StatusSolicitacaoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -28,6 +30,7 @@ import java.util.List;
 public class SolicitacaoController {
     
     private final SolicitacaoService solicitacaoService;
+    private final StatusSolicitacaoService statusSolicitacaoService;
     
     /**
      * Creates a new request.
@@ -66,6 +69,44 @@ public class SolicitacaoController {
             // Ensure the datasolictacao is not null to prevent issues
             Solicitacao solicitacaoAtualizada = solicitacaoService.atualizar(solicitacao);
             return ResponseEntity.ok(solicitacaoAtualizada);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    
+    /**
+     * Sets the status of a request by status ID.
+     * 
+     * @param id The ID of the request
+     * @param statusId The ID of the status to set
+     * @return The updated request, or error response
+     */
+    @PutMapping("/{id}/status/{statusId}")
+    public ResponseEntity<Solicitacao> setStatus(@PathVariable Long id, @PathVariable Long statusId) {
+        try {
+            Solicitacao solicitacao = solicitacaoService.setStatus(id, statusId);
+            return ResponseEntity.ok(solicitacao);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    
+    /**
+     * Sets the status of a request by status name.
+     * 
+     * @param id The ID of the request
+     * @param statusNome The name of the status to set
+     * @return The updated request, or error response
+     */
+    @PutMapping("/{id}/status-nome/{statusNome}")
+    public ResponseEntity<Solicitacao> setStatusPorNome(@PathVariable Long id, @PathVariable String statusNome) {
+        try {
+            Solicitacao solicitacao = solicitacaoService.setStatusPorNome(id, statusNome);
+            return ResponseEntity.ok(solicitacao);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }

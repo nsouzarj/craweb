@@ -1,54 +1,52 @@
 .user-detail-container {
   padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
 }
 
 .page-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 16px;
-  margin-bottom: 30px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.back-button {
-  margin-right: 8px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
 .header-content {
   flex: 1;
+  min-width: 0;
 }
 
 .header-content h1 {
-  margin: 0 0 8px 0;
-  color: #333;
-  font-size: 28px;
+  margin: 0;
+  font-size: 24px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .header-badges {
-  display: flex;
-  gap: 8px;
+  margin-top: 8px;
 }
 
-.header-actions {
-  display: flex;
-  gap: 12px;
+.header-badges mat-chip {
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .content-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 20px;
 }
 
 .info-card {
-  height: fit-content;
+  border-radius: 8px;
+  box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
 }
 
 .info-card mat-card-header {
-  margin-bottom: 16px;
+  padding: 16px;
+  border-bottom: 1px solid rgba(0,0,0,.12);
 }
 
 .info-card mat-card-title {
@@ -56,39 +54,54 @@
   align-items: center;
   gap: 8px;
   font-size: 18px;
-  font-weight: 500;
+  margin: 0;
 }
 
-.info-grid {
-  display: grid;
-  gap: 16px;
+.info-card mat-card-content {
+  padding: 16px;
+}
+
+.info-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .info-item {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
 }
 
-.info-item label {
-  font-size: 12px;
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.info-label {
   font-weight: 500;
   color: #666;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  min-width: 150px;
+  flex-shrink: 0;
 }
 
-.info-item span {
-  font-size: 14px;
+.info-value {
+  flex: 1;
   color: #333;
+  min-width: 0;
 }
 
-.status.active {
+.info-value:not(:empty) {
+  word-break: break-word;
+}
+
+.active-status {
   color: #4caf50;
   font-weight: 500;
 }
 
-.status:not(.active) {
+.inactive-status {
   color: #f44336;
   font-weight: 500;
 }
@@ -147,25 +160,11 @@
   gap: 8px;
 }
 
-.warning-text {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 16px;
-  padding: 12px;
-  background-color: #fff3cd;
-  border: 1px solid #ffeaa7;
-  border-radius: 4px;
-  color: #856404;
-  font-size: 14px;
-}
-
 .loading-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 60px 20px;
+  padding: 60px;
   gap: 20px;
 }
 
@@ -180,6 +179,7 @@
   color: white !important;
 }
 
+/* Type chips */
 .type-admin {
   background-color: #3f51b5 !important;
   color: white !important;
@@ -195,6 +195,23 @@
   color: white !important;
 }
 
+/* Type text colors */
+.type-admin-text {
+  color: #3f51b5;
+  font-weight: 500;
+}
+
+.type-advogado-text {
+  color: #ff9800;
+  font-weight: 500;
+}
+
+.type-correspondente-text {
+  color: #009688;
+  font-weight: 500;
+}
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
   .user-detail-container {
     padding: 16px;
@@ -202,16 +219,36 @@
   
   .page-header {
     flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .header-content h1 {
+    font-size: 20px;
+  }
+  
+  .info-label {
+    min-width: 120px;
+  }
+}
+
+@media (max-width: 480px) {
+  .info-item {
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .info-label {
+    min-width: auto;
+    font-weight: 600;
+  }
+  
+  .permission-item {
+    flex-direction: column;
     align-items: flex-start;
-    gap: 12px;
   }
   
-  .content-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .header-actions {
-    width: 100%;
-    justify-content: flex-end;
+  .permission-status {
+    align-self: flex-end;
+    margin-top: -24px;
   }
 }

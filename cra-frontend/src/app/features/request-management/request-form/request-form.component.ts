@@ -3,12 +3,13 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SolicitacaoService } from '../../../core/services/solicitacao.service';
+import { SolicitacaoStatusService } from '../../../core/services/solicitacao-status.service';
 import { ProcessoService } from '../../../core/services/processo.service';
 import { CorrespondenteService } from '../../../core/services/correspondente.service';
 import { ComarcaService } from '../../../core/services/comarca.service';
 import { UserService } from '../../../core/services/user.service';
 import { TipoSolicitacaoService } from '../../../core/services/tiposolicitacao.service';
-import { Solicitacao } from '../../../shared/models/solicitacao.model';
+import { Solicitacao, SolicitacaoStatus } from '../../../shared/models/solicitacao.model';
 import { Processo } from '../../../shared/models/processo.model';
 import { Correspondente } from '../../../shared/models/correspondente.model';
 import { Comarca } from '../../../shared/models/comarca.model';
@@ -32,8 +33,9 @@ export class RequestFormComponent implements OnInit {
   comarcas: Comarca[] = [];
   usuarios: User[] = [];
   tiposSolicitacao: TipoSolicitacao[] = [];
+  statuses: SolicitacaoStatus[] = [];
   
-  // Filtered dropdown options (only active processes and correspondents)
+  // Filtered dropdown options (only active processes and correspondentes)
   filteredProcessos: Processo[] = [];
   filteredCorrespondentes: Correspondente[] = [];
 
@@ -43,6 +45,7 @@ export class RequestFormComponent implements OnInit {
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
     private solicitacaoService: SolicitacaoService,
+    private solicitacaoStatusService: SolicitacaoStatusService,
     private processoService: ProcessoService,
     private correspondenteService: CorrespondenteService,
     private comarcaService: ComarcaService,
@@ -66,10 +69,13 @@ export class RequestFormComponent implements OnInit {
   }
 
   private createForm(): FormGroup {
+    // Set default status to the first available status or 'PENDENTE' if none available
+    const defaultStatus = this.statuses && this.statuses.length > 0 ? this.statuses[0].status : 'PENDENTE';
+    
     return this.formBuilder.group({
       complemento: ['', [Validators.required]],
       tipoSolicitacao: [null],
-      status: ['PENDENTE'],
+      status: [defaultStatus],
       processo: [null],
       correspondente: [null],
       comarca: [null],
@@ -139,6 +145,17 @@ export class RequestFormComponent implements OnInit {
         this.snackBar.open('Erro ao carregar tipos de solicitação', 'Fechar', { duration: 5000 });
       }
     });
+
+    // Load statuses
+    this.solicitacaoStatusService.getSolicitacaoStatuses().subscribe({
+      next: (statuses) => {
+        this.statuses = statuses;
+      },
+      error: (error) => {
+        console.error('Error loading statuses:', error);
+        this.snackBar.open('Erro ao carregar status', 'Fechar', { duration: 5000 });
+      }
+    });
   }
 
   private loadRequest(): void {
@@ -150,7 +167,7 @@ export class RequestFormComponent implements OnInit {
         this.requestForm.patchValue({
           complemento: solicitacao.complemento || '',
           tipoSolicitacao: solicitacao.tipoSolicitacao?.idtiposolicitacao || null,
-          status: solicitacao.status || 'PENDENTE',
+          status: solicitacao.statusSolicitacao?.idstatus || (this.statuses && this.statuses.length > 0 ? this.statuses[0].status : 'PENDENTE'),
           processo: solicitacao.processo?.id || null,
           correspondente: solicitacao.correspondente?.id || null,
           comarca: solicitacao.comarca?.id || null,
@@ -180,9 +197,12 @@ export class RequestFormComponent implements OnInit {
     
     // Prepare the solicitacao object
     const formValue = this.requestForm.value;
+    
+    // Find the selected status object
+    const selectedStatus = this.statuses.find(s => s.status === formValue.status);
+    
     const solicitacao: any = {
       complemento: formValue.complemento,
-      status: formValue.status,
       dataPrazo: formValue.dataPrazo || null,
       observacao: formValue.observacao || null,
       instrucoes: formValue.instrucoes || null,
@@ -190,6 +210,10 @@ export class RequestFormComponent implements OnInit {
     };
 
     // Add relationships if selected
+    if(formValue.status){
+      solicitacao.statusSolicitacao = { idstatus: formValue.status };
+    }
+
     if (formValue.tipoSolicitacao) {
       solicitacao.tipoSolicitacao = { idtiposolicitacao: formValue.tipoSolicitacao };
     }

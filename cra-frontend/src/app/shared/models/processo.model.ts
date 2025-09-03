@@ -30,10 +30,3 @@ export interface Processo {
 }
 
 export { Orgao };  // Re-export Orgao for backward compatibility
-
-export enum ProcessStatus {
-  EM_ANDAMENTO = 'EM_ANDAMENTO',
-  SUSPENSO = 'SUSPENSO',
-  ARQUIVADO = 'ARQUIVADO',
-  FINALIZADO = 'FINALIZADO'
-}

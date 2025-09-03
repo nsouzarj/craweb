@@ -35,13 +35,11 @@ export interface Solicitacao {
   lide?: string;
   avaliacaoNota?: number;
   textoAvaliacao?: string;
-  status?: SolicitacaoStatus;
+  statusSolicitacao?: SolicitacaoStatus;
   ativo: boolean;
 }
 
-export enum SolicitacaoStatus {
-  PENDENTE = 'PENDENTE',
-  EM_ANDAMENTO = 'EM_ANDAMENTO',
-  FINALIZADA = 'FINALIZADA',
-  CANCELADA = 'CANCELADA'
+export interface SolicitacaoStatus {
+  idstatus: number;
+  status: string;
 }

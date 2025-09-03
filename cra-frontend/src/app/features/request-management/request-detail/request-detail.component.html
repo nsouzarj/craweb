@@ -6,8 +6,8 @@
     <div class="header-content">
       <h1>Solicitação: {{ solicitacao?.id }}</h1>
       <div class="header-badges">
-        <mat-chip [ngClass]="getStatusClass(solicitacao?.status)">
-          {{ getStatusText(solicitacao?.status) }}
+        <mat-chip [ngClass]="getStatusClass(solicitacao?.statusSolicitacao?.status)">
+          {{ getStatusText(solicitacao?.statusSolicitacao?.status) }}
         </mat-chip>
       </div>
     </div>
@@ -42,7 +42,9 @@
           </div>
           <div class="info-item">
             <span class="info-label">Status:</span>
-            <span class="info-value">{{ getStatusText(solicitacao?.status) }}</span>
+            <span class="info-value" [ngClass]="'status-' + (solicitacao?.statusSolicitacao?.status || '').toLowerCase().replace('_', '-')">
+              {{ getStatusText(solicitacao?.statusSolicitacao?.status) }}
+            </span>
           </div>
           <div class="info-item">
             <span class="info-label">Data de Solicitação:</span>
@@ -84,7 +86,9 @@
           </div>
           <div class="info-item">
             <span class="info-label">Status:</span>
-            <span class="info-value">{{ getProcessStatusText(solicitacao?.processo?.status) }}</span>
+            <span class="info-value" [ngClass]="'status-' + (solicitacao?.processo?.status || '').toLowerCase().replace('_', '-') + '-text'">
+              {{ getProcessStatusText(solicitacao?.processo?.status) }}
+            </span>
           </div>
           <div class="info-item" *ngIf="solicitacao?.processo?.comarca">
             <span class="info-label">Comarca:</span>

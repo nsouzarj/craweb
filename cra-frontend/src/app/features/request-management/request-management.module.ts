@@ -25,6 +25,9 @@ import { RequestDetailComponent } from './request-detail/request-detail.componen
 
 // Services
 import { TipoSolicitacaoService } from '../../core/services/tiposolicitacao.service';
+import { ProcessoService } from '../../core/services/processo.service';
+import { ComarcaService } from '../../core/services/comarca.service';
+import { OrgaoService } from '../../core/services/orgao.service';
 
 // Guards
 import { AuthGuard } from '../../core/guards/auth.guard';
@@ -62,7 +65,10 @@ const routes: Routes = [
     MatNativeDateModule
   ],
   providers: [
-    TipoSolicitacaoService
+    TipoSolicitacaoService,
+    ProcessoService,
+    ComarcaService,
+    OrgaoService
   ]
 })
 export class RequestManagementModule { }
