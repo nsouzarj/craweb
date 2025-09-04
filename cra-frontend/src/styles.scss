@@ -615,4 +615,15 @@ html, body {
   .user-welcome {
     color: rgba(255, 255, 255, 0.8) !important;
   }
+  
+  /* Ensure all icons maintain proper styling */
+  .mat-icon {
+    color: #ffffff !important;
+  }
+  
+  /* Ensure mat-toolbar maintains proper styling */
+  .mat-toolbar {
+    background-color: #3f51b5 !important;
+    color: #ffffff !important;
+  }
 }
