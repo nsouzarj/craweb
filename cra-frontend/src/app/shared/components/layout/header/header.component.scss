@@ -78,10 +78,12 @@
 
 .dark-theme .app-title {
   color: #ffffff !important;
+  font-weight: 600; /* Make title bolder for better visibility */
 }
 
 .dark-theme .user-welcome {
-  color: rgba(255, 255, 255, 0.8) !important;
+  color: #ffffff !important; /* Brighter text */
+  font-weight: 500; /* Make user welcome text bolder */
 }
 
 .dark-theme .mat-icon {
