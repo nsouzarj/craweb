@@ -8,6 +8,17 @@
     </div>
     
     <div class="header-right">
+      <!-- Zoom Controls -->
+      <button mat-icon-button (click)="zoomOut()" matTooltip="Diminuir zoom (Ctrl+-)">
+        <mat-icon>zoom_out</mat-icon>
+      </button>
+      <button mat-icon-button (click)="resetZoom()" matTooltip="Redefinir zoom (Ctrl+0)">
+        <span style="font-size: 14px; font-weight: 500;">{{ getZoomLevel() }}%</span>
+      </button>
+      <button mat-icon-button (click)="zoomIn()" matTooltip="Aumentar zoom (Ctrl+)">
+        <mat-icon>zoom_in</mat-icon>
+      </button>
+      
       <button mat-icon-button (click)="toggleTheme()" [matTooltip]="isDarkMode() ? 'Modo claro' : 'Modo escuro'">
         <mat-icon>{{ isDarkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
       </button>

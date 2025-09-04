@@ -1,7 +1,8 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
 import { ThemeService } from '../../../../core/services/theme.service';
+import { ZoomService } from '../../../../core/services/zoom.service';
 import { User } from '../../../models/user.model';
 
 @Component({
@@ -17,6 +18,7 @@ export class HeaderComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private themeService: ThemeService,
+    private zoomService: ZoomService,
     private router: Router
   ) {}
 
@@ -85,5 +87,44 @@ export class HeaderComponent implements OnInit {
 
   logout(): void {
     this.authService.logout();
+  }
+
+  // Zoom functionality methods
+  zoomIn(): void {
+    this.zoomService.zoomIn();
+  }
+
+  zoomOut(): void {
+    this.zoomService.zoomOut();
+  }
+
+  resetZoom(): void {
+    this.zoomService.resetZoom();
+  }
+
+  getZoomLevel(): number {
+    return this.zoomService.getZoomLevel();
+  }
+
+  // Keyboard shortcuts for zoom (Ctrl + '+' to zoom in, Ctrl + '-' to zoom out, Ctrl + '0' to reset)
+  @HostListener('window:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent): void {
+    if (event.ctrlKey) {
+      switch (event.key) {
+        case '+':
+        case '=': // Some keyboards use '=' for '+'
+          event.preventDefault();
+          this.zoomIn();
+          break;
+        case '-':
+          event.preventDefault();
+          this.zoomOut();
+          break;
+        case '0':
+          event.preventDefault();
+          this.resetZoom();
+          break;
+      }
+    }
   }
 }

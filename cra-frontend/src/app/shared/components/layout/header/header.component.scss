@@ -35,6 +35,21 @@
   gap: 16px;
 }
 
+// Zoom controls styling
+.zoom-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.zoom-level {
+  min-width: 40px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: #ffffff;
+}
+
 .user-welcome {
   font-size: 14px;
   color: rgba(255, 255, 255, 0.8);
@@ -116,5 +131,11 @@
   
   .header-right {
     gap: 8px;
+  }
+  
+  // Adjust zoom controls for smaller screens
+  .zoom-level {
+    font-size: 12px;
+    min-width: 35px;
   }
 }

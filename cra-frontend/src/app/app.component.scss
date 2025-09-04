@@ -2,6 +2,14 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
+  // Add transform transition for smooth zoom animations
+  transition: transform 0.2s ease, width 0.2s ease, height 0.2s ease;
+  // Ensure the container can overflow when zoomed
+  overflow: auto;
+  // Set transform origin for proper zoom behavior
+  transform-origin: top left;
+  // Add position relative for proper scaling
+  position: relative;
 }
 
 .sidenav-container {
@@ -21,6 +29,8 @@
 .content-container {
   padding: 20px;
   min-height: calc(100vh - 64px);
+  // Add padding to accommodate zoomed content
+  padding: 20px;
 }
 
 .login-layout {
