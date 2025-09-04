@@ -75,8 +75,6 @@ html, body {
   gap: 8px;
 }
 
-
-
 .search-container {
   display: flex;
   gap: 16px;
@@ -397,5 +395,224 @@ html, body {
   
   .confirmation-dialog {
     min-width: 90vw;
+  }
+}
+
+/* Dark Theme Styles */
+.dark-theme {
+  /* Background colors */
+  background-color: #121212 !important;
+  
+  .main-content {
+    background-color: #121212 !important;
+  }
+  
+  .content-container {
+    background-color: #121212;
+    color: #ffffff;
+  }
+  
+  /* Sidenav styles */
+  .sidenav {
+    background-color: #303030 !important;
+    border-right: 1px solid #424242 !important;
+    color: #ffffff;
+  }
+  
+  .sidenav-list {
+    background-color: #303030;
+  }
+  
+  .nav-header {
+    background-color: #212121;
+  }
+  
+  .nav-item {
+    color: #ffffff !important;
+  }
+  
+  .nav-item:hover {
+    background-color: #424242 !important;
+  }
+  
+  .nav-item.active-link {
+    background-color: #424242 !important;
+    color: #7986cb !important;
+    border-right: 3px solid #7986cb !important;
+  }
+  
+  .nav-child-item {
+    color: #ffffff !important;
+    background-color: #303030 !important;
+  }
+  
+  .nav-child-item:hover {
+    background-color: #424242 !important;
+  }
+  
+  .nav-child-item.active-link {
+    background-color: #424242 !important;
+    color: #7986cb !important;
+  }
+  
+  /* Form elements keep light theme styling */
+  .form-container {
+    background-color: #ffffff;
+    color: #333333;
+  }
+  
+  .mat-form-field {
+    color: #333333;
+  }
+  
+  .mat-form-field-appearance-outline .mat-form-field-outline {
+    color: rgba(0, 0, 0, 0.12);
+  }
+  
+  .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+    color: #3f51b5;
+  }
+  
+  .mat-form-field-label {
+    color: rgba(0, 0, 0, 0.6);
+  }
+  
+  .mat-form-field.mat-focused .mat-form-field-label {
+    color: #3f51b5;
+  }
+  
+  .mat-input-element {
+    color: #333333;
+  }
+  
+  .mat-select-value {
+    color: #333333;
+  }
+  
+  /* Buttons keep light theme styling */
+  .mat-raised-button, .mat-button {
+    color: #333333;
+  }
+  
+  /* Tables keep light theme styling */
+  .data-table {
+    background-color: #ffffff;
+    color: #333333;
+  }
+  
+  .table-header {
+    background-color: #f5f5f5;
+    color: #333333;
+  }
+  
+  .mat-row {
+    background-color: #ffffff;
+  }
+  
+  .mat-row:nth-child(even) {
+    background-color: #fafafa;
+  }
+  
+  /* Search container keeps light theme styling */
+  .search-container {
+    background-color: #ffffff;
+    color: #333333;
+  }
+  
+  /* Cards keep light theme styling */
+  .mat-card {
+    background-color: #ffffff;
+    color: #333333;
+  }
+  
+  /* Dialogs keep light theme styling */
+  .mat-dialog-container {
+    background-color: #ffffff;
+    color: #333333;
+  }
+  
+  /* Menu items keep light theme styling */
+  .user-info {
+    background-color: #f5f5f5;
+  }
+  
+  .user-name {
+    color: #333;
+  }
+  
+  .user-email {
+    color: #666;
+  }
+  
+  .user-role {
+    color: #3f51b5;
+  }
+  
+  /* Snackbar colors remain the same */
+  .error-snackbar {
+    background-color: #f44336 !important;
+  }
+  
+  .success-snackbar {
+    background-color: #4caf50 !important;
+  }
+  
+  .info-snackbar {
+    background-color: #2196f3 !important;
+  }
+  
+  .warning-snackbar {
+    background-color: #ff9800 !important;
+  }
+  
+  /* Ensure all form elements maintain light theme styling */
+  .mat-form-field,
+  .mat-select,
+  .mat-input-element,
+  .mat-select-value,
+  .mat-form-field-label {
+    background-color: #ffffff !important;
+    color: #333333 !important;
+  }
+  
+  /* Ensure all buttons maintain light theme styling */
+  .mat-raised-button,
+  .mat-button,
+  .mat-icon-button {
+    background-color: #ffffff !important;
+    color: #333333 !important;
+  }
+  
+  /* Ensure all tables maintain light theme styling */
+  .mat-table,
+  .mat-cell,
+  .mat-header-cell {
+    background-color: #ffffff !important;
+    color: #333333 !important;
+  }
+  
+  /* Ensure all cards maintain light theme styling */
+  .mat-card {
+    background-color: #ffffff !important;
+    color: #333333 !important;
+  }
+  
+  /* Ensure all dialogs maintain light theme styling */
+  .mat-dialog-container {
+    background-color: #ffffff !important;
+    color: #333333 !important;
+  }
+  
+  /* Ensure all headers maintain proper styling */
+  .app-header {
+    background-color: #3f51b5 !important;
+  }
+  
+  .app-title {
+    color: #ffffff !important;
+  }
+  
+  .user-welcome {
+    color: rgba(255, 255, 255, 0.8) !important;
   }
 }

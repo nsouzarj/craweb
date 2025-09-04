@@ -8,6 +8,10 @@
     </div>
     
     <div class="header-right">
+      <button mat-icon-button (click)="toggleTheme()" [matTooltip]="isDarkMode() ? 'Modo claro' : 'Modo escuro'">
+        <mat-icon>{{ isDarkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+      </button>
+      
       <span class="user-welcome" *ngIf="currentUser">
         Olá, {{ currentUser.nomecompleto }}
       </span>

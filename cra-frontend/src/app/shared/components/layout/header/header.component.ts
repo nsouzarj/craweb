@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
+import { ThemeService } from '../../../../core/services/theme.service';
 import { User } from '../../../models/user.model';
 
 @Component({
@@ -15,6 +16,7 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
+    private themeService: ThemeService,
     private router: Router
   ) {}
 
@@ -26,6 +28,17 @@ export class HeaderComponent implements OnInit {
 
   onToggleSidenav(): void {
     this.toggleSidenav.emit();
+  }
+
+  toggleTheme(): void {
+    console.log('Toggling theme');
+    this.themeService.toggleTheme();
+  }
+
+  isDarkMode(): boolean {
+    const isDark = this.themeService.isDarkMode();
+    console.log('Checking dark mode:', isDark);
+    return isDark;
   }
 
   getUserRoleText(): string {

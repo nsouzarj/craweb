@@ -89,6 +89,46 @@ mat-icon[matListItemIcon] {
   color: inherit;
 }
 
+/* Dark Theme Overrides */
+.dark-theme .sidenav-list {
+  background-color: #303030;
+}
+
+.dark-theme .nav-header {
+  background-color: #212121;
+}
+
+.dark-theme .nav-item {
+  color: #ffffff !important;
+}
+
+.dark-theme .nav-item:hover {
+  background-color: #424242 !important;
+}
+
+.dark-theme .nav-item.active-link {
+  background-color: #424242 !important;
+  color: #7986cb !important;
+  border-right: 3px solid #7986cb !important;
+}
+
+.dark-theme .nav-children {
+  background-color: #303030;
+}
+
+.dark-theme .nav-child-item {
+  color: #ffffff !important;
+}
+
+.dark-theme .nav-child-item:hover {
+  background-color: #424242 !important;
+}
+
+.dark-theme .nav-child-item.active-link {
+  background-color: #424242 !important;
+  color: #7986cb !important;
+}
+
 /* Mobile styles */
 @media (max-width: 768px) {
   .nav-header {

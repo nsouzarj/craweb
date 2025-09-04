@@ -31,6 +31,20 @@
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
+/* Dark Theme Overrides */
+.dark-theme {
+  background-color: #121212 !important;
+  
+  .main-content {
+    background-color: #121212 !important;
+  }
+  
+  .sidenav {
+    background-color: #303030 !important;
+    border-right: 1px solid #424242 !important;
+  }
+}
+
 /* Responsive styles for mobile */
 @media (max-width: 768px) {
   .sidenav {

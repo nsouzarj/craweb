@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { AuthService } from './core/services/auth.service';
+import { ThemeService } from './core/services/theme.service';
 import { Router } from '@angular/router';
 import { MatSidenav } from '@angular/material/sidenav';
 
@@ -17,12 +18,16 @@ export class AppComponent implements OnInit {
 
   constructor(
     public authService: AuthService,
+    private themeService: ThemeService,
     private router: Router
   ) {
     this.checkScreenSize();
   }
 
   ngOnInit(): void {
+    // Initialize theme
+    // Theme is now initialized in the service constructor
+    
     // Check if user is authenticated on app start
     if (this.authService.isAuthenticated) {
       // Validate token and get current user info
