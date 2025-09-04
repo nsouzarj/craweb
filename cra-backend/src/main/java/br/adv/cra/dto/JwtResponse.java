@@ -1,5 +1,6 @@
 package br.adv.cra.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,7 +18,9 @@ public class JwtResponse {
     private String type = "Bearer";
     private Long id;
     private String login;
+    @JsonProperty("nomeCompleto")
     private String nomecompleto;
+    @JsonProperty("emailPrincipal")
     private String emailprincipal;
     private Integer tipo;
     private List<String> roles;

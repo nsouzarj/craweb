@@ -38,10 +38,12 @@
           </mat-select>
         </mat-form-field>
 
-        <button mat-raised-button (click)="clearFilters()">
-          <mat-icon>clear</mat-icon>
-          Limpar
-        </button>
+        <div class="filter-actions">
+          <button mat-raised-button color="primary" class="button-align" (click)="clearFilters()">
+            <mat-icon>clear</mat-icon>
+            Limpar
+          </button>
+        </div>
       </div>
     </mat-card-content>
   </mat-card>

@@ -114,7 +114,7 @@ public class StatusSolicitacaoController {
     @GetMapping("/buscar/status")
     public ResponseEntity<?> buscarPorStatus(@RequestParam String status) {
         try {
-            List<StatusSolicitacao> statusList = statusSolicitacaoService.buscarPorStatus(status);
+            List<StatusSolicitacao> statusList = statusSolicitacaoService.buscarPorStatusContaining(status);
             return ResponseEntity.ok(statusList);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao buscar status de solicitação: " + e.getMessage());

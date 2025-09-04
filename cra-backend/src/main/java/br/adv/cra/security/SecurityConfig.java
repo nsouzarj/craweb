@@ -23,9 +23,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
     
-    private final UserDetailsService userDetailsService;
     private final AuthEntryPointJwt unauthorizedHandler;
     private final AuthTokenFilter authTokenFilter;
+    private final UserDetailsService userDetailsService;
     
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -49,6 +49,9 @@ public class SecurityConfig {
     @SuppressWarnings("removal")
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        // Set the UserDetailsService in the AuthTokenFilter
+        authTokenFilter.setUserDetailsService(userDetailsService);
+        
         http.cors(cors -> cors.configurationSource(request -> {
                     var corsConfiguration = new org.springframework.web.cors.CorsConfiguration();
                     corsConfiguration.setAllowedOriginPatterns(java.util.List.of("*"));

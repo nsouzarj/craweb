@@ -18,12 +18,19 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 @Component
-@RequiredArgsConstructor
 @Slf4j
 public class AuthTokenFilter extends OncePerRequestFilter {
     
     private final JwtUtils jwtUtils;
-    private final UserDetailsService userDetailsService;
+    private UserDetailsService userDetailsService;
+    
+    public AuthTokenFilter(JwtUtils jwtUtils) {
+        this.jwtUtils = jwtUtils;
+    }
+    
+    public void setUserDetailsService(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
     
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, 

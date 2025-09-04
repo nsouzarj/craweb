@@ -19,6 +19,14 @@
   font-size: 28px;
 }
 
+.button-align{
+  display: flex !important;
+  justify-content: flex-end !important;
+  align-items: center !important;
+  bottom: 10px !important;
+}
+
+
 .filters-card {
   margin-bottom: 30px;
 }
@@ -27,7 +35,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
-  align-items: flex-end; /* Changed from 'end' to 'flex-end' for better alignment */
+  align-items: center;
 }
 
 .search-field {
@@ -35,31 +43,18 @@
   min-width: 250px;
 }
 
-.clear-filter-button {
-  height: 36px; /* Match the visible height of the form field input area */
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 0 16px; /* Standard padding per specs */
-  font-size: 14px; /* Standard size per specs */
-  margin-bottom: 22px; /* Adjusted margin to better align with the form fields' text area */
-}
-
 .filter-actions {
   display: flex;
-  align-items: flex-end; /* Changed from 'end' to 'flex-end' for better alignment */
-  height: auto;
-  margin: 0;
+  align-items: center;
 }
 
 .filter-actions button {
-  height: 36px; /* Match the visible height of the form field input area */
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 0 16px; /* Standard padding per specs */
-  font-size: 14px; /* Standard size per specs */
-  min-width: auto;
+  height: 40px; /* Standard button height */
+  padding: 0 16px;
+  font-size: 14px;
+  white-space: nowrap;
+  margin: 0;
+  border-radius: 4px;
 }
 
 /* Status filter option colors */
@@ -232,22 +227,15 @@
     min-width: auto;
   }
   
-  .clear-filter-button {
-    height: 40px;
+  .clear-filter-button, .filter-actions button {
     width: 100%;
-    justify-content: center;
+    margin-top: 8px;
   }
   
   .filter-actions {
     align-items: stretch;
     height: auto;
     margin-bottom: 0;
-  }
-  
-  .filter-actions button {
-    height: 40px;
-    width: 100%;
-    justify-content: center;
   }
   
   .table-header {

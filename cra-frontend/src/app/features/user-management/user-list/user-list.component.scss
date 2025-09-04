@@ -20,6 +20,13 @@
   margin-bottom: 20px;
 }
 
+.button-align{
+  display: flex !important;
+  justify-content: flex-end !important;
+  align-items: center !important;
+  bottom: 10px !important;
+}
+
 .search-container {
   display: flex;
   gap: 16px;
@@ -30,6 +37,24 @@
 .search-field {
   flex: 1;
   min-width: 250px;
+}
+
+.filter-actions {
+  display: flex;
+  align-items: center;
+}
+
+.filter-actions button {
+  height: 40px; /* Standard button height */
+  padding: 0 16px;
+  font-size: 14px;
+  white-space: nowrap;
+  margin: 0;
+  border-radius: 4px;
+}
+
+.filter-actions mat-icon {
+  margin-right: 6px;
 }
 
 .table-card {
@@ -137,9 +162,19 @@
   
   .search-container {
     flex-direction: column;
+    align-items: stretch;
   }
   
   .search-field {
     min-width: unset;
+  }
+  
+  .filter-actions {
+    width: 100%;
+    margin-top: 8px;
+  }
+  
+  .filter-actions button {
+    width: 100%;
   }
 }
