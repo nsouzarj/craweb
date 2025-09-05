@@ -8,6 +8,8 @@ import { Solicitacao, SolicitacaoStatus } from '../../../shared/models/solicitac
 import { Processo } from '../../../shared/models/processo.model';
 import { Comarca } from '../../../shared/models/comarca.model';
 import { Orgao } from '../../../shared/models/orgao.model';
+import { AuthService } from '@/app/core/services/auth.service';
+import { PermissionService } from '@/app/core/services/permission.service'; // Added PermissionService
 
 @Component({
   selector: 'app-request-list',
@@ -38,7 +40,9 @@ export class RequestListComponent implements OnInit {
     private solicitacaoStatusService: SolicitacaoStatusService,
     private processoService: ProcessoService,
     private comarcaService: ComarcaService,
-    private orgaoService: OrgaoService
+    private orgaoService: OrgaoService,
+    public authService: AuthService,
+    public permissionService: PermissionService   // Added PermissionService
   ) {}
 
   ngOnInit(): void {
@@ -172,5 +176,23 @@ export class RequestListComponent implements OnInit {
     this.filterComarca = null;
     this.filterOrgao = null;
     this.filteredSolicitacoes = this.solicitacoes;
+  }
+  
+  // Added delete request method
+  deleteRequest(id: number): void {
+    if (confirm('Tem certeza que deseja excluir esta solicitação?')) {
+      this.solicitacaoService.deleteSolicitacao(id).subscribe({
+        next: () => {
+          // Remove the deleted request from the lists
+          this.solicitacoes = this.solicitacoes.filter(s => s.id !== id);
+          this.filteredSolicitacoes = this.filteredSolicitacoes.filter(s => s.id !== id);
+          console.log('Solicitação excluída com sucesso');
+        },
+        error: (error) => {
+          console.error('Erro ao excluir solicitação:', error);
+          alert('Erro ao excluir solicitação');
+        }
+      });
+    }
   }
 }

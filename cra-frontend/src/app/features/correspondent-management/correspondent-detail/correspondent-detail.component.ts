@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { CorrespondenteService } from '../../../core/services/correspondente.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { PermissionService } from '../../../core/services/permission.service'; // Added PermissionService
 import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import { Correspondente } from '../../../shared/models/correspondente.model';
 
@@ -21,6 +22,7 @@ export class CorrespondentDetailComponent implements OnInit {
     private router: Router,
     private correspondenteService: CorrespondenteService,
     private authService: AuthService,
+    public permissionService: PermissionService, // Added PermissionService
     private snackBar: MatSnackBar,
     private dialog: MatDialog
   ) {}

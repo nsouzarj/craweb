@@ -1,17 +1,19 @@
-import { Component, OnInit, Output, EventEmitter, HostListener } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, HostListener, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
 import { ThemeService } from '../../../../core/services/theme.service';
 import { ZoomService } from '../../../../core/services/zoom.service';
 import { User } from '../../../models/user.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
   currentUser: User | null = null;
+  private currentUserSubscription: Subscription | null = null;
   
   @Output() toggleSidenav = new EventEmitter<void>();
 
@@ -23,9 +25,42 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.authService.currentUser.subscribe(user => {
-      this.currentUser = user;
+    // Subscribe to user changes to ensure we get updates when user logs in
+    this.currentUserSubscription = this.authService.currentUser.subscribe(user => {
+      this.currentUser = this.normalizeUser(user);
     });
+  }
+
+  ngOnDestroy(): void {
+    // Unsubscribe to prevent memory leaks
+    if (this.currentUserSubscription) {
+      this.currentUserSubscription.unsubscribe();
+    }
+  }
+
+  /**
+   * Normalize user data to handle potential alternative field names from backend
+   */
+  private normalizeUser(user: User | null): User | null {
+    if (!user) return null;
+    
+    // Handle potential case sensitivity or naming differences
+    const normalizedUser = { ...user };
+    
+    if (!normalizedUser.emailprincipal && (user as any).emailPrincipal) {
+      normalizedUser.emailprincipal = (user as any).emailPrincipal;
+    }
+    
+    if (!normalizedUser.nomecompleto && (user as any).nomeCompleto) {
+      normalizedUser.nomecompleto = (user as any).nomeCompleto;
+    }
+    
+    // Fallback: if nomecompleto is still missing, use login as the name
+    if (!normalizedUser.nomecompleto) {
+      normalizedUser.nomecompleto = normalizedUser.login;
+    }
+    
+    return normalizedUser;
   }
 
   onToggleSidenav(): void {

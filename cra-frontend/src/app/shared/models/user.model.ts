@@ -10,6 +10,10 @@ export interface User {
   ativo: boolean;
   dataEntrada?: string;
   authorities?: string[];
+  
+  // Handle potential alternative field names from backend
+  emailPrincipal?: string;
+  nomeCompleto?: string;
 }
 
 export enum UserType {
@@ -44,4 +48,8 @@ export interface JwtResponse {
   tipo: UserType;
   roles: string[];
   expiresAt: string;
+  
+  // Handle potential alternative field names from backend
+  emailPrincipal?: string;
+  nomeCompleto?: string;
 }

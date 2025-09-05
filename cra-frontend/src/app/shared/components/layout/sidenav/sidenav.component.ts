@@ -46,7 +46,8 @@ export class SidenavComponent implements OnInit {
           icon: 'add',
           route: '/correspondentes/novo'
         }
-      ]
+      ],
+      roles: ['ROLE_ADMIN', 'ROLE_ADVOGADO'] // Only Admins and Lawyers can manage correspondents
     },
     {
       label: 'Processos',
@@ -62,7 +63,8 @@ export class SidenavComponent implements OnInit {
           icon: 'add',
           route: '/processos/novo'
         }
-      ]
+      ],
+      roles: ['ROLE_ADMIN', 'ROLE_ADVOGADO'] // Only Admins and Lawyers can manage processes
     },
     {
       label: 'Solicitações',
@@ -72,16 +74,19 @@ export class SidenavComponent implements OnInit {
           label: 'Listar',
           icon: 'list',
           route: '/solicitacoes'
+          // No roles restriction - all users can view solicitations
         },
         {
           label: 'Cadastrar',
           icon: 'add',
-          route: '/solicitacoes/novo'
+          route: '/solicitacoes/novo',
+          roles: ['ROLE_ADMIN', 'ROLE_ADVOGADO'] // Only Admins and Lawyers can create
         },
         {
           label: 'Pendentes',
           icon: 'pending',
-          route: '/solicitacoes/pendentes'
+          route: '/solicitacoes/pendentes',
+          roles: ['ROLE_ADMIN', 'ROLE_ADVOGADO'] // Only Admins and Lawyers can view pending
         }
       ]
     },
@@ -100,7 +105,7 @@ export class SidenavComponent implements OnInit {
           route: '/relatorios/solicitacoes'
         }
       ],
-      roles: ['ROLE_ADMIN', 'ROLE_ADVOGADO']
+      roles: ['ROLE_ADMIN', 'ROLE_ADVOGADO'] // Only Admins and Lawyers can access reports
     }
   ];
 

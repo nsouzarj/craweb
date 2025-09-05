@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { UserService } from '../../../core/services/user.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { PermissionService } from '../../../core/services/permission.service'; // Added PermissionService
 import { User, UserType } from '../../../shared/models/user.model';
 
 @Component({
@@ -21,6 +22,7 @@ export class UserDetailComponent implements OnInit {
     private router: Router,
     private userService: UserService,
     public authService: AuthService,
+    public permissionService: PermissionService, // Added PermissionService
     private snackBar: MatSnackBar
   ) {}
 

@@ -17,7 +17,7 @@
         </mat-chip>
       </div>
     </div>
-    <button mat-raised-button color="primary" (click)="editProcess()">
+    <button *ngIf="permissionService.canEditRequests()" mat-raised-button color="primary" (click)="editProcess()">
       <mat-icon>edit</mat-icon>
       Editar
     </button>

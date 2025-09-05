@@ -10,6 +10,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { UserService } from '../../../core/services/user.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { PermissionService } from '../../../core/services/permission.service';
 import { ConfirmationDialogComponent } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import { User, UserType } from '../../../shared/models/user.model';
 
@@ -36,6 +37,7 @@ export class UserListComponent implements OnInit {
   constructor(
     private userService: UserService,
     public authService: AuthService,
+    public permissionService: PermissionService,
     private dialog: MatDialog,
     private router: Router,
     private snackBar: MatSnackBar

@@ -10,6 +10,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { CorrespondenteService } from '../../../core/services/correspondente.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { PermissionService } from '../../../core/services/permission.service';
 import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import { Correspondente } from '../../../shared/models/correspondente.model';
 
@@ -33,6 +34,7 @@ export class CorrespondentListComponent implements OnInit {
   constructor(
     private correspondenteService: CorrespondenteService,
     public authService: AuthService,
+    public permissionService: PermissionService,
     private dialog: MatDialog,
     private router: Router,
     private snackBar: MatSnackBar

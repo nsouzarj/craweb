@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProcessoService } from '../../../core/services/processo.service';
+import { AuthService } from '../../../core/services/auth.service'; // Added AuthService
+import { PermissionService } from '../../../core/services/permission.service'; // Added PermissionService
 import { Processo } from '../../../shared/models/processo.model';
 
 @Component({
@@ -15,7 +17,8 @@ export class ProcessDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private processoService: ProcessoService
+    private processoService: ProcessoService,
+    public permissionService: PermissionService // Added PermissionService
   ) {}
 
   ngOnInit(): void {

@@ -24,7 +24,7 @@
       </button>
       
       <span class="user-welcome" *ngIf="currentUser">
-        Olá, {{ currentUser.nomecompleto }}
+        Olá, {{ currentUser.nomecompleto || currentUser.login || 'Usuário' }}
       </span>
       
       <button mat-icon-button [matMenuTriggerFor]="userMenu">
@@ -33,8 +33,8 @@
       
       <mat-menu #userMenu="matMenu">
         <div class="user-info">
-          <div class="user-name" *ngIf="currentUser">{{ currentUser.nomecompleto }}</div>
-          <div class="user-email" *ngIf="currentUser">{{ currentUser.emailprincipal }}</div>
+          <div class="user-name" *ngIf="currentUser">{{ currentUser.nomecompleto || currentUser.login || 'Usuário' }}</div>
+          <div class="user-email" *ngIf="currentUser">{{ currentUser.emailprincipal || 'Email não informado' }}</div>
           <div class="user-role">{{ getUserRoleText() }}</div>
         </div>
         <mat-divider></mat-divider>

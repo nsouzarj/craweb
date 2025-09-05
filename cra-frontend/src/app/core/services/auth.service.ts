@@ -83,6 +83,13 @@ export class AuthService {
   }
 
   /**
+   * Property version of isAdmin for template usage
+   */
+  public get isAdminUser(): boolean {
+    return this.isAdmin();
+  }
+
+  /**
    * Checks if the current user is a lawyer (Advogado)
    * 
    * @returns True if the user is a lawyer, false otherwise
@@ -92,12 +99,46 @@ export class AuthService {
   }
 
   /**
+   * Property version of isAdvogado for template usage
+   */
+  public get isAdvogadoUser(): boolean {
+    return this.isAdvogado();
+  }
+
+  /**
    * Checks if the current user is a correspondent (Correspondente)
    * 
    * @returns True if the user is a correspondent, false otherwise
    */
   public isCorrespondente(): boolean {
     return this.hasRole('ROLE_CORRESPONDENTE');
+  }
+
+  /**
+   * Property version of isCorrespondente for template usage
+   */
+  public get isCorrespondenteUser(): boolean {
+    return this.isCorrespondente();
+  }
+
+  /**
+   * Checks if the current user has any of the specified roles
+   * 
+   * @param roles Array of roles to check
+   * @returns True if the user has any of the specified roles, false otherwise
+   */
+  public hasAnyRole(roles: string[]): boolean {
+    return roles.some(role => this.hasRole(role));
+  }
+
+  /**
+   * Checks if the current user has all of the specified roles
+   * 
+   * @param roles Array of roles to check
+   * @returns True if the user has all of the specified roles, false otherwise
+   */
+  public hasAllRoles(roles: string[]): boolean {
+    return roles.every(role => this.hasRole(role));
   }
 
   /**
@@ -114,6 +155,25 @@ export class AuthService {
 
     return this.http.post<JwtResponse>(`${this.apiUrl}/login`, credentials, { headers })
       .pipe(
+        map(response => {
+          // Handle potential case sensitivity or naming differences
+          const normalizedResponse = { ...response };
+          
+          if (!normalizedResponse.emailprincipal && (response as any).emailPrincipal) {
+            normalizedResponse.emailprincipal = (response as any).emailPrincipal;
+          }
+          
+          if (!normalizedResponse.nomecompleto && (response as any).nomeCompleto) {
+            normalizedResponse.nomecompleto = (response as any).nomeCompleto;
+          }
+          
+          // Fallback: if nomecompleto is still missing, use login as the name
+          if (!normalizedResponse.nomecompleto) {
+            normalizedResponse.nomecompleto = normalizedResponse.login;
+          }
+          
+          return normalizedResponse;
+        }),
         tap(response => {
           // Store JWT token
           localStorage.setItem('token', response.token);
@@ -196,6 +256,25 @@ export class AuthService {
 
     return this.http.get<User>(`${this.apiUrl}/me`, { headers })
       .pipe(
+        map(user => {
+          // Handle potential case sensitivity or naming differences
+          const normalizedUser = { ...user };
+          
+          if (!normalizedUser.emailprincipal && (user as any).emailPrincipal) {
+            normalizedUser.emailprincipal = (user as any).emailPrincipal;
+          }
+          
+          if (!normalizedUser.nomecompleto && (user as any).nomeCompleto) {
+            normalizedUser.nomecompleto = (user as any).nomeCompleto;
+          }
+          
+          // Fallback: if nomecompleto is still missing, use login as the name
+          if (!normalizedUser.nomecompleto) {
+            normalizedUser.nomecompleto = normalizedUser.login || 'Usuário';
+          }
+          
+          return normalizedUser;
+        }),
         tap(user => {
           localStorage.setItem('currentUser', JSON.stringify(user));
           this.currentUserSubject.next(user);

@@ -124,7 +124,7 @@
                 <button mat-icon-button (click)="viewProcess(processo)" matTooltip="Visualizar">
                   <mat-icon>visibility</mat-icon>
                 </button>
-                <button mat-icon-button (click)="editProcess(processo)" matTooltip="Editar">
+                <button *ngIf="permissionService.canEditRequests()" mat-icon-button (click)="editProcess(processo)" matTooltip="Editar">
                   <mat-icon>edit</mat-icon>
                 </button>
               </div>

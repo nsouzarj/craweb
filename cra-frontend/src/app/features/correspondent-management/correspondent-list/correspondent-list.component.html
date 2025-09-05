@@ -153,7 +153,7 @@
                   <mat-icon>visibility</mat-icon>
                 </button>
                 
-                <button mat-icon-button (click)="editCorrespondent(correspondent)" matTooltip="Editar">
+                <button *ngIf="permissionService.canEditRequests()" mat-icon-button (click)="editCorrespondent(correspondent)" matTooltip="Editar">
                   <mat-icon>edit</mat-icon>
                 </button>
 

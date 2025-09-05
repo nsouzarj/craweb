@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SolicitacaoService } from '../../../core/services/solicitacao.service';
+import { PermissionService } from '../../../core/services/permission.service'; // Added PermissionService
 import { Solicitacao } from '../../../shared/models/solicitacao.model';
 
 @Component({
@@ -17,6 +18,7 @@ export class RequestDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private solicitacaoService: SolicitacaoService,
+    public permissionService: PermissionService, // Added PermissionService
     private snackBar: MatSnackBar
   ) {}
 

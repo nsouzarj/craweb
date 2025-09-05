@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { ProcessoService } from '../../../core/services/processo.service';
 import { ComarcaService } from '../../../core/services/comarca.service';
 import { OrgaoService } from '../../../core/services/orgao.service';
+import { PermissionService } from '../../../core/services/permission.service';
 import { Processo } from '../../../shared/models/processo.model';
 import { Comarca } from '../../../shared/models/comarca.model';
 import { Orgao } from '../../../shared/models/orgao.model';
@@ -46,6 +47,7 @@ export class ProcessListComponent implements OnInit {
     private processoService: ProcessoService,
     private comarcaService: ComarcaService,
     private orgaoService: OrgaoService,
+    public permissionService: PermissionService,
     private router: Router,
     private snackBar: MatSnackBar
   ) {}

@@ -23,7 +23,7 @@
           </mat-chip>
         </div>
       </div>
-      <button mat-raised-button color="primary" (click)="editUser()" *ngIf="authService.isAdmin()">
+      <button mat-raised-button color="primary" (click)="editUser()" *ngIf="permissionService.canManageUsers()">
         <mat-icon>edit</mat-icon>
         Editar
       </button>
@@ -123,7 +123,7 @@
       </mat-card>
 
       <!-- Admin Actions (only visible to admins) -->
-      <mat-card class="info-card" *ngIf="authService.isAdmin() && user?.id !== currentUserId">
+      <mat-card class="info-card" *ngIf="permissionService.canManageUsers() && user?.id !== currentUserId">
         <mat-card-header>
           <mat-card-title>
             <mat-icon>admin_panel_settings</mat-icon>

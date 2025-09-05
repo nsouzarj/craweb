@@ -120,14 +120,14 @@
                 
                 <button mat-icon-button 
                         (click)="editUser(user)"
-                        *ngIf="authService.isAdmin()"
+                        *ngIf="permissionService.canManageUsers()"
                         matTooltip="Editar">
                   <mat-icon>edit</mat-icon>
                 </button>
 
                 <button mat-icon-button 
                         [matMenuTriggerFor]="userMenu"
-                        *ngIf="authService.isAdmin()"
+                        *ngIf="permissionService.canManageUsers()"
                         matTooltip="Mais ações">
                   <mat-icon>more_vert</mat-icon>
                 </button>
@@ -174,7 +174,7 @@
         <p>Não há usuários que correspondam aos critérios de busca.</p>
         <button mat-raised-button color="primary" 
                 routerLink="/usuarios/novo"
-                *ngIf="authService.isAdmin()">
+                *ngIf="permissionService.canManageUsers()">
           Criar Primeiro Usuário
         </button>
       </div>

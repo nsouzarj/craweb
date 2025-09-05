@@ -54,6 +54,9 @@ import { SidenavComponent } from './shared/components/layout/sidenav/sidenav.com
 // Shared Components
 import { ConfirmationDialogComponent } from './shared/components/confirmation-dialog/confirmation-dialog.component';
 
+// Shared Module
+import { SharedModule } from './shared/shared.module'; // Added SharedModule
+
 // Interceptors
 import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
 import { ErrorHandlingInterceptor } from './core/interceptors/error-handling.interceptor';
@@ -80,6 +83,7 @@ import { ErrorHandlingInterceptor } from './core/interceptors/error-handling.int
     FormsModule,
     RouterModule.forRoot([]),
     AppRoutingModule,
+    SharedModule, // Added SharedModule
     
     // Angular Material Modules
     MatToolbarModule,

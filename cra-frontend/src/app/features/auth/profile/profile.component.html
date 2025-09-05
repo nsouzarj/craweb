@@ -17,11 +17,11 @@
           <div class="info-grid">
             <div class="info-item">
               <label>Nome Completo</label>
-              <span>{{ currentUser.nomecompleto }}</span>
+              <span>{{ currentUser.nomecompleto || currentUser.login || 'Não informado' }}</span>
             </div>
             <div class="info-item">
               <label>Login</label>
-              <span>{{ currentUser.login }}</span>
+              <span>{{ currentUser.login || 'Não informado' }}</span>
             </div>
             <div class="info-item">
               <label>Email Principal</label>

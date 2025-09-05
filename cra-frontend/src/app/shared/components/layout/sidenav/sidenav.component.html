@@ -32,14 +32,16 @@
         </a>
         
         <div class="nav-children" [class.expanded]="item.expanded">
-          <a mat-list-item 
-             *ngFor="let child of item.children"
-             [routerLink]="child.route"
-             routerLinkActive="active-link"
-             class="nav-child-item">
-            <mat-icon matListItemIcon>{{ child.icon }}</mat-icon>
-            <span matListItemTitle>{{ child.label }}</span>
-          </a>
+          <ng-container *ngFor="let child of item.children">
+            <a mat-list-item 
+               *ngIf="hasPermission(child.roles)"
+               [routerLink]="child.route"
+               routerLinkActive="active-link"
+               class="nav-child-item">
+              <mat-icon matListItemIcon>{{ child.icon }}</mat-icon>
+              <span matListItemTitle>{{ child.label }}</span>
+            </a>
+          </ng-container>
         </div>
       </div>
     </div>
