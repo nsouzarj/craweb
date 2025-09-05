@@ -7,7 +7,7 @@
       <h1>{{ correspondent?.nome }}</h1>
       <div class="header-badges">
         <mat-chip class="type-chip" *ngIf="correspondent?.tipo">
-          {{ getFormattedType(correspondent?.tipo) }}
+          <span  style="color:white">{{ getFormattedType(correspondent?.tipo) }}</span>
         </mat-chip>
         <mat-chip [class]="correspondent?.ativo ? 'status-active' : 'status-inactive'">
           {{ correspondent?.ativo ? 'Ativo' : 'Inativo' }}
