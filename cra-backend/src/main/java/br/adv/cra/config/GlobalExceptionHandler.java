@@ -42,7 +42,7 @@ public class GlobalExceptionHandler {
         
         ErrorResponse errorResponse = new ErrorResponse(
                 "Erro interno",
-                ex.getMessage(),
+                ex.getMessage() != null ? ex.getMessage() : "Ocorreu um erro inesperado",
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 LocalDateTime.now(),
                 null
