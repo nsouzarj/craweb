@@ -101,6 +101,29 @@
   align-items: center;
 }
 
+.table-info {
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+// Add explicit styling for the paginator
+.mat-paginator {
+  display: block !important;
+  margin-top: 20px !important;
+  border-top: 1px solid #e0e0e0 !important;
+  padding-top: 20px !important;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+// Ensure paginator is visible
+mat-paginator {
+  display: block;
+  margin-top: 20px;
+}
+
 @media (max-width: 768px) {
   .filter-row {
     flex-direction: column;

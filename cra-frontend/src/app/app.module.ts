@@ -14,7 +14,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { MatTableModule } from '@angular/material/table';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginatorModule, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
@@ -53,6 +53,9 @@ import { SidenavComponent } from './shared/components/layout/sidenav/sidenav.com
 
 // Shared Components
 import { ConfirmationDialogComponent } from './shared/components/confirmation-dialog/confirmation-dialog.component';
+
+// Shared Services
+import { PaginatorI18nService } from './shared/services/paginator-i18n.service';
 
 // Shared Module
 import { SharedModule } from './shared/shared.module'; // Added SharedModule
@@ -125,6 +128,10 @@ import { ErrorHandlingInterceptor } from './core/interceptors/error-handling.int
       provide: HTTP_INTERCEPTORS,
       useClass: ErrorHandlingInterceptor,
       multi: true
+    },
+    {
+      provide: MatPaginatorIntl,
+      useClass: PaginatorI18nService
     }
   ],
   bootstrap: [AppComponent],

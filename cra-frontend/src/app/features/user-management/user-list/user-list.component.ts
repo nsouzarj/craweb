@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -19,7 +19,7 @@ import { User, UserType } from '../../../shared/models/user.model';
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.scss']
 })
-export class UserListComponent implements OnInit {
+export class UserListComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -50,6 +50,7 @@ export class UserListComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
+    // Ensure paginator is connected to data source
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
@@ -60,6 +61,13 @@ export class UserListComponent implements OnInit {
       next: (users) => {
         this.dataSource.data = users;
         this.loading = false;
+        
+        // Connect paginator after data is loaded with a slight delay to ensure DOM is updated
+        setTimeout(() => {
+          if (this.paginator) {
+            this.dataSource.paginator = this.paginator;
+          }
+        }, 0);
       },
       error: (error) => {
         console.error('Error loading users:', error);

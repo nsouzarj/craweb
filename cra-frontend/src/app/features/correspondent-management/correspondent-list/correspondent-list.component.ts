@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -19,7 +19,7 @@ import { Correspondente } from '../../../shared/models/correspondente.model';
   templateUrl: './correspondent-list.component.html',
   styleUrls: ['./correspondent-list.component.scss']
 })
-export class CorrespondentListComponent implements OnInit {
+export class CorrespondentListComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -41,21 +41,29 @@ export class CorrespondentListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadCorrespondentes();  // Fixed method name
+    this.loadCorrespondentes();
     this.setupFilters();
   }
 
   ngAfterViewInit(): void {
+    // Ensure paginator is connected to data source
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
 
-  loadCorrespondentes(): void {  // Fixed method name
+  loadCorrespondentes(): void {
     this.loading = true;
     this.correspondenteService.getCorrespondentes().subscribe({
       next: (correspondents) => {
         this.dataSource.data = correspondents;
         this.loading = false;
+        
+        // Connect paginator after data is loaded with a slight delay to ensure DOM is updated
+        setTimeout(() => {
+          if (this.paginator) {
+            this.dataSource.paginator = this.paginator;
+          }
+        }, 0);
       },
       error: (error) => {
         console.error('Error loading correspondents:', error);

@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { SolicitacaoService } from '../../../core/services/solicitacao.service';
 import { SolicitacaoStatusService } from '../../../core/services/solicitacao-status.service';
 import { ProcessoService } from '../../../core/services/processo.service';
@@ -9,16 +13,18 @@ import { Processo } from '../../../shared/models/processo.model';
 import { Comarca } from '../../../shared/models/comarca.model';
 import { Orgao } from '../../../shared/models/orgao.model';
 import { AuthService } from '@/app/core/services/auth.service';
-import { PermissionService } from '@/app/core/services/permission.service'; // Added PermissionService
+import { PermissionService } from '@/app/core/services/permission.service';
+import { ConfirmationDialogComponent } from '@/app/shared/components/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-request-list',
   templateUrl: './request-list.component.html',
   styleUrls: ['./request-list.component.scss']
 })
-export class RequestListComponent implements OnInit {
-  solicitacoes: Solicitacao[] = [];
-  filteredSolicitacoes: Solicitacao[] = [];
+export class RequestListComponent implements OnInit, AfterViewInit {
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  dataSource = new MatTableDataSource<Solicitacao>();
   displayedColumns: string[] = ['id', 'complemento', 'tipoSolicitacao', 'processo', 'correspondente', 'status', 'actions'];
   loading = true;
   statuses: SolicitacaoStatus[] = [];
@@ -42,7 +48,10 @@ export class RequestListComponent implements OnInit {
     private comarcaService: ComarcaService,
     private orgaoService: OrgaoService,
     public authService: AuthService,
-    public permissionService: PermissionService   // Added PermissionService
+    public permissionService: PermissionService,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -51,27 +60,40 @@ export class RequestListComponent implements OnInit {
     this.loadFilterOptions();
   }
 
+  ngAfterViewInit(): void {
+    // Ensure paginator is connected to data source
+    this.dataSource.paginator = this.paginator;
+  }
+
   loadRequests(): void {
     this.solicitacaoService.getSolicitacoes().subscribe({
       next: (solicitacoes) => {
-        this.solicitacoes = solicitacoes;
-        this.filteredSolicitacoes = solicitacoes;
+        this.dataSource.data = solicitacoes;
         this.loading = false;
+        
+        // Connect paginator after data is loaded with a slight delay to ensure DOM is updated
+        setTimeout(() => {
+          if (this.paginator) {
+            this.dataSource.paginator = this.paginator;
+          }
+        }, 0);
       },
-      error: () => {
-        this.solicitacoes = [];
-        this.filteredSolicitacoes = [];
+      error: (error) => {
+        console.error('Error loading requests:', error);
+        this.dataSource.data = [];
         this.loading = false;
       }
     });
+  }
+  
+  private connectPaginator(): void {
+    // This method is no longer needed with the simplified approach
   }
 
   loadStatuses(): void {
     this.solicitacaoStatusService.getSolicitacaoStatuses().subscribe({
       next: (statuses) => {
         this.statuses = statuses;
-        // Log statuses for debugging
-        console.log('Loaded statuses:', statuses);
       },
       error: (error) => {
         console.error('Error loading statuses:', error);
@@ -131,18 +153,7 @@ export class RequestListComponent implements OnInit {
   }
 
   applyFilter(): void {
-    console.log('Applying filters:', {
-      status: this.filterStatus,
-      search: this.filterSearch,
-      processo: this.filterProcesso,
-      comarca: this.filterComarca,
-      orgao: this.filterOrgao
-    });
-    
-    this.filteredSolicitacoes = this.solicitacoes.filter(solicitacao => {
-      // Log each solicitacao for debugging
-      console.log('Checking solicitacao:', solicitacao);
-      
+    this.dataSource.filterPredicate = (solicitacao: Solicitacao, filter: string): boolean => {
       // Filter by status
       const statusMatch = this.filterStatus ? 
         solicitacao.statusSolicitacao?.status === this.filterStatus : true;
@@ -163,10 +174,16 @@ export class RequestListComponent implements OnInit {
       const orgaoMatch = this.filterOrgao ? 
         solicitacao.processo?.orgao?.id === this.filterOrgao : true;
       
-      console.log('Filter results:', { statusMatch, searchMatch, processoMatch, comarcaMatch, orgaoMatch });
-      
-      return statusMatch && searchMatch && processoMatch && comarcaMatch && orgaoMatch;
-    });
+      return Boolean(statusMatch && searchMatch && processoMatch && comarcaMatch && orgaoMatch);
+    };
+
+    // Trigger the filter
+    this.dataSource.filter = 'trigger';
+    
+    // Reset paginator to first page when filtering
+    if (this.paginator) {
+      this.paginator.firstPage();
+    }
   }
 
   clearFilters(): void {
@@ -175,24 +192,63 @@ export class RequestListComponent implements OnInit {
     this.filterProcesso = '';
     this.filterComarca = null;
     this.filterOrgao = null;
-    this.filteredSolicitacoes = this.solicitacoes;
+    
+    // Clear the filter
+    this.dataSource.filter = '';
+    
+    // Reset paginator to first page when clearing filters
+    if (this.paginator) {
+      this.paginator.firstPage();
+    }
   }
   
-  // Added delete request method
+  // Updated delete request method with confirmation dialog
   deleteRequest(id: number): void {
-    if (confirm('Tem certeza que deseja excluir esta solicitação?')) {
-      this.solicitacaoService.deleteSolicitacao(id).subscribe({
-        next: () => {
-          // Remove the deleted request from the lists
-          this.solicitacoes = this.solicitacoes.filter(s => s.id !== id);
-          this.filteredSolicitacoes = this.filteredSolicitacoes.filter(s => s.id !== id);
-          console.log('Solicitação excluída com sucesso');
-        },
-        error: (error) => {
-          console.error('Erro ao excluir solicitação:', error);
-          alert('Erro ao excluir solicitação');
-        }
-      });
-    }
+    // Find the request to get its description for the confirmation dialog
+    const solicitacao = this.dataSource.data.find(s => s.id === id);
+    const descricao = solicitacao?.complemento || `ID: ${id}`;
+    
+    // Open confirmation dialog
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Confirmar Exclusão',
+        message: `Tem certeza que deseja excluir a solicitação "${descricao}"?`,
+        confirmText: 'SIM',
+        cancelText: 'NÃO'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.solicitacaoService.deleteSolicitacao(id).subscribe({
+          next: () => {
+            // Remove the deleted request from the data source
+            const updatedData = this.dataSource.data.filter(s => s.id !== id);
+            this.dataSource.data = updatedData;
+            
+            // If we're using pagination, we might need to refresh the paginator
+            if (this.paginator) {
+              this.paginator._changePageSize(this.paginator.pageSize);
+            }
+            
+            // Show success message
+            this.snackBar.open('Solicitação excluída com sucesso!', 'Fechar', {
+              duration: 3000,
+              panelClass: ['success-snackbar']
+            });
+          },
+          error: (error) => {
+            console.error('Erro ao excluir solicitação:', error);
+            
+            // Show error message
+            this.snackBar.open('Erro ao excluir solicitação', 'Fechar', {
+              duration: 5000,
+              panelClass: ['error-snackbar']
+            });
+          }
+        });
+      }
+    });
   }
 }

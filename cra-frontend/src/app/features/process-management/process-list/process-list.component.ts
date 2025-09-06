@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -19,7 +19,7 @@ import { Orgao } from '../../../shared/models/orgao.model';
   templateUrl: './process-list.component.html',
   styleUrls: ['./process-list.component.scss']
 })
-export class ProcessListComponent implements OnInit {
+export class ProcessListComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -59,6 +59,7 @@ export class ProcessListComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
+    // Ensure paginator is connected to data source
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
@@ -68,6 +69,13 @@ export class ProcessListComponent implements OnInit {
       next: (processos) => {
         this.dataSource.data = processos;
         this.loading = false;
+        
+        // Connect paginator after data is loaded with a slight delay to ensure DOM is updated
+        setTimeout(() => {
+          if (this.paginator) {
+            this.dataSource.paginator = this.paginator;
+          }
+        }, 0);
       },
       error: (error) => {
         console.error('Error loading processes:', error);
