@@ -30,6 +30,7 @@ Após iniciar a aplicação, você pode acessar os seguintes endpoints:
 
 - **Swagger UI**: `http://localhost:8081/cra-api/swagger-ui.html`
 - **API Docs JSON**: `http://localhost:8081/cra-api/api-docs`
+- **API Docs YAML**: `http://localhost:8081/cra-api/v3/api-docs.yaml`
 
 ## Como Adicionar Documentação para Novos Endpoints
 
@@ -75,6 +76,14 @@ As seguintes tags estão configuradas para organizar a documentação:
 
 A API utiliza autenticação JWT. Os endpoints protegidos são marcados com a anotação `@SecurityRequirement(name = "bearerAuth")`.
 
+Para autenticar nas APIs protegidas através do Swagger UI:
+
+1. Utilize o endpoint `/api/auth/login` para obter um token JWT
+2. Copie o token retornado (sem as aspas)
+3. Clique no botão "Authorize" no topo da página do Swagger UI
+4. Insira o token no formato: `Bearer seu_token_aqui`
+5. Clique em "Authorize" e depois em "Close"
+
 ## Personalização
 
 As seguintes propriedades podem ser configuradas no `application.properties`:
@@ -85,3 +94,23 @@ springdoc.swagger-ui.path=/swagger-ui.html
 springdoc.swagger-ui.operationsSorter=method
 springdoc.swagger-ui.tagsSorter=alpha
 ```
+
+## Solução de Problemas
+
+### Acesso não autorizado ao Swagger UI
+
+Se você estiver recebendo erros de "Acesso não autorizado" ao tentar acessar o Swagger UI, verifique se as seguintes URLs estão configuradas para permitir acesso sem autenticação no arquivo `SecurityConfig.java`:
+
+- `/swagger-ui/**`
+- `/swagger-ui.html`
+- `/api-docs/**`
+- `/v3/api-docs/**`
+- `/webjars/**`
+
+### Problemas com autenticação JWT
+
+Se estiver tendo problemas com a autenticação JWT nos endpoints protegidos:
+
+1. Certifique-se de que o token está no formato correto: `Bearer seu_token_aqui`
+2. Verifique se o token não expirou
+3. Confirme se o usuário tem as permissões necessárias para acessar o endpoint
