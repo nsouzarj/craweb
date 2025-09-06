@@ -24,7 +24,7 @@ export class ProcessListComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   dataSource = new MatTableDataSource<Processo>();
-  displayedColumns: string[] = ['numeroprocesso', 'parte', 'adverso', 'comarca', 'orgao', 'assunto', 'proceletronico', 'status', 'actions'];
+  displayedColumns: string[] = ['numeroprocesso', 'parte', 'adverso', 'cartorio', 'localizacao', 'comarca', 'orgao', 'assunto', 'proceletronico', 'status', 'actions'];
   loading = true;
   
   // Filter controls
@@ -147,6 +147,8 @@ export class ProcessListComponent implements OnInit, AfterViewInit {
         processo.numeroprocesso, 
         processo.parte,
         processo.adverso,
+        processo.cartorio,
+        processo.localizacao,
         processo.assunto
       ].some(field => field && field.toLowerCase().includes(searchTerm));
 

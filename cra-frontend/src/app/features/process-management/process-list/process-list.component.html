@@ -88,6 +88,16 @@
             <td mat-cell *matCellDef="let processo">{{ processo.adverso || '-' }}</td>
           </ng-container>
 
+          <ng-container matColumnDef="cartorio">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Cartório</th>
+            <td mat-cell *matCellDef="let processo">{{ processo.cartorio || '-' }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="localizacao">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Localização</th>
+            <td mat-cell *matCellDef="let processo">{{ processo.localizacao || '-' }}</td>
+          </ng-container>
+
           <ng-container matColumnDef="comarca">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Comarca</th>
             <td mat-cell *matCellDef="let processo">{{ getComarcaText(processo.comarca) }}</td>

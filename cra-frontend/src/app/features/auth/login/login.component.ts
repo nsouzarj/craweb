@@ -14,6 +14,7 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   loading = false;
   returnUrl: string;
+  hidePassword = true;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -35,6 +36,10 @@ export class LoginComponent implements OnInit {
     if (this.authService.isAuthenticated) {
       this.router.navigate([this.returnUrl]);
     }
+  }
+
+  togglePasswordVisibility(): void {
+    this.hidePassword = !this.hidePassword;
   }
 
   onSubmit(): void {

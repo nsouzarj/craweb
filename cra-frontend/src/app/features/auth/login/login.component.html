@@ -20,7 +20,10 @@
 
         <mat-form-field class="form-field" appearance="outline">
           <mat-label>Senha</mat-label>
-          <input matInput type="password" formControlName="senha" autocomplete="current-password">
+          <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="senha" autocomplete="current-password">
+          <button mat-icon-button matSuffix (click)="togglePasswordVisibility()" type="button">
+            <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
           <mat-error *ngIf="loginForm.get('senha')?.hasError('required')">
             Senha é obrigatória
           </mat-error>

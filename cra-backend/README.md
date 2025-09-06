@@ -16,6 +16,7 @@ Este projeto é um backend desenvolvido em Spring Boot para o sistema CRA (Corre
 - **H2 Database** (desenvolvimento/testes)
 - **Lombok**
 - **Maven**
+- **Swagger/OpenAPI 3.0** (Documentação da API)
 
 ## 📋 Pré-requisitos
 
@@ -211,6 +212,15 @@ A documentação completa da API está disponível em [docs/controllers.md](docs
 - Tipos de usuários e permissões
 
 Além disso, cada controller possui documentação JavaDoc detalhada no próprio código fonte.
+
+### Documentação Swagger/OpenAPI
+
+O projeto agora inclui documentação interativa da API usando Swagger/OpenAPI 3.0:
+
+- **Swagger UI**: `http://localhost:8080/cra-api/swagger-ui.html`
+- **API Docs JSON**: `http://localhost:8080/cra-api/api-docs`
+
+A documentação foi implementada de forma separada dos controllers para manter o código limpo e organizado. Para mais detalhes sobre como a documentação foi implementada, consulte o guia [SWAGGER_GUIDE.md](SWAGGER_GUIDE.md).
 
 ### Controllers Documentados
 

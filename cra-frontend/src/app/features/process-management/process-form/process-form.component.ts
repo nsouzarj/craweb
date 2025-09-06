@@ -36,10 +36,12 @@ export class ProcessFormComponent implements OnInit {
       numeroprocesso: ['', [Validators.required]],
       parte: [''],
       adverso: [''],
+      cartorio: [''],
+      localizacao: [''],
       assunto: [''],
-      proceletronico: [''], // Added processo eletronico field
-      status: ['EM_ANDAMENTO'], // Changed from ProcessStatus.EM_ANDAMENTO to string
-      observacoes: [''], // This should match the form field name
+      proceletronico: [''],
+      status: ['EM_ANDAMENTO'],
+      observacoes: [''],
       ativo: [true],
       orgao: [null],
       comarca: [null]
@@ -109,10 +111,12 @@ export class ProcessFormComponent implements OnInit {
           numeroprocesso: processo.numeroprocesso,
           parte: processo.parte,
           adverso: processo.adverso,
+          cartorio: processo.cartorio,
+          localizacao: processo.localizacao,
           assunto: processo.assunto,
-          proceletronico: processo.proceletronico, // Added processo eletronico field
+          proceletronico: processo.proceletronico,
           status: processo.status,
-          observacoes: processo.observacao, // Fixed: use 'observacao' instead of 'observacoes'
+          observacoes: processo.observacao,
           ativo: processo.ativo,
           orgao: processo.orgao?.id || null,
           comarca: processo.comarca?.id || null
@@ -139,10 +143,12 @@ export class ProcessFormComponent implements OnInit {
       numeroprocesso: formValue.numeroprocesso,
       parte: formValue.parte,
       adverso: formValue.adverso,
+      cartorio: formValue.cartorio,
+      localizacao: formValue.localizacao,
       assunto: formValue.assunto,
-      proceletronico: formValue.proceletronico, // Added processo eletronico field
+      proceletronico: formValue.proceletronico,
       status: formValue.status,
-      observacao: formValue.observacoes, // Fixed: map 'observacoes' form field to 'observacao' model property
+      observacao: formValue.observacoes,
       ativo: formValue.ativo,
       orgao: orgao,
       comarca: comarca
