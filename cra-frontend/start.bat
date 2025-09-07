@@ -1,4 +1,34 @@
 @echo off
+echo CRA - Sistema de Correspondentes
+echo ===============================
+echo.
+echo Iniciando o sistema completo...
+echo.
+echo Passo 1: Construindo e iniciando todos os serviços
+docker-compose up -d
+echo.
+echo Passo 2: Aguardando inicialização (30 segundos)
+timeout /t 30 /nobreak >nul
+echo.
+echo Passo 3: Verificando status dos serviços
+docker-compose ps
+echo.
+echo ===============================
+echo Acesso ao sistema:
+echo Frontend: http://localhost:4200
+echo Backend API: http://localhost:8080/api
+echo Banco de Dados: localhost:5432 (PostgreSQL)
+echo ===============================
+echo.
+echo Credenciais padrão:
+echo Admin: admin / admin123
+echo Advogado: advogado / senha123
+echo Correspondente: correspondente / senha123
+echo.
+echo Para parar o sistema, execute: docker-compose down
+echo.
+pause
+
 echo =====================================
 echo CRA Frontend - Angular 18 Application
 echo =====================================

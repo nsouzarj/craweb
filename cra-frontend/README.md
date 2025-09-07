@@ -69,14 +69,6 @@ ng build --configuration production
 
 Built files will be in the `dist/` directory.
 
-## 🔐 Default Login Credentials
-
-Use the same credentials configured in your backend:
-
-- **Admin**: admin / admin123
-- **Advogado**: advogado / senha123
-- **Correspondente**: correspondente / senha123
-
 ## 🏗️ Project Structure
 
 ```
@@ -167,22 +159,46 @@ export const environment = {
 };
 ```
 
-## 🚨 Common Issues
+## ▶️ Running the Application
 
-### Backend Connection Issues
-- Ensure the CRA backend is running on `http://localhost:8080`
-- Check CORS configuration in the backend
-- Verify API endpoints are accessible
+### Prerequisites
+- Docker and Docker Compose installed
+- At least 4GB of available RAM
 
-### Authentication Issues
-- Clear browser localStorage if experiencing login issues
-- Check JWT token expiration
-- Verify user credentials in the backend database
+### Quick Start
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   cd cra-frontend
+   ```
 
-### Build Issues
-- Clear node_modules and reinstall: `rm -rf node_modules && npm install`
-- Check Angular CLI version: `ng version`
-- Ensure all peer dependencies are satisfied
+2. Start the complete application stack:
+   ```bash
+   docker-compose up -d
+   ```
+
+3. Access the application:
+   - Frontend: http://localhost:4200
+   - Backend API: http://localhost:8080/api
+   - Database: localhost:5432 (PostgreSQL)
+
+### Stopping the Application
+```bash
+docker-compose down
+```
+
+### Viewing Logs
+```bash
+docker-compose logs -f
+```
+
+## 🔐 Default Login Credentials
+
+Use the same credentials configured in your backend:
+
+- **Admin**: admin / admin123
+- **Advogado**: advogado / senha123
+- **Correspondente**: correspondente / senha123
 
 ## 🎨 Customization
 

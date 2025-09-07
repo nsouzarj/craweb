@@ -16,6 +16,7 @@ import { environment } from '../../../environments/environment';
 })
 export class ProcessoService {
   private apiUrl = `${environment.apiUrl}/api/processos`;
+
   constructor(
     private http: HttpClient,
     private comarcaService: ComarcaService
