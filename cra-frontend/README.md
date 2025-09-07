@@ -211,7 +211,9 @@ The application is fully responsive and supports mobile devices with:
 
 This application can be containerized using Docker for easy deployment and scalability.
 
-For detailed instructions on Docker deployment, please refer to [DOCKER.md](DOCKER.md).
+For detailed instructions on Docker deployment, please refer to:
+- [DOCKER.md](DOCKER.md) (English)
+- [DOCKER.pt.md](DOCKER.pt.md) (Portuguese)
 
 ### Quick Start
 

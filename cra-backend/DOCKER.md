@@ -141,3 +141,9 @@ docker-compose build
 # For development setup
 docker-compose -f docker-compose.dev.yml build
 ```
+
+---
+
+## 🌍 Documentação em Português
+
+Este documento também está disponível em português: [DOCKER_PT.md](DOCKER_PT.md)
