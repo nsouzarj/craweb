@@ -4,8 +4,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { UserService } from '../../../core/services/user.service';
 import { AuthService } from '../../../core/services/auth.service';
-import { PermissionService } from '../../../core/services/permission.service'; // Added PermissionService
+import { PermissionService } from '../../../core/services/permission.service';
 import { User, UserType } from '../../../shared/models/user.model';
+import { Correspondente } from '../../../shared/models/correspondente.model';
 
 @Component({
   selector: 'app-user-detail',
@@ -22,7 +23,7 @@ export class UserDetailComponent implements OnInit {
     private router: Router,
     private userService: UserService,
     public authService: AuthService,
-    public permissionService: PermissionService, // Added PermissionService
+    public permissionService: PermissionService,
     private snackBar: MatSnackBar
   ) {}
 
@@ -196,5 +197,87 @@ export class UserDetailComponent implements OnInit {
 
   goBack(): void {
     this.router.navigate(['/usuarios']);
+  }
+
+  getCorrespondentInfo(): any[] {
+    if (!this.user || this.user.tipo !== UserType.CORRESPONDENTE || !this.user.correspondent) {
+      return [];
+    }
+
+    const correspondent = this.user.correspondent;
+    const endereco = correspondent.endereco;
+    
+    const info = [
+      {
+        label: 'Nome',
+        value: correspondent.nome
+      },
+      {
+        label: 'OAB',
+        value: correspondent.oab || 'Não informado'
+      },
+      {
+        label: 'CPF/CNPJ',
+        value: correspondent.cpfcnpj || 'Não informado'
+      }
+    ];
+
+    // Add contact information
+    if (correspondent.emailprimario) {
+      info.push({
+        label: 'Email Principal',
+        value: correspondent.emailprimario
+      });
+    }
+
+    if (correspondent.telefoneprimario) {
+      info.push({
+        label: 'Telefone Principal',
+        value: correspondent.telefoneprimario
+      });
+    }
+
+    if (correspondent.telefonecelularprimario) {
+      info.push({
+        label: 'Celular',
+        value: correspondent.telefonecelularprimario
+      });
+    }
+
+    // Add address information
+    if (endereco) {
+      if (endereco.logradouro) {
+        info.push({
+          label: 'Endereço',
+          value: `${endereco.logradouro}${endereco.numero ? `, ${endereco.numero}` : ''}${endereco.complemento ? ` - ${endereco.complemento}` : ''}`
+        });
+      }
+
+      if (endereco.bairro) {
+        info.push({
+          label: 'Bairro',
+          value: endereco.bairro
+        });
+      }
+
+      if (endereco.cidade || endereco.uf) {
+        const cityUf = `${endereco.cidade || ''}${endereco.uf ? `/${endereco.uf.sigla}` : ''}`;
+        if (cityUf) {
+          info.push({
+            label: 'Cidade/UF',
+            value: cityUf
+          });
+        }
+      }
+
+      if (endereco.cep) {
+        info.push({
+          label: 'CEP',
+          value: endereco.cep
+        });
+      }
+    }
+
+    return info;
   }
 }

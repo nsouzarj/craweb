@@ -36,7 +36,7 @@
               <mat-error *ngIf="userForm.get('nomecompleto')?.hasError('required')">
                 Nome completo é obrigatório
               </mat-error>
-              <mat-error *ngIf="userForm.get('nomeCompleto')?.hasError('maxlength')">
+              <mat-error *ngIf="userForm.get('nomecompleto')?.hasError('maxlength')">
                 Nome deve ter no máximo 255 caracteres
               </mat-error>
             </mat-form-field>
@@ -81,6 +81,23 @@
               </mat-error>
             </mat-form-field>
           </div>
+          
+          <!-- Correspondent Selection (only for Correspondente type users) -->
+          <div class="form-row" *ngIf="showCorrespondentField">
+            <mat-form-field class="form-field full-width" appearance="outline">
+              <mat-label>Correspondente *</mat-label>
+              <mat-select formControlName="correspondentId" placeholder="Selecione um correspondente">
+                <mat-option *ngFor="let correspondente of correspondentes" [value]="correspondente.id">
+                  {{ correspondente.nome }} 
+                  <span *ngIf="correspondente.oab">({{ correspondente.oab }})</span>
+                </mat-option>
+              </mat-select>
+              <mat-hint>Selecione um correspondente</mat-hint>
+              <mat-error *ngIf="userForm.get('correspondentId')?.hasError('required')">
+                Correspondente é obrigatório para usuários do tipo Correspondente
+              </mat-error>
+            </mat-form-field>
+          </div>
         </div>
 
         <!-- Contact Information -->
@@ -90,7 +107,7 @@
           <mat-form-field class="form-field full-width" appearance="outline">
             <mat-label>Email Principal</mat-label>
             <input matInput type="email" formControlName="emailprincipal">
-            <mat-error *ngIf="userForm.get('emailPrincipal')?.hasError('email')">
+            <mat-error *ngIf="userForm.get('emailprincipal')?.hasError('email')">
               Email inválido
             </mat-error>
           </mat-form-field>
@@ -99,7 +116,7 @@
             <mat-form-field class="form-field" appearance="outline">
               <mat-label>Email Secundário</mat-label>
               <input matInput type="email" formControlName="emailsecundario">
-              <mat-error *ngIf="userForm.get('emailSecundario')?.hasError('email')">
+              <mat-error *ngIf="userForm.get('emailsecundario')?.hasError('email')">
                 Email inválido
               </mat-error>
             </mat-form-field>
@@ -107,7 +124,7 @@
             <mat-form-field class="form-field" appearance="outline">
               <mat-label>Email Responsável</mat-label>
               <input matInput type="email" formControlName="emailresponsavel">
-              <mat-error *ngIf="userForm.get('emailResponsavel')?.hasError('email')">
+              <mat-error *ngIf="userForm.get('emailresponsavel')?.hasError('email')">
                 Email inválido
               </mat-error>
             </mat-form-field>

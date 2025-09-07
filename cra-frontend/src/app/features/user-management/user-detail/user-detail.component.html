@@ -72,6 +72,24 @@
         </mat-card-content>
       </mat-card>
 
+      <!-- Correspondent Information (only for Correspondente type users) -->
+      <mat-card class="info-card" *ngIf="user.tipo === 3 && user.correspondent">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>business</mat-icon>
+            Informações do Correspondente
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="info-list">
+            <div class="info-item" *ngFor="let info of getCorrespondentInfo()">
+              <span class="info-label">{{ info.label }}:</span>
+              <span class="info-value">{{ info.value }}</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
       <!-- Contact Information -->
       <mat-card class="info-card">
         <mat-card-header>

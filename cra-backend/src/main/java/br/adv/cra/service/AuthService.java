@@ -5,7 +5,9 @@ import br.adv.cra.dto.LoginRequest;
 import br.adv.cra.dto.RefreshTokenRequest;
 import br.adv.cra.dto.RegisterRequest;
 import br.adv.cra.entity.Usuario;
+import br.adv.cra.entity.Correspondente;
 import br.adv.cra.repository.UsuarioRepository;
+import br.adv.cra.repository.CorrespondenteRepository;
 import br.adv.cra.security.JwtUtils;
 import br.adv.cra.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +35,7 @@ public class AuthService {
     
     private final AuthenticationManager authenticationManager;
     private final UsuarioRepository usuarioRepository;
+    private final CorrespondenteRepository correspondenteRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtils jwtUtils;
     
@@ -92,6 +96,16 @@ public class AuthService {
         usuario.setTipo(registerRequest.getTipo());
         usuario.setAtivo(true);
         usuario.setDataentrada(LocalDateTime.now());
+        
+        // If user type is "correspondente" (type 3) and a correspondent ID is provided, associate it
+        if (registerRequest.getTipo() == 3 && registerRequest.getCorrespondenteId() != null) {
+            Optional<Correspondente> correspondenteOpt = correspondenteRepository.findById(registerRequest.getCorrespondenteId());
+            if (correspondenteOpt.isPresent()) {
+                usuario.setCorrespondente(correspondenteOpt.get());
+            } else {
+                throw new RuntimeException("Erro: Correspondente com ID " + registerRequest.getCorrespondenteId() + " não encontrado!");
+            }
+        }
         
         usuario = usuarioRepository.save(usuario);
         

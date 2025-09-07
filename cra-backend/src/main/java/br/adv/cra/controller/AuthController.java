@@ -58,6 +58,9 @@ public class AuthController {
     /**
      * Registers a new user (Admin only).
      * 
+     * When registering a user of type "correspondente" (type 3), you can optionally
+     * associate an existing correspondent entity by providing the correspondenteId.
+     * 
      * @param registerRequest The user registration information
      * @return JwtResponse with access and refresh tokens for the new user, or error information
      */

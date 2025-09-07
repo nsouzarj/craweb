@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "usuario")
 @Data
@@ -34,7 +36,8 @@ public class Usuario implements Serializable {
     
     private String emailresponsavel;
     
-    @OneToOne
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "idcorrespondente")
     private Correspondente correspondente;
     
     private Integer tipo; // 1-Adm, 2-Advgodado, 3-Correspondente

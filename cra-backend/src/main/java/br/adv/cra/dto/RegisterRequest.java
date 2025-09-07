@@ -36,4 +36,7 @@ public class RegisterRequest {
     
     @NotNull(message = "Tipo é obrigatório")
     private Integer tipo; // 1-Admin, 2-Advogado, 3-Correspondente
+    
+    // Optional field to associate an existing correspondent when registering a "correspondente" user
+    private Long correspondenteId;
 }

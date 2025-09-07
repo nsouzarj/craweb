@@ -6,7 +6,9 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { UserService } from '../../../core/services/user.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { CorrespondenteService } from '../../../core/services/correspondente.service';
 import { User, UserType } from '../../../shared/models/user.model';
+import { Correspondente } from '../../../shared/models/correspondente.model';
 import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
@@ -23,10 +25,16 @@ export class UserFormComponent implements OnInit {
   isEditMode = false;
   userId: number | null = null;
   UserType = UserType;
+  
+  // Correspondent related properties
+  correspondentes: Correspondente[] = [];
+  filteredCorrespondentes: Correspondente[] = [];
+  showCorrespondentField = false;
 
   constructor(
     private formBuilder: FormBuilder,
     private userService: UserService,
+    private correspondenteService: CorrespondenteService,
     private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute,
@@ -44,6 +52,9 @@ export class UserFormComponent implements OnInit {
       return;
     }
 
+    // Load correspondents for selection
+    this.loadCorrespondentes();
+
     // Check if we're in edit mode
     this.route.params.subscribe(params => {
       if (params['id']) {
@@ -51,6 +62,18 @@ export class UserFormComponent implements OnInit {
         this.userId = +params['id'];
         this.loadUser();
       }
+    });
+    
+    // Watch for tipo changes to show/hide correspondent field
+    this.userForm.get('tipo')?.valueChanges.subscribe(tipo => {
+      this.showCorrespondentField = tipo === UserType.CORRESPONDENTE;
+      if (this.showCorrespondentField) {
+        this.userForm.get('correspondentId')?.setValidators([Validators.required]);
+      } else {
+        this.userForm.get('correspondentId')?.clearValidators();
+        this.userForm.get('correspondentId')?.setValue(null); // Reset the value when not needed
+      }
+      this.userForm.get('correspondentId')?.updateValueAndValidity();
     });
   }
 
@@ -63,6 +86,7 @@ export class UserFormComponent implements OnInit {
       emailsecundario: ['', [Validators.email]],
       emailresponsavel: ['', [Validators.email]],
       tipo: ['', [Validators.required]],
+      correspondentId: [null],
       ativo: [true]
     });
 
@@ -101,6 +125,22 @@ export class UserFormComponent implements OnInit {
     return form;
   }
 
+  loadCorrespondentes(): void {
+    this.correspondenteService.getActiveCorrespondentes().subscribe({
+      next: (correspondentes) => {
+        this.correspondentes = correspondentes;
+        this.filteredCorrespondentes = correspondentes;
+      },
+      error: (error) => {
+        console.error('Error loading correspondentes:', error);
+        this.snackBar.open('Erro ao carregar correspondentes', 'Fechar', {
+          duration: 5000,
+          panelClass: ['error-snackbar']
+        });
+      }
+    });
+  }
+
   loadUser(): void {
     if (!this.userId) return;
 
@@ -111,6 +151,15 @@ export class UserFormComponent implements OnInit {
         this.userForm.get('senha')?.clearValidators();
         this.userForm.get('senha')?.updateValueAndValidity();
         
+        // Set correspondent field visibility
+        this.showCorrespondentField = user.tipo === UserType.CORRESPONDENTE;
+        if (this.showCorrespondentField) {
+          this.userForm.get('correspondentId')?.setValidators([Validators.required]);
+        } else {
+          this.userForm.get('correspondentId')?.clearValidators();
+        }
+        this.userForm.get('correspondentId')?.updateValueAndValidity();
+        
         // Populate form
         this.userForm.patchValue({
           login: user.login?.trim(), // Trim the login field
@@ -119,6 +168,7 @@ export class UserFormComponent implements OnInit {
           emailsecundario: user.emailsecundario || '',
           emailresponsavel: user.emailresponsavel || '',
           tipo: user.tipo,
+          correspondentId: user.correspondentId || null,
           ativo: user.ativo
         });
       },
@@ -171,6 +221,11 @@ export class UserFormComponent implements OnInit {
       ...this.userForm.value,
       login: this.userForm.value.login?.trim()
     };
+
+    // Remove correspondentId if not needed
+    if (userData.tipo !== UserType.CORRESPONDENTE) {
+      delete userData.correspondentId;
+    }
 
     // For update operations, don't send password if it's empty or only whitespace
     if (this.isEditMode && (!userData.senha || userData.senha.trim() === '')) {

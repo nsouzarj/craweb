@@ -20,6 +20,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatListModule } from '@angular/material/list';
 
 // Components
 import { UserListComponent } from './user-list/user-list.component';
@@ -84,7 +85,8 @@ const routes: Routes = [
     MatChipsModule,
     MatSlideToggleModule,
     MatTooltipModule,
-    MatMenuModule
+    MatMenuModule,
+    MatListModule
   ]
 })
 export class UserManagementModule { }

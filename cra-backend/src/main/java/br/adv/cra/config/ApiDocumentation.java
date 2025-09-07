@@ -62,7 +62,9 @@ public interface ApiDocumentation {
     @Operation(
         summary = "Registra um novo usuário",
         description = "Registra um novo usuário no sistema. Apenas usuários com perfil de administrador podem registrar novos usuários. " +
-                     "O tipo de usuário deve ser 1 (Administrador), 2 (Advogado) ou 3 (Correspondente)."
+                     "O tipo de usuário deve ser 1 (Administrador), 2 (Advogado) ou 3 (Correspondente). " +
+                     "Quando registrar um usuário do tipo 3 (Correspondente), você pode opcionalmente associar um correspondente existente " +
+                     "fornecendo o ID do correspondente no campo correspondenteId."
     )
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Registro bem-sucedido", 

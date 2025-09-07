@@ -1,3 +1,5 @@
+import { Correspondente } from './correspondente.model';
+
 export interface User {
   id?: number;
   login: string;
@@ -10,6 +12,10 @@ export interface User {
   ativo: boolean;
   dataEntrada?: string;
   authorities?: string[];
+  
+  // Reference to correspondent (for CORRESPONDENTE type users)
+  correspondentId?: number;
+  correspondent?: Correspondente;
   
   // Handle potential alternative field names from backend
   emailPrincipal?: string;
