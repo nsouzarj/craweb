@@ -53,8 +53,9 @@ export class AppComponent implements OnInit {
     if (this.sidenav) {
       if (this.isMobile) {
         this.sidenav.mode = 'over';
-        this.sidenav.close();
-        this.isSidenavOpen = false;
+        // Don't automatically close the sidenav on mobile, let the user control it
+        // this.sidenav.close();
+        // this.isSidenavOpen = false;
       } else {
         this.sidenav.mode = 'side';
         this.sidenav.open();

@@ -68,8 +68,7 @@
 
 @media (max-width: 480px) {
   .sidenav {
-    width: 0;
-    overflow: hidden;
+    width: 200px; /* Keep the sidebar visible on small screens */
   }
   
   .sidenav-container {

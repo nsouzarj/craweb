@@ -4,7 +4,7 @@
   "description": "CRA Frontend - Angular 18 application for legal correspondent management",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --host 0.0.0.0 --disable-host-check",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
