@@ -207,9 +207,27 @@ The application is fully responsive and supports mobile devices with:
 - Mobile-optimized navigation
 - Adaptive form layouts
 
-## 🧪 Testing
+## 🐳 Docker Deployment
+
+This application can be containerized using Docker for easy deployment and scalability.
+
+For detailed instructions on Docker deployment, please refer to [DOCKER.md](DOCKER.md).
+
+### Quick Start
 
 ```bash
+# Build the Docker image
+docker build -t cra-frontend .
+
+# Run the container
+docker run -d -p 4200:80 --name cra-frontend-app cra-frontend
+```
+
+The application will be available at `http://localhost:4200`
+
+## 🧪 Testing
+
+```
 # Run unit tests
 npm test
 

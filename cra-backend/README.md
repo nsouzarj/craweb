@@ -17,6 +17,7 @@ Este projeto é um backend desenvolvido em Spring Boot para o sistema CRA (Corre
 - **Lombok**
 - **Maven**
 - **Swagger/OpenAPI 3.0** (Documentação da API)
+- **Docker** (Containerização)
 
 ## 📋 Pré-requisitos
 
@@ -24,6 +25,7 @@ Este projeto é um backend desenvolvido em Spring Boot para o sistema CRA (Corre
 - Maven 3.6 ou superior
 - **PostgreSQL 12+** (produção) - Configurado em 192.168.1.105:5432
 - MySQL 8.0 (alternativo)
+- Docker (opcional, para containerização)
 
 ## 🛠️ Configuração do Projeto
 
@@ -80,11 +82,27 @@ mvn spring-boot:run -Dspring-boot.run.profiles=dev
 mvn spring-boot:run
 ```
 
-### 4. Acesso às Aplicações
+### 4. Execução com Docker
+
+O projeto inclui suporte completo para Docker. Para mais detalhes, consulte [DOCKER.md](DOCKER.md).
+
+#### Execução com Docker Compose (Produção):
+```bash
+docker-compose up -d
+```
+
+#### Execução com Docker Compose (Desenvolvimento):
+```bash
+docker-compose -f docker-compose.dev.yml up -d
+```
+
+### 5. Acesso às Aplicações
 
 - **API REST**: http://localhost:8080/cra-api
 - **H2 Console** (dev): http://localhost:8080/cra-api/h2-console
 - **Actuator Health**: http://localhost:8080/cra-api/actuator/health
+- **Swagger UI**: http://localhost:8080/cra-api/swagger-ui.html
+- **API Docs**: http://localhost:8080/cra-api/api-docs
 
 ## 📚 Estrutura do Projeto
 
@@ -305,147 +323,3 @@ Retorna informações do usuário autenticado.
 Realiza logout (remove token no cliente).
 
 #### `GET /api/auth/validate`
-Valida se o token JWT atual é válido.
-
-#### `GET /api/auth/database-info`
-Retorna informações sobre a conexão com o banco de dados PostgreSQL (endpoint público para testes).
-
-### Como Usar a Autenticação:
-
-1. **Login**: Faça POST para `/api/auth/login` com credenciais
-2. **Use o Token**: Inclua o token no header `Authorization: Bearer <token>`
-3. **Renovação**: Use `/api/auth/refresh` quando o token expirar
-
-### Exemplo de Requisição Autenticada:
-
-```bash
-curl -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." \
-     http://localhost:8080/cra-api/api/usuarios
-```
-
-### Configuração JWT:
-
-```properties
-# application.properties
-app.jwt.secret=<secret-key-base64>
-app.jwt.expiration=86400000          # 24 horas
-app.jwt.refresh-expiration=604800000 # 7 dias
-```
-
-## 🔧 Solução de Problemas
-
-### Problemas de Conexão PostgreSQL:
-
-1. **Verificar se o PostgreSQL está rodando:**
-```bash
-# No servidor 192.168.1.105
-sudo systemctl status postgresql
-sudo systemctl start postgresql
-```
-
-2. **Testar conexão manual:**
-```bash
-psql -h 192.168.1.105 -U postgres -d dbcra
-```
-
-3. **Verificar firewall:**
-```bash
-# Permitir porta 5432
-sudo ufw allow 5432
-telnet 192.168.1.105 5432
-```
-
-4. **Verificar configuração PostgreSQL:**
-```bash
-# Editar postgresql.conf
-listen_addresses = '*'
-port = 5432
-
-# Editar pg_hba.conf
-host    all             all             0.0.0.0/0               md5
-```
-
-5. **Endpoint de teste de conexão:**
-```bash
-curl http://localhost:8080/cra-api/api/auth/database-info
-```
-
-### Problemas de Autenticação:
-
-1. **Erro "Credenciais inválidas":**
-```bash
-# Execute o script de correção de senhas no PostgreSQL
-psql -h 192.168.1.105 -U postgres -d dbcra -f database/fix-passwords.sql
-```
-
-2. **Usuários padrão após correção:**
-```
-Login: admin, Senha: admin123 (ROLE_ADMIN)
-Login: advogado1, Senha: adv123 (ROLE_ADVOGADO)  
-Login: corresp1, Senha: corresp123 (ROLE_CORRESPONDENTE)
-Login: isomina, Senha: isomina123 (ROLE_ADVOGADO)
-```
-
-3. **Testar login após correção:**
-```bash
-curl -X POST http://localhost:8080/cra-api/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"login":"admin","senha":"admin123"}'
-```
-
-### Logs do Sistema:
-```bash
-# Verificar logs da aplicação
-tail -f logs/cra-backend.log
-
-# Verificar logs do PostgreSQL
-sudo tail -f /var/log/postgresql/postgresql-*.log
-```
-
-## 🧪 Dados de Teste
-
-O projeto inclui dados iniciais para desenvolvimento:
-
-### Usuários Padrão:
-- **Admin**: login=`admin`, senha=`admin123`, tipo=1
-- **Advogado**: login=`advogado1`, senha=`adv123`, tipo=2
-- **Correspondente**: login=`corresp1`, senha=`corresp123`, tipo=3
-
-### Tipos de Usuário:
-- `1` - Administrador
-- `2` - Advogado
-- `3` - Correspondente
-
-## 🔧 Personalização
-
-### Modificar Configurações de Banco:
-Edite o arquivo `application.properties` para produção ou `application-dev.properties` para desenvolvimento.
-
-### Adicionar Novos Endpoints:
-1. Crie o método no Service correspondente
-2. Adicione o endpoint no Controller
-3. Teste via Postman ou curl
-
-### Adicionar Validações:
-Use as anotações do Bean Validation nas entidades ou crie validadores customizados.
-
-## 📞 Suporte
-
-Para dúvidas ou problemas, verifique:
-
-1. Logs da aplicação em `logs/cra-backend.log`
-2. Console do H2 (modo dev): http://localhost:8080/cra-api/h2-console
-3. Endpoint de health: http://localhost:8080/cra-api/actuator/health
-
-## 🏗️ Modernizações Implementadas
-
-- **Migração para Jakarta EE** (Spring Boot 3.x)
-- **Uso de Lombok** para reduzir boilerplate
-- **Validações com Bean Validation**
-- **Tratamento global de exceções**
-- **Configuração CORS**
-- **Profiles de ambiente**
-- **Logs estruturados**
-- **Endpoints RESTful padronizados**
-- **Uso de LocalDateTime** ao invés de Date
-- **IDs Long** ao invés de Integer
