@@ -23,7 +23,7 @@ Updated [Dockerfile](file:///d:/Projetos/craweb/cra-frontend/Dockerfile) to:
 - Ensure proper startup sequence
 
 ### 3. Added Health Checks
-Created [docker-compose.override.yml](file:///d:/Projetos/craweb/cra-frontend/docker-compose.override.yml) with:
+Created [docker-compose.override.yml](file:///d:/Projetos/ccra-frontend/docker-compose.override.yml) with:
 - Health checks for both frontend and backend services
 - Proper startup dependencies and timing
 
@@ -44,4 +44,4 @@ Added a custom error page [backend-error.html](file:///d:/Projetos/craweb/cra-fr
 - The backend service automatically adds the '/api' prefix to all routes, so frontend calls should use paths like `/cra-api/auth` instead of `/cra-api/api/auth`
 - The frontend and backend services are on the same Docker network and can communicate using service names
 - The health checks ensure proper startup order and service availability
-- For development access from other devices on the same network, use your machine's IP address: http://192.168.1.5:8081/cra-api
+- For development access from other devices on the same network, use your machine's IP address: http://192.168.1.105:8081/cra-api

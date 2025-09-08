@@ -2,7 +2,7 @@
 
 ## Configuration Summary
 Your system is configured with the following settings:
-- Machine IP: 192.168.1.5
+- Machine IP: 192.168.1.105
 - Frontend port: 4200
 - Backend port: 8081
 - Database port: 5432
@@ -29,7 +29,7 @@ Services are configured with proper networking:
 ### 3. environment.ts
 Development environment API URL:
 ```typescript
-apiUrl: 'http://192.168.1.5:8081/cra-api'
+apiUrl: 'http://192.168.1.105:8081/cra-api'
 ```
 
 ## Running the Application
@@ -40,8 +40,8 @@ docker-compose up --build
 ```
 
 ### 2. Access the Application
-- Frontend: http://192.168.1.5:4200
-- Backend API: http://192.168.1.5:8081/cra-api/
+- Frontend: http://192.168.1.105:4200
+- Backend API: http://192.168.1.105:8081/cra-api/
 - Database: localhost:5432 (from host)
 
 ### 3. Stopping Services
@@ -78,8 +78,8 @@ docker-compose logs database
 
 ## Network Access
 From other devices on the same network (Wi-Fi), you can access:
-- Frontend: http://192.168.1.5:4200
-- Backend API: http://192.168.1.5:8081/cra-api/
+- Frontend: http://192.168.1.105:4200
+- Backend API: http://192.168.1.105:8081/cra-api/
 
 ## Service Dependencies
 The services have the following dependencies:

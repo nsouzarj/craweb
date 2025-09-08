@@ -28,8 +28,8 @@ Try accessing an API endpoint through the proxy:
 
 ### 5. Test Mobile/Network Access
 From other devices on the same network, you can access:
-- Frontend: http://192.168.1.5:4200
-- API: http://192.168.1.5:8081/cra-api/actuator/health
+- Frontend: http://192.168.1.105:4200
+- API: http://192.168.1.105:8081/cra-api/actuator/health
 
 ### 6. Check Logs if Issues Occur
 ```bash
@@ -75,4 +75,4 @@ The updated configuration includes:
 2. API requests to `/cra-api/*` should be proxied to the backend service
 3. If backend is unavailable, users should see a friendly error message
 4. All services should maintain connectivity within the Docker network
-5. Other devices on the same network should be able to access the services using IP 192.168.1.5
+5. Other devices on the same network should be able to access the services using IP 192.168.1.105
