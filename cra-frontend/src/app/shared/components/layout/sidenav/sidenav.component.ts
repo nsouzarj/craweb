@@ -79,7 +79,9 @@ export class SidenavComponent implements OnInit {
         {
           label: 'Listar',
           icon: 'list',
-          route: '/solicitacoes'
+          route: '/solicitacoes',
+          roles: ['ROLE_ADMIN', 'ROLE_ADVOGADO'] 
+
           // No roles restriction - all users can view solicitations
         },
         {
