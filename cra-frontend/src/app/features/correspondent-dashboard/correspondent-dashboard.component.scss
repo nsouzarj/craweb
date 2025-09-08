@@ -1,3 +1,4 @@
+// Correspondent dashboard - minimal styles
 .dashboard-container {
   padding: 20px;
   max-width: 1200px;
@@ -6,56 +7,35 @@
 
 .dashboard-header {
   margin-bottom: 30px;
-  
-  h1 {
-    color: #333;
-    margin-bottom: 10px;
-  }
-  
-  p {
-    color: #666;
-    font-size: 1.1em;
-  }
+}
+
+.dashboard-header h1 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.dashboard-header p {
+  color: #666;
+  font-size: 1.1em;
 }
 
 .charts-section {
   margin-bottom: 30px;
-  
-  h2 {
-    color: #333;
-    margin-bottom: 20px;
-  }
+}
+
+.charts-section h2 {
+  color: #333;
+  margin-bottom: 20px;
 }
 
 .charts-grid {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  
-  &.vertical-layout {
-    grid-template-columns: 1fr;
-  }
 }
 
-.chart-card {
-  mat-card-header {
-    margin-bottom: 15px;
-    
-    mat-card-title {
-      font-size: 1.3em;
-      color: #333;
-    }
-    
-    mat-card-subtitle {
-      color: #666;
-    }
-  }
-  
-  mat-card-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+.chart-card mat-card-header {
+  margin-bottom: 15px;
 }
 
 .chart-container {
@@ -67,151 +47,47 @@
   padding: 20px 0;
 }
 
-.bar-chart {
+.bar-chart .chart-bars {
+  display: flex;
+  align-items: flex-end;
+  height: 250px;
+  gap: 15px;
+  padding: 20px;
   width: 100%;
-  display: flex;
   justify-content: center;
-  
-  .chart-bars {
-    display: flex;
-    align-items: flex-end;
-    height: 250px;
-    gap: 15px;
-    padding: 20px;
-    width: 100%;
-    justify-content: center;
-  }
-  
-  .bar-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-width: 70px;
-  }
-  
-  .bar {
-    width: 50px;
-    background-color: #4facfe;
-    border-radius: 4px 4px 0 0;
-    transition: height 0.3s ease;
-    min-height: 5px;
-  }
-  
-  .bar-label {
-    margin-top: 10px;
-    font-size: 0.85em;
-    text-align: center;
-    color: #666;
-    word-break: break-word;
-    max-width: 50px;
-  }
-  
-  .bar-value {
-    margin-bottom: 5px;
-    font-size: 0.9em;
-    font-weight: bold;
-    color: #333;
-  }
 }
 
-.pie-chart {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+.bar-chart .bar {
+  width: 50px;
+  background-color: #4facfe;
+  border-radius: 4px 4px 0 0;
+  min-height: 5px;
+}
+
+.pie-chart-container {
+  position: relative;
+  width: 350px;
+  height: 350px;
+  margin: 0 auto;
+}
+
+.pie-svg {
   width: 100%;
-  gap: 30px;
-  justify-content: center;
-  padding: 20px 0;
-  
-  .pie-chart-container {
-    position: relative;
-    width: 350px;
-    height: 350px;
-    margin: 0 auto;
-    flex-shrink: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .pie-svg {
-    width: 100%;
-    height: 100%;
-  }
-  
-  .pie-segment {
-    transform: rotate(-90deg);
-    transform-origin: center;
-  }
-  
-  .pie-center {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    
-    .pie-total {
-      font-size: 2.5em;
-      font-weight: bold;
-      color: #333;
-    }
-    
-    .pie-label {
-      font-size: 1.1em;
-      color: #666;
-    }
-  }
-  
-  .pie-legend {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    max-width: 400px;
-    flex: 1;
-    
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    .legend-color {
-      width: 16px;
-      height: 16px;
-      border-radius: 4px;
-    }
-    
-    .legend-label {
-      font-size: 0.9em;
-      color: #666;
-    }
-  }
+  height: 100%;
 }
 
-.loading-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 300px;
-  
-  mat-spinner {
-    margin-bottom: 20px;
-  }
-  
-  p {
-    color: #666;
-  }
+.pie-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
 }
 
-.quick-actions {
-  margin-top: 30px;
-  
-  h2 {
-    color: #333;
-    margin-bottom: 20px;
-  }
+.pie-total {
+  font-size: 2.5em;
+  font-weight: bold;
+  color: #333;
 }
 
 .actions-grid {
@@ -220,76 +96,20 @@
   gap: 20px;
 }
 
-.action-card {
-  text-align: center;
-  
-  mat-card-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    
-    mat-icon {
-      font-size: 3em;
-      width: auto;
-      height: auto;
-      color: #4facfe;
-      margin-bottom: 15px;
-    }
-    
-    h3 {
-      margin-bottom: 10px;
-      color: #333;
-    }
-    
-    p {
-      margin-bottom: 20px;
-      color: #666;
-    }
-    
-    button {
-      width: 100%;
-      max-width: 200px;
-    }
-  }
+.action-card mat-icon {
+  font-size: 3em;
+  color: #4facfe;
+  margin-bottom: 15px;
 }
 
-// Consolidated responsive design
 @media (max-width: 768px) {
   .dashboard-container {
     padding: 15px;
   }
   
-  .bar-chart {
-    .chart-bars {
-      flex-wrap: wrap;
-      height: auto;
-      justify-content: center;
-    }
-    
-    .bar-container {
-      margin: 10px;
-      min-width: 60px;
-    }
-    
-    .bar {
-      width: 40px;
-    }
-  }
-  
-  .pie-chart {
-    flex-direction: column;
-    gap: 20px;
-    padding: 20px 0;
-    
-    .pie-chart-container {
-      width: 250px;
-      height: 250px;
-    }
-    
-    .pie-legend {
-      max-width: 100%;
-    }
+  .pie-chart-container {
+    width: 250px;
+    height: 250px;
   }
   
   .actions-grid {
@@ -298,16 +118,12 @@
 }
 
 @media (max-width: 480px) {
-  .pie-chart .pie-chart-container {
+  .pie-chart-container {
     width: 200px;
     height: 200px;
   }
   
-  .pie-chart .pie-center .pie-total {
+  .pie-total {
     font-size: 2em;
-  }
-  
-  .pie-chart .pie-center .pie-label {
-    font-size: 0.9em;
   }
 }
