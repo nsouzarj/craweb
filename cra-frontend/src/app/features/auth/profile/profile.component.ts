@@ -71,9 +71,16 @@ export class ProfileComponent implements OnInit {
   findUser(id: number): void {
     this.userService.getUserById(id).subscribe({
       next: (user) => {
-        console.log('User obtained:', JSON.stringify(user))
+        console.log('User obtained:', JSON.stringify(user));
         this.userFind = user;
-        console.log('User obtained:', JSON.stringify(this.userFind))
+        // If the userFind has correspondent data, use it
+        if (user.correspondente && !this.currentUser?.correspondente) {
+          this.currentUser = {
+            ...this.currentUser,
+            correspondente: user.correspondente
+          } as User;
+        }
+        console.log('User obtained:', JSON.stringify(this.userFind));
       },
       error: (error) => {
         console.error('Error obtaining user:', error);

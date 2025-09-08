@@ -78,6 +78,7 @@ export class CorrespondentRequestsComponent implements OnInit, AfterViewInit {
     this.tipoSolicitacaoService.getTiposSolicitacao().subscribe({
       next: (tipos) => {
         this.tiposSolicitacao = tipos;
+        console.log('Loaded tipos de solicitação:', tipos);
       },
       error: (error) => {
         console.error('Error loading tipos de solicitação:', error);
@@ -287,6 +288,7 @@ export class CorrespondentRequestsComponent implements OnInit, AfterViewInit {
             }
             
             this.snackBar.open('Status atualizado com sucesso!', 'Fechar', { duration: 3000 });
+            console.log('Status updated successfully for solicitacao:', updated);
           },
           error: (error) => {
             console.error('Error updating status:', error);

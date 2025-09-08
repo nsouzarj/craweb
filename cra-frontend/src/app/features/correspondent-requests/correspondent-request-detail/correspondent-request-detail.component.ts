@@ -74,6 +74,7 @@ export class CorrespondentRequestDetailComponent implements OnInit {
           this.solicitacao = solicitacao;
           // Trigger change detection to ensure UI updates
           this.cdr.detectChanges();
+          console.log('Loaded solicitacao:', solicitacao);
         } else {
           this.snackBar.open('Você não tem permissão para visualizar esta solicitação', 'Fechar', { duration: 5000 });
           this.goBack();
@@ -292,6 +293,8 @@ export class CorrespondentRequestDetailComponent implements OnInit {
           next: (updated) => {
             this.solicitacao = updated;
             this.snackBar.open('Status atualizado com sucesso!', 'Fechar', { duration: 3000 });
+            console.log('Status updated successfully for solicitacao:', updated);
+            // Emit an event or call a method to notify parent components if needed
           },
           error: (error) => {
             console.error('Error updating status:', error);

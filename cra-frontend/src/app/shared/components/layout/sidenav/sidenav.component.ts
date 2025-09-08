@@ -27,6 +27,12 @@ export class SidenavComponent implements OnInit {
       route: '/dashboard'
     },
     {
+      label: 'Meu Dashboard',
+      icon: 'dashboard',
+      route: '/correspondent-dashboard',
+      roles: ['ROLE_CORRESPONDENTE'] // Only Correspondents can access their dashboard
+    },
+    {
       label: 'Usuários',
       icon: 'people',
       route: '/usuarios',

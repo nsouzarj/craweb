@@ -4,7 +4,8 @@ import { SolicitacaoService } from '../../core/services/solicitacao.service';
 import { SolicitacaoStatusService } from '../../core/services/solicitacao-status.service';
 import { User } from '../../shared/models/user.model';
 import { Solicitacao, SolicitacaoStatus } from '../../shared/models/solicitacao.model';
-import { catchError, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 interface ChartData {
   labels: string[];
@@ -80,24 +81,42 @@ export class CorrespondentDashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.currentUser = this.authService.currentUserValue;
-    this.loadDashboardData();
+    // Try to get fresh user data from the server
+    this.authService.getCurrentUser().subscribe({
+      next: (user) => {
+        console.log('Received fresh user data in dashboard:', user);
+        this.currentUser = user;
+        console.log('Correspondent ID:', this.currentUser?.correspondentId);
+        console.log('User ID:', this.currentUser?.id);
+        this.loadDashboardData();
+      },
+      error: (error) => {
+        console.error('Error loading current user in dashboard:', error);
+        // Fallback to cached data
+        this.currentUser = this.authService.currentUserValue;
+        console.log('Using cached user data in dashboard:', this.currentUser);
+        console.log('Correspondent ID:', this.currentUser?.correspondentId);
+        console.log('User ID:', this.currentUser?.id);
+        this.loadDashboardData();
+      }
+    });
   }
 
   private loadDashboardData(): void {
     // Get all solicitacao statuses
     this.solicitacaoStatusService.getSolicitacaoStatuses().pipe(
-      catchError((error) => {
+      catchError((error: any) => {
         console.error('Error fetching solicitacao statuses:', error);
         return of([]);
       })
     ).subscribe({
       next: (statuses: SolicitacaoStatus[]) => {
         console.log('Loaded solicitacao statuses:', statuses);
+        console.log('Number of statuses loaded:', statuses.length);
         // Load solicitacoes by status data
         this.loadSolicitacoesPorStatusData(statuses);
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Error loading dashboard data:', error);
         this.loading = false;
       }
@@ -119,22 +138,32 @@ export class CorrespondentDashboardComponent implements OnInit {
       return;
     }
 
-    // Get all solicitations for the current correspondent
-    this.solicitacaoService.getSolicitacoes().pipe(
-      catchError((error) => {
-        console.error('Error fetching all solicitacoes:', error);
-        return of([]);
-      })
-    ).subscribe({
+    // Get solicitations for the current correspondent using the appropriate method
+    const correspondentId = this.currentUser?.correspondentId;
+    const userId = this.currentUser?.id;
+    
+    let solicitacoesObservable: Observable<Solicitacao[]>;
+    
+    if (correspondentId) {
+      console.log(`Fetching solicitacoes for correspondent ID ${correspondentId}`);
+      solicitacoesObservable = this.solicitacaoService.searchByCorrespondente(correspondentId);
+    } else if (userId) {
+      console.log(`Fetching solicitacoes for user ID ${userId}`);
+      solicitacoesObservable = this.solicitacaoService.searchByUserCorrespondente(userId);
+    } else {
+      console.log('No correspondent ID or user ID found, fetching all solicitacoes');
+      solicitacoesObservable = this.solicitacaoService.getSolicitacoes().pipe(
+        catchError((error: any) => {
+          console.error('Error fetching all solicitacoes:', error);
+          return of([]);
+        })
+      );
+    }
+
+    solicitacoesObservable.subscribe({
       next: (solicitacoes: Solicitacao[]) => {
-        console.log(`Fetched ${solicitacoes.length} total solicitacoes`);
-        
-        // Filter solicitations for the current correspondent
-        const correspondentId = this.currentUser?.correspondentId;
-        if (correspondentId) {
-          solicitacoes = solicitacoes.filter(s => s.correspondente?.id === correspondentId);
-          console.log(`Filtered to ${solicitacoes.length} solicitacoes for correspondent ID ${correspondentId}`);
-        }
+        console.log(`Fetched ${solicitacoes.length} solicitacoes for current user`);
+        console.log('Sample of fetched solicitacoes:', solicitacoes.slice(0, 3)); // Log first 3 solicitations
         
         // Group solicitations by status
         const solicitacoesPorStatus: { [key: string]: number } = {};
@@ -149,6 +178,8 @@ export class CorrespondentDashboardComponent implements OnInit {
           if (solicitacao.statusSolicitacao?.status) {
             const status = solicitacao.statusSolicitacao.status.trim();
             solicitacoesPorStatus[status] = (solicitacoesPorStatus[status] || 0) + 1;
+          } else {
+            console.log('Solicitation without status:', solicitacao);
           }
         });
         
@@ -159,6 +190,10 @@ export class CorrespondentDashboardComponent implements OnInit {
         const values = Object.values(solicitacoesPorStatus);
         const colors = labels.map((status, index) => this.getStatusColor(status, index));
         
+        console.log('Chart labels:', labels);
+        console.log('Chart values:', values);
+        console.log('Chart colors:', colors);
+        
         this.solicitacoesPorStatusChart = {
           labels: labels,
           values: values,
@@ -168,7 +203,7 @@ export class CorrespondentDashboardComponent implements OnInit {
         console.log('Updated solicitacoesPorStatusChart:', this.solicitacoesPorStatusChart);
         this.loading = false;
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Error loading solicitacoes por status data:', error);
         this.loading = false;
       }
@@ -177,40 +212,65 @@ export class CorrespondentDashboardComponent implements OnInit {
 
   // Chart helper methods
   getBarHeight(value: number, maxValue: number): string {
-    if (maxValue === 0) return '0%';
-    return `${(value / maxValue) * 100}%`;
+    console.log(`Calculating bar height for value: ${value}, max: ${maxValue}`);
+    if (maxValue === 0) {
+      console.log('Max value is 0, returning 0%');
+      return '0%';
+    }
+    const height = `${(value / maxValue) * 100}%`;
+    console.log(`Calculated height: ${height}`);
+    return height;
   }
 
   getMaxValue(values: number[]): number {
-    return Math.max(...values, 1); // Return at least 1 to avoid division by zero
+    console.log('Getting max value from:', values);
+    const max = Math.max(...values, 1); // Return at least 1 to avoid division by zero
+    console.log(`Max value: ${max}`);
+    return max;
   }
 
   getPieStrokeDasharray(value: number, values: number[]): string {
     const total = values.reduce((sum, val) => sum + val, 0);
-    if (total === 0) return '0, 100';
+    console.log(`Calculating stroke dasharray for value: ${value}, total: ${total}`);
+    if (total === 0) {
+      console.log('Total is 0, returning 0, 100');
+      return '0, 100';
+    }
     const percentage = (value / total) * 100;
-    return `${percentage}, 100`;
+    const result = `${percentage}, 100`;
+    console.log(`Calculated stroke dasharray: ${result}`);
+    return result;
   }
 
   getPieStrokeDashoffset(index: number, values: number[]): string {
     let offset = 0;
     for (let i = 0; i < index; i++) {
       const total = values.reduce((sum, val) => sum + val, 0);
-      if (total === 0) return '0';
+      if (total === 0) {
+        console.log('Total is 0, returning 0');
+        return '0';
+      }
       offset += (values[i] / total) * 100;
     }
-    return `-${offset}`;
+    const result = `-${offset}`;
+    console.log(`Calculated stroke dashoffset for index ${index}: ${result}`);
+    return result;
   }
 
   // Method to calculate total solicitacoes for pie chart center
   getTotalSolicitacoes(): number {
-    return this.solicitacoesPorStatusChart.values.reduce((sum, value) => sum + value, 0);
+    const total = this.solicitacoesPorStatusChart.values.reduce((sum, value) => sum + value, 0);
+    console.log(`Calculating total solicitacoes: ${total}`);
+    return total;
   }
 
   // Helper method to get color for a status with fallback to generated colors
   private getStatusColor(status: string, index: number): string {
+    console.log(`Getting color for status: "${status}" at index: ${index}`);
+    
     // First check if we have a predefined color
     if (this.statusColors[status]) {
+      console.log(`Found predefined color for status "${status}": ${this.statusColors[status]}`);
       return this.statusColors[status];
     }
     
@@ -223,6 +283,8 @@ export class CorrespondentDashboardComponent implements OnInit {
     ];
     
     // Return a color from our palette, cycling if necessary
-    return colors[index % colors.length];
+    const color = colors[index % colors.length];
+    console.log(`Generated color for status "${status}": ${color}`);
+    return color;
   }
 }

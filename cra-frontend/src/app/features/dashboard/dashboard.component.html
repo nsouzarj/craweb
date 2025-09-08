@@ -295,6 +295,18 @@
           </button>
         </mat-card-content>
       </mat-card>
+      
+      <!-- Correspondent Dashboard Action -->
+      <mat-card class="action-card" *ngIf="authService.isCorrespondente()">
+        <mat-card-content>
+          <mat-icon>dashboard</mat-icon>
+          <h3>Meu Dashboard</h3>
+          <p>Visualizar minhas estatísticas</p>
+          <button mat-raised-button color="primary" routerLink="/correspondent-dashboard">
+            Acessar
+          </button>
+        </mat-card-content>
+      </mat-card>
     </div>
   </div>
 
