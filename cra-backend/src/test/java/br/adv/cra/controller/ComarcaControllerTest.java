@@ -44,8 +44,15 @@ class ComarcaControllerTest {
         
         // Create test data
         uf = new Uf(1L, "SP", "São Paulo");
-        comarca1 = new Comarca(1L, "São Paulo", uf);
-        comarca2 = new Comarca(2L, "Campinas", uf);
+        comarca1 = new Comarca();
+        comarca1.setId(1L);
+        comarca1.setNome("São Paulo");
+        comarca1.setUf(uf);
+        
+        comarca2 = new Comarca();
+        comarca2.setId(2L);
+        comarca2.setNome("Campinas");
+        comarca2.setUf(uf);
     }
 
     @Test

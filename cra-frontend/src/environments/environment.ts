@@ -6,7 +6,7 @@
 // Replace '192.168.1.103' with your actual machine's IP address
 export const environment = {
   production: false,
-  apiUrl: 'http://192.168.1.103:8081/cra-api'
+  apiUrl: 'http://192.168.1.102:8081/cra-api'
 };
 
 /*

@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 public interface StatusSolicitacaoRepository extends JpaRepository<StatusSolicitacao, Long> {
     
-    @Query("SELECT s FROM StatusSolicitacao s WHERE s.status LIKE %:status%")
+    @Query("SELECT s FROM StatusSolicitacao s WHERE s.status LIKE CONCAT('%', :status, '%')")
     List<StatusSolicitacao> findByStatusContaining(@Param("status") String status);
     
     @Query("SELECT s FROM StatusSolicitacao s WHERE s.status = :status")

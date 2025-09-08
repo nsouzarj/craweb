@@ -6,13 +6,16 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, forkJoin } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { UserService } from '../../../core/services/user.service';
+import { CorrespondenteService } from '../../../core/services/correspondente.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { PermissionService } from '../../../core/services/permission.service';
 import { ConfirmationDialogComponent } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import { User, UserType } from '../../../shared/models/user.model';
+import { Correspondente } from '../../../shared/models/correspondente.model';
 
 @Component({
   selector: 'app-user-list',
@@ -24,7 +27,7 @@ export class UserListComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   dataSource = new MatTableDataSource<User>();
-  displayedColumns: string[] = ['id', 'login', 'nomeCompleto', 'emailPrincipal', 'tipo', 'ativo', 'dataEntrada', 'actions'];
+  displayedColumns: string[] = ['id', 'login', 'nomeCompleto', 'emailPrincipal', 'correspondente', 'tipo', 'ativo', 'dataEntrada', 'actions'];
   loading = true;
   
   searchControl = new FormControl('');
@@ -36,6 +39,7 @@ export class UserListComponent implements OnInit, AfterViewInit {
 
   constructor(
     private userService: UserService,
+    private correspondenteService: CorrespondenteService,
     public authService: AuthService,
     public permissionService: PermissionService,
     private dialog: MatDialog,
@@ -59,15 +63,54 @@ export class UserListComponent implements OnInit, AfterViewInit {
     this.loading = true;
     this.userService.getUsers().subscribe({
       next: (users) => {
-        this.dataSource.data = users;
-        this.loading = false;
-        
-        // Connect paginator after data is loaded with a slight delay to ensure DOM is updated
-        setTimeout(() => {
-          if (this.paginator) {
-            this.dataSource.paginator = this.paginator;
-          }
-        }, 0);
+        // Fetch correspondent data for correspondent users
+        const correspondentUsers = users.filter(user => user.tipo === UserType.CORRESPONDENTE && user.correspondentId);
+        if (correspondentUsers.length > 0) {
+          const correspondentRequests = correspondentUsers.map(user => 
+            this.correspondenteService.getCorrespondenteById(user.correspondentId!)
+          );
+          
+          forkJoin(correspondentRequests).subscribe({
+            next: (correspondents) => {
+              // Map correspondents to their respective users
+              correspondentUsers.forEach((user, index) => {
+                user.correspondente = correspondents[index];
+              });
+              
+              this.dataSource.data = users;
+              this.loading = false;
+              
+              // Connect paginator after data is loaded with a slight delay to ensure DOM is updated
+              setTimeout(() => {
+                if (this.paginator) {
+                  this.dataSource.paginator = this.paginator;
+                }
+              }, 0);
+            },
+            error: (error) => {
+              console.error('Error loading correspondents:', error);
+              this.dataSource.data = users;
+              this.loading = false;
+              
+              // Connect paginator after data is loaded with a slight delay to ensure DOM is updated
+              setTimeout(() => {
+                if (this.paginator) {
+                  this.dataSource.paginator = this.paginator;
+                }
+              }, 0);
+            }
+          });
+        } else {
+          this.dataSource.data = users;
+          this.loading = false;
+          
+          // Connect paginator after data is loaded with a slight delay to ensure DOM is updated
+          setTimeout(() => {
+            if (this.paginator) {
+              this.dataSource.paginator = this.paginator;
+            }
+          }, 0);
+        }
       },
       error: (error) => {
         console.error('Error loading users:', error);
@@ -78,6 +121,13 @@ export class UserListComponent implements OnInit, AfterViewInit {
         });
       }
     });
+  }
+
+  getCorrespondentName(user: User): string {
+    if (user.tipo === UserType.CORRESPONDENTE && user.correspondente) {
+      return user.correspondente.nome;
+    }
+    return '';
   }
 
   setupFilters(): void {
@@ -109,7 +159,8 @@ export class UserListComponent implements OnInit, AfterViewInit {
       const matchesSearch = !searchTerm || 
         user.login.toLowerCase().includes(searchTerm) ||
         user.nomecompleto.toLowerCase().includes(searchTerm) ||
-        (user.emailprincipal ? user.emailprincipal.toLowerCase().includes(searchTerm) : false);
+        (user.emailprincipal ? user.emailprincipal.toLowerCase().includes(searchTerm) : false) ||
+        (user.tipo === UserType.CORRESPONDENTE && user.correspondente?.nome.toLowerCase().includes(searchTerm));
 
       // Type filter
       const matchesType = !typeFilter || typeFilter === '' || user.tipo === Number(typeFilter);

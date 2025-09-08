@@ -77,6 +77,12 @@ export class SidenavComponent implements OnInit {
           // No roles restriction - all users can view solicitations
         },
         {
+          label: 'Minhas Solicitações',
+          icon: 'assignment_ind',
+          route: '/minhas-solicitacoes',
+          roles: ['ROLE_CORRESPONDENTE'] // Only Correspondents can view their own requests
+        },
+        {
           label: 'Cadastrar',
           icon: 'add',
           route: '/solicitacoes/novo',

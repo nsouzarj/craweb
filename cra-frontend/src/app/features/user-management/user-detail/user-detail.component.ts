@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { UserService } from '../../../core/services/user.service';
+import { CorrespondenteService } from '../../../core/services/correspondente.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { PermissionService } from '../../../core/services/permission.service';
 import { User, UserType } from '../../../shared/models/user.model';
@@ -22,6 +23,7 @@ export class UserDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private userService: UserService,
+    private correspondenteService: CorrespondenteService,
     public authService: AuthService,
     public permissionService: PermissionService,
     private snackBar: MatSnackBar
@@ -43,7 +45,12 @@ export class UserDetailComponent implements OnInit {
     this.userService.getUserById(userId).subscribe({
       next: (user) => {
         this.user = user;
-        this.loading = false;
+        // If user is a correspondent, ensure correspondent data is loaded
+        if (user.tipo === UserType.CORRESPONDENTE && user.correspondentId) {
+          this.loadCorrespondentData(user.correspondentId);
+        } else {
+          this.loading = false;
+        }
       },
       error: (error) => {
         console.error('Error loading user:', error);
@@ -53,6 +60,25 @@ export class UserDetailComponent implements OnInit {
           panelClass: ['error-snackbar']
         });
         this.goBack();
+      }
+    });
+  }
+
+  loadCorrespondentData(correspondentId: number): void {
+    this.correspondenteService.getCorrespondenteById(correspondentId).subscribe({
+      next: (correspondentData) => {
+        if (this.user) {
+          this.user.correspondente = correspondentData;
+        }
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Error loading correspondent data:', error);
+        this.loading = false;
+        this.snackBar.open('Erro ao carregar dados do correspondente', 'Fechar', {
+          duration: 5000,
+          panelClass: ['error-snackbar']
+        });
       }
     });
   }
@@ -200,47 +226,55 @@ export class UserDetailComponent implements OnInit {
   }
 
   getCorrespondentInfo(): any[] {
-    if (!this.user || this.user.tipo !== UserType.CORRESPONDENTE || !this.user.correspondent) {
+    if (!this.user || this.user.tipo !== UserType.CORRESPONDENTE || !this.user.correspondentId) {
       return [];
     }
 
-    const correspondent = this.user.correspondent;
-    const endereco = correspondent.endereco;
+    // If correspondent data hasn't loaded yet, show a loading message
+    if (!this.user.correspondente) {
+      return [{
+        label: 'Carregando',
+        value: 'Dados do correspondente...'
+      }];
+    }
+
+    const correspondente = this.user.correspondente;
+    const endereco = correspondente.endereco;
     
     const info = [
       {
         label: 'Nome',
-        value: correspondent.nome
+        value: correspondente.nome
       },
       {
         label: 'OAB',
-        value: correspondent.oab || 'Não informado'
+        value: correspondente.oab || 'Não informado'
       },
       {
         label: 'CPF/CNPJ',
-        value: correspondent.cpfcnpj || 'Não informado'
+        value: correspondente.cpfcnpj || 'Não informado'
       }
     ];
 
     // Add contact information
-    if (correspondent.emailprimario) {
+    if (correspondente.emailprimario) {
       info.push({
         label: 'Email Principal',
-        value: correspondent.emailprimario
+        value: correspondente.emailprimario
       });
     }
 
-    if (correspondent.telefoneprimario) {
+    if (correspondente.telefoneprimario) {
       info.push({
         label: 'Telefone Principal',
-        value: correspondent.telefoneprimario
+        value: correspondente.telefoneprimario
       });
     }
 
-    if (correspondent.telefonecelularprimario) {
+    if (correspondente.telefonecelularprimario) {
       info.push({
         label: 'Celular',
-        value: correspondent.telefonecelularprimario
+        value: correspondente.telefonecelularprimario
       });
     }
 

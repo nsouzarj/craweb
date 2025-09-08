@@ -1,7 +1,9 @@
 package br.adv.cra.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -66,6 +68,28 @@ public class Correspondente implements Serializable {
     
     // Adding the inverse relationship with Solicitacao
     @OneToMany(mappedBy = "correspondente", fetch = FetchType.LAZY)
-    @JsonIgnoreProperties("correspondente")
+    @JsonIgnore
     private List<Solicitacao> solicitacoes;
+    
+    // Adding the inverse relationship with Usuario
+    @OneToMany(mappedBy = "correspondente", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Usuario> usuarios;
+    
+    // Custom setter to handle deserialization when only ID is provided
+    @JsonSetter("id")
+    public void setIdFromObject(Object idObj) {
+        if (idObj instanceof Number) {
+            this.id = ((Number) idObj).longValue();
+        } else if (idObj instanceof String) {
+            try {
+                this.id = Long.parseLong((String) idObj);
+            } catch (NumberFormatException e) {
+                // Handle the case where the string is not a valid number
+                this.id = null;
+            }
+        } else {
+            this.id = null;
+        }
+    }
 }

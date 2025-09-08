@@ -94,7 +94,12 @@ public class CorrespondenteService {
     
     @Transactional(readOnly = true)
     public List<Correspondente> listarTodos() {
-        return correspondenteRepository.findAll();
+        try {
+            return correspondenteRepository.findAll();
+        } catch (Exception e) {
+            e.printStackTrace(); // Log the exception for debugging
+            throw new RuntimeException("Erro ao buscar todos os correspondentes: " + e.getMessage(), e);
+        }
     }
     
     @Transactional(readOnly = true)

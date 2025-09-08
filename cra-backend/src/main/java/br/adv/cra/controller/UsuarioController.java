@@ -94,6 +94,7 @@ public class UsuarioController {
      * @return The user if found, or 404 if not found
      */
     @GetMapping("/{id}")
+   // @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Usuario> buscarPorId(@PathVariable Long id) {
         try {
             return usuarioService.buscarPorId(id)

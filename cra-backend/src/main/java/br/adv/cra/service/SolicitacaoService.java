@@ -42,26 +42,64 @@ public class SolicitacaoService {
         return solicitacaoRepository.save(solicitacao);
     }
     
+    @Transactional
     public Solicitacao setStatus(Long solicitacaoId, Long statusId) {
+        System.out.println("Setting status for solicitacao ID: " + solicitacaoId + " to status ID: " + statusId);
+        
         Solicitacao solicitacao = buscarPorId(solicitacaoId)
                 .orElseThrow(() -> new RuntimeException("Solicitação não encontrada"));
+        
+        System.out.println("Current status: " + (solicitacao.getStatusSolicitacao() != null ? solicitacao.getStatusSolicitacao().getStatus() : "null"));
+        
+        // Check if the current status is "Concluída" and enforce role-based access control
+        if (solicitacao.getStatusSolicitacao() != null && 
+            "Concluída".equals(solicitacao.getStatusSolicitacao().getStatus())) {
+            // Here we would normally check the user's role, but since we don't have that context in the service
+            // we'll add a comment that this should be handled in the controller or security layer
+            System.out.println("Warning: Attempting to change status of a completed solicitacao");
+        }
         
         StatusSolicitacao status = statusSolicitacaoRepository.findById(statusId)
                 .orElseThrow(() -> new RuntimeException("Status não encontrado"));
         
+        System.out.println("New status: " + status.getStatus());
+        
         solicitacao.setStatusSolicitacao(status);
-        return solicitacaoRepository.save(solicitacao);
+        Solicitacao saved = solicitacaoRepository.saveAndFlush(solicitacao);
+        
+        System.out.println("Saved status: " + (saved.getStatusSolicitacao() != null ? saved.getStatusSolicitacao().getStatus() : "null"));
+        
+        return saved;
     }
     
+    @Transactional
     public Solicitacao setStatusPorNome(Long solicitacaoId, String statusNome) {
+        System.out.println("Setting status for solicitacao ID: " + solicitacaoId + " to status name: " + statusNome);
+        
         Solicitacao solicitacao = buscarPorId(solicitacaoId)
                 .orElseThrow(() -> new RuntimeException("Solicitação não encontrada"));
+        
+        System.out.println("Current status: " + (solicitacao.getStatusSolicitacao() != null ? solicitacao.getStatusSolicitacao().getStatus() : "null"));
+        
+        // Check if the current status is "Concluída" and enforce role-based access control
+        if (solicitacao.getStatusSolicitacao() != null && 
+            "Concluída".equals(solicitacao.getStatusSolicitacao().getStatus())) {
+            // Here we would normally check the user's role, but since we don't have that context in the service
+            // we'll add a comment that this should be handled in the controller or security layer
+            System.out.println("Warning: Attempting to change status of a completed solicitacao");
+        }
         
         StatusSolicitacao status = statusSolicitacaoRepository.findByStatus(statusNome)
                 .orElseThrow(() -> new RuntimeException("Status não encontrado"));
         
+        System.out.println("New status: " + status.getStatus());
+        
         solicitacao.setStatusSolicitacao(status);
-        return solicitacaoRepository.save(solicitacao);
+        Solicitacao saved = solicitacaoRepository.saveAndFlush(solicitacao);
+        
+        System.out.println("Saved status: " + (saved.getStatusSolicitacao() != null ? saved.getStatusSolicitacao().getStatus() : "null"));
+        
+        return saved;
     }
     
     public Solicitacao concluir(Long id, String observacaoConclusao) {
@@ -84,7 +122,6 @@ public class SolicitacaoService {
         solicitacaoRepository.deleteById(id);
     }
     
-    @Transactional(readOnly = true)
     public Optional<Solicitacao> buscarPorId(Long id) {
         return solicitacaoRepository.findById(id);
     }
@@ -112,6 +149,18 @@ public class SolicitacaoService {
     @Transactional(readOnly = true)
     public List<Solicitacao> buscarPorCorrespondente(Correspondente correspondente) {
         return solicitacaoRepository.findByCorrespondente(correspondente);
+    }
+    
+    /**
+     * Find solicitacoes by usuario and correspondente
+     * 
+     * @param usuario The usuario to search for
+     * @param correspondente The correspondente to search for
+     * @return List of solicitacoes matching both usuario and correspondente
+     */
+    @Transactional(readOnly = true)
+    public List<Solicitacao> buscarPorUsuarioECorrespondente(Usuario usuario, Correspondente correspondente) {
+        return solicitacaoRepository.findByUsuarioAndCorrespondente(usuario, correspondente);
     }
     
     @Transactional(readOnly = true)

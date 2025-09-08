@@ -25,6 +25,9 @@ public interface SolicitacaoRepository extends JpaRepository<Solicitacao, Long> 
     // Adding method to find solicitacoes by correspondente
     List<Solicitacao> findByCorrespondente(Correspondente correspondente);
     
+    // Adding method to find solicitacoes by usuario and correspondente
+    List<Solicitacao> findByUsuarioAndCorrespondente(Usuario usuario, Correspondente correspondente);
+    
     @Query("SELECT s FROM Solicitacao s WHERE s.datasolictacao BETWEEN :inicio AND :fim")
     List<Solicitacao> findByDatasolictacaoBetween(@Param("inicio") LocalDateTime inicio, @Param("fim") LocalDateTime fim);
     
@@ -40,7 +43,7 @@ public interface SolicitacaoRepository extends JpaRepository<Solicitacao, Long> 
     @Query("SELECT s FROM Solicitacao s WHERE s.pago = 'false'")
     List<Solicitacao> findByPagoFalse();
     
-    @Query("SELECT s FROM Solicitacao s WHERE s.dataprazo < :data AND s.dataconclusao IS NULL")
+    @Query("SELECT s FROM Solicitacao s WHERE s.dataagendamento < :data AND s.dataconclusao IS NULL")
     List<Solicitacao> findAtrasadas(@Param("data") LocalDateTime data);
     
     @Query("SELECT s FROM Solicitacao s WHERE s.observacao LIKE '%' || :texto || '%' OR s.instrucoes LIKE '%' || :texto || '%'")

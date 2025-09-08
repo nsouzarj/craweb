@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "comarca")
@@ -31,4 +32,8 @@ public class Comarca implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER, cascade = {})
     @JoinColumn(name = "uf_id", nullable = false)
     private Uf uf;
+    
+    // Adding the inverse relationship with Solicitacao
+    @OneToMany(mappedBy = "comarca", fetch = FetchType.LAZY)
+    private List<Solicitacao> solicitacoes;
 }

@@ -86,14 +86,14 @@
           <div class="form-row" *ngIf="showCorrespondentField">
             <mat-form-field class="form-field full-width" appearance="outline">
               <mat-label>Correspondente *</mat-label>
-              <mat-select formControlName="correspondentId" placeholder="Selecione um correspondente">
+              <mat-select formControlName="correspondente" placeholder="Selecione um correspondente">
                 <mat-option *ngFor="let correspondente of correspondentes" [value]="correspondente.id">
                   {{ correspondente.nome }} 
                   <span *ngIf="correspondente.oab">({{ correspondente.oab }})</span>
                 </mat-option>
               </mat-select>
               <mat-hint>Selecione um correspondente</mat-hint>
-              <mat-error *ngIf="userForm.get('correspondentId')?.hasError('required')">
+              <mat-error *ngIf="userForm.get('correspondente')?.hasError('required')">
                 Correspondente é obrigatório para usuários do tipo Correspondente
               </mat-error>
             </mat-form-field>

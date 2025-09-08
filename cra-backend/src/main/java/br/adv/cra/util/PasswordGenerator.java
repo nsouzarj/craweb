@@ -13,7 +13,7 @@ public class PasswordGenerator {
         // Generate hashes for all test users
         String adminPassword = "admin123";
         String advogadoPassword = "#Nso1810";
-        String correspondentePassword = "corresp123";
+        String correspondentePassword = "crateste";
         String isominaPassword = "isomina123";
         
         String adminHash = encoder.encode(adminPassword);

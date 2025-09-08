@@ -30,6 +30,7 @@ export class UserFormComponent implements OnInit {
   correspondentes: Correspondente[] = [];
   filteredCorrespondentes: Correspondente[] = [];
   showCorrespondentField = false;
+  userLoaded = false; // Track if user data has been loaded
 
   constructor(
     private formBuilder: FormBuilder,
@@ -52,28 +53,30 @@ export class UserFormComponent implements OnInit {
       return;
     }
 
-    // Load correspondents for selection
-    this.loadCorrespondentes();
-
     // Check if we're in edit mode
     this.route.params.subscribe(params => {
       if (params['id']) {
         this.isEditMode = true;
         this.userId = +params['id'];
+        
+        // Load user data first
         this.loadUser();
       }
+      
+      // Load correspondents for selection
+      this.loadCorrespondentes();
     });
     
     // Watch for tipo changes to show/hide correspondent field
     this.userForm.get('tipo')?.valueChanges.subscribe(tipo => {
       this.showCorrespondentField = tipo === UserType.CORRESPONDENTE;
       if (this.showCorrespondentField) {
-        this.userForm.get('correspondentId')?.setValidators([Validators.required]);
+        this.userForm.get('correspondente')?.setValidators([Validators.required]);
       } else {
-        this.userForm.get('correspondentId')?.clearValidators();
-        this.userForm.get('correspondentId')?.setValue(null); // Reset the value when not needed
+        this.userForm.get('correspondente')?.clearValidators();
+        this.userForm.get('correspondente')?.setValue(null); // Reset the value when not needed
       }
-      this.userForm.get('correspondentId')?.updateValueAndValidity();
+      this.userForm.get('correspondente')?.updateValueAndValidity();
     });
   }
 
@@ -86,7 +89,7 @@ export class UserFormComponent implements OnInit {
       emailsecundario: ['', [Validators.email]],
       emailresponsavel: ['', [Validators.email]],
       tipo: ['', [Validators.required]],
-      correspondentId: [null],
+      correspondente: [null], // Use correspondentId to match the User model
       ativo: [true]
     });
 
@@ -130,6 +133,15 @@ export class UserFormComponent implements OnInit {
       next: (correspondentes) => {
         this.correspondentes = correspondentes;
         this.filteredCorrespondentes = correspondentes;
+        
+        // If user is already loaded, update the form to ensure the correspondent is selected
+        if (this.userLoaded) {
+          const currentCorrespondentId = this.userForm.get('correspondente')?.value;
+          if (currentCorrespondentId) {
+            // Force form update to ensure the dropdown shows the correct value
+            this.userForm.get('correspondente')?.setValue(currentCorrespondentId, { emitEvent: false });
+          }
+        }
       },
       error: (error) => {
         console.error('Error loading correspondentes:', error);
@@ -146,6 +158,8 @@ export class UserFormComponent implements OnInit {
 
     this.userService.getUserById(this.userId).subscribe({
       next: (user) => {
+        this.userLoaded = true; // Mark user as loaded
+        
         // Remove senha requirement in edit mode
         this.savePassword = user.senha || '';
         this.userForm.get('senha')?.clearValidators();
@@ -154,11 +168,12 @@ export class UserFormComponent implements OnInit {
         // Set correspondent field visibility
         this.showCorrespondentField = user.tipo === UserType.CORRESPONDENTE;
         if (this.showCorrespondentField) {
-          this.userForm.get('correspondentId')?.setValidators([Validators.required]);
+          this.userForm.get('correspondente')?.setValidators([Validators.required]);
         } else {
-          this.userForm.get('correspondentId')?.clearValidators();
+          this.userForm.get('correspondente')?.clearValidators();
+          this.userForm.get('correspondente')?.setValue(null); // Reset the value when not needed
         }
-        this.userForm.get('correspondentId')?.updateValueAndValidity();
+        this.userForm.get('correspondente')?.updateValueAndValidity();
         
         // Populate form
         this.userForm.patchValue({
@@ -168,9 +183,17 @@ export class UserFormComponent implements OnInit {
           emailsecundario: user.emailsecundario || '',
           emailresponsavel: user.emailresponsavel || '',
           tipo: user.tipo,
-          correspondentId: user.correspondentId || null,
+          correspondente: user.correspondente || null,
           ativo: user.ativo
         });
+        
+        // If correspondents are already loaded, validate that the selected correspondent exists
+        if (this.correspondentes.length > 0 && user.correspondentId) {
+          const correspondentExists = this.correspondentes.some(c => c.id === user.correspondente);
+          if (!correspondentExists) {
+            console.warn('Selected correspondent not found in loaded correspondents list');
+          }
+        }
       },
       error: (error) => {
         console.error('Error loading user:', error);
@@ -222,14 +245,28 @@ export class UserFormComponent implements OnInit {
       login: this.userForm.value.login?.trim()
     };
 
-    // Remove correspondentId if not needed
-    if (userData.tipo !== UserType.CORRESPONDENTE) {
-      delete userData.correspondentId;
+    // Only include correspondentId for CORRESPONDENTE type users
+    if (userData.tipo === UserType.CORRESPONDENTE) {
+      // Ensure correspondentId is included for correspondent users
+      if (!userData.correspondente) {
+        // If no correspondent is selected, show an error
+        this.snackBar.open('Por favor, selecione um correspondente', 'Fechar', {
+          duration: 5000,
+          panelClass: ['error-snackbar']
+        });
+        this.loading = false;
+        return;
+      }
+      // Ensure correspondentId is a number
+      userData.correspondente = Number(userData.correspondente);
+    } else {
+      // Remove correspondentId for non-correspondent users
+      delete userData.correspondente;
     }
 
     // For update operations, don't send password if it's empty or only whitespace
     if (this.isEditMode && (!userData.senha || userData.senha.trim() === '')) {
-       userData.senha=this.savePassword
+      delete userData.senha; // Remove password field entirely if empty to prevent changing it
     }
 
     const operation = this.isEditMode && this.userId ? 

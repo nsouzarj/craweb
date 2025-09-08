@@ -37,6 +37,20 @@ export class UserService {
   getUserById(id: number): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/${id}`)
       .pipe(catchError(this.handleError));
+
+  }
+
+  /**
+   * Retrieves correspondent data for a user
+   * 
+   * @param id The ID of the correspondent to retrieve
+   * @returns Observable containing the correspondent data
+   */
+  getUserCorrespondente(id: number): Observable<any> {
+    // This should call the correspondent service endpoint
+    return this.http.get<any>(`${environment.apiUrl}/api/correspondentes/${id}`)
+      .pipe(catchError(this.handleError));
+
   }
 
   /**

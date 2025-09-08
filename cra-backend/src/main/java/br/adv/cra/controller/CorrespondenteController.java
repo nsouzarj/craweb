@@ -96,6 +96,7 @@ public class CorrespondenteController {
             List<Correspondente> correspondentes = correspondenteService.listarTodos();
             return ResponseEntity.ok(correspondentes);
         } catch (Exception e) {
+            e.printStackTrace(); // Log the exception for debugging
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

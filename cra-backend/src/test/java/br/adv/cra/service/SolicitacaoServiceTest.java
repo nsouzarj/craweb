@@ -44,9 +44,14 @@ class SolicitacaoServiceTest {
         status.setIdstatus(statusId);
         status.setStatus("Pendente");
         
+        // Criar uma nova instância de solicitação com o status definido para simular o saveAndFlush
+        Solicitacao savedSolicitacao = new Solicitacao();
+        savedSolicitacao.setId(solicitacaoId);
+        savedSolicitacao.setStatusSolicitacao(status);
+        
         when(solicitacaoRepository.findById(solicitacaoId)).thenReturn(Optional.of(solicitacao));
         when(statusSolicitacaoRepository.findById(statusId)).thenReturn(Optional.of(status));
-        when(solicitacaoRepository.save(solicitacao)).thenReturn(solicitacao);
+        when(solicitacaoRepository.saveAndFlush(solicitacao)).thenReturn(savedSolicitacao);
         
         // Act
         Solicitacao result = solicitacaoService.setStatus(solicitacaoId, statusId);
@@ -56,7 +61,7 @@ class SolicitacaoServiceTest {
         assertEquals(status, result.getStatusSolicitacao());
         verify(solicitacaoRepository, times(1)).findById(solicitacaoId);
         verify(statusSolicitacaoRepository, times(1)).findById(statusId);
-        verify(solicitacaoRepository, times(1)).save(solicitacao);
+        verify(solicitacaoRepository, times(1)).saveAndFlush(solicitacao);
     }
 
     @Test
@@ -114,9 +119,14 @@ class SolicitacaoServiceTest {
         status.setIdstatus(1L);
         status.setStatus(statusNome);
         
+        // Criar uma nova instância de solicitação com o status definido para simular o saveAndFlush
+        Solicitacao savedSolicitacao = new Solicitacao();
+        savedSolicitacao.setId(solicitacaoId);
+        savedSolicitacao.setStatusSolicitacao(status);
+        
         when(solicitacaoRepository.findById(solicitacaoId)).thenReturn(Optional.of(solicitacao));
         when(statusSolicitacaoRepository.findByStatus(statusNome)).thenReturn(Optional.of(status));
-        when(solicitacaoRepository.save(solicitacao)).thenReturn(solicitacao);
+        when(solicitacaoRepository.saveAndFlush(solicitacao)).thenReturn(savedSolicitacao);
         
         // Act
         Solicitacao result = solicitacaoService.setStatusPorNome(solicitacaoId, statusNome);
@@ -126,7 +136,7 @@ class SolicitacaoServiceTest {
         assertEquals(status, result.getStatusSolicitacao());
         verify(solicitacaoRepository, times(1)).findById(solicitacaoId);
         verify(statusSolicitacaoRepository, times(1)).findByStatus(statusNome);
-        verify(solicitacaoRepository, times(1)).save(solicitacao);
+        verify(solicitacaoRepository, times(1)).saveAndFlush(solicitacao);
     }
     
     @Test

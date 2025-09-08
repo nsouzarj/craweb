@@ -15,7 +15,7 @@ public interface CorrespondenteRepository extends JpaRepository<Correspondente, 
     
     List<Correspondente> findByAtivoFalse();
     
-    @Query("SELECT c FROM Correspondente c WHERE c.nome LIKE %:nome%")
+    @Query("SELECT c FROM Correspondente c WHERE c.nome LIKE CONCAT('%', :nome, '%')")
     List<Correspondente> findByNomeContaining(@Param("nome") String nome);
     
     Optional<Correspondente> findByCpfcnpj(String cpfCnpj);

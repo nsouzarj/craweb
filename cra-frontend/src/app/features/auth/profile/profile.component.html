@@ -40,6 +40,83 @@
           </div>
         </div>
         
+        <!-- Correspondent Information Section -->
+        <div class="profile-section">
+          <h3>Dados do Correspondente</h3>
+          <div *ngIf="isCorrespondent(); else notCorrespondent">
+            <div *ngIf="userFind?.correspondente; else noCorrespondentData">
+              <div class="info-grid">
+                <div class="info-item">
+                  <label>Nome</label>
+                  <span>{{ userFind?.correspondente?.nome }}</span>
+                </div>
+                <div class="info-item">
+                  <label>CPF/CNPJ</label>
+                  <span>{{ userFind?.correspondente?.cpfcnpj || 'Não informado' }}</span>
+                </div>
+                <div class="info-item">
+                  <label>OAB</label>
+                  <span>{{ userFind?.correspondente?.oab }}</span>
+                </div>
+                <div class="info-item">
+                  <label>Email Primário</label>
+                  <span>{{ userFind?.correspondente?.emailprimario || 'Não informado' }}</span>
+                </div>
+                <div class="info-item">
+                  <label>Telefone Primário</label>
+                  <span>{{ userFind?.correspondente?.telefoneprimario || 'Não informado' }}</span>
+                </div>
+                <div class="info-item">
+                  <label>Celular Primário</label>
+                  <span>{{ userFind?.correspondente?.telefonecelularprimario || 'Não informado' }}</span>
+                </div>
+              </div>
+              
+              <!-- Address Information -->
+              <div class="info-grid" *ngIf="userFind?.correspondente?.endereco">
+                <div class="info-item full-width">
+                  <h3>Endereço</h3>
+                </div>
+                <div class="info-item">
+                  <label>Logradouro</label>
+                  <span>{{ userFind?.correspondente?.endereco?.logradouro || 'Não informado' }}</span>
+                </div>
+                <div class="info-item">
+                  <label>Número</label>
+                  <span>{{ userFind?.correspondente?.endereco?.numero || 'Não informado' }}</span>
+                </div>
+                <div class="info-item">
+                  <label>Complemento</label>
+                  <span>{{ userFind?.correspondente?.endereco?.complemento || 'Não informado' }}</span>
+                </div>
+                <div class="info-item">
+                  <label>Bairro</label>
+                  <span>{{ userFind?.correspondente?.endereco?.bairro || 'Não informado' }}</span>
+                </div>
+                <div class="info-item">
+                  <label>Cidade</label>
+                  <span>{{ userFind?.correspondente?.endereco?.cidade || 'Não informado' }}</span>
+                </div>
+                <div class="info-item">
+                  <label>UF</label>
+                  <span>{{ userFind?.correspondente?.endereco?.uf?.sigla || userFind?.correspondente?.endereco?.uf?.nome || 'Não informado' }}</span>
+                </div>
+                <div class="info-item">
+                  <label>CEP</label>
+                  <span>{{ userFind?.correspondente?.endereco?.cep || 'Não informado' }}</span>
+                </div>
+              </div>
+            </div>
+            <ng-template #noCorrespondentData>
+              <p>Você é um correspondente, mas os dados não foram carregados.</p>
+              <p *ngIf="currentUser?.correspondentId">Correspondent ID: {{ userFind?.correspondente?.id }}</p>
+            </ng-template>
+          </div>
+          <ng-template #notCorrespondent>
+            <p>Você não é um correspondente.</p>
+          </ng-template>
+        </div>
+        
         <div class="profile-section">
           <h3>Configurações</h3>
           <div class="settings-grid">
@@ -77,6 +154,10 @@
     </mat-card-content>
     
     <mat-card-actions align="end">
+      <button mat-button (click)="debugUserData()">
+        <mat-icon>bug_report</mat-icon>
+        Debug
+      </button>
       <button mat-button (click)="goBack()">
         <mat-icon>arrow_back</mat-icon>
         Voltar

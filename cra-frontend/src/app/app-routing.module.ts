@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './core/guards/auth.guard';
 import { RoleGuard } from './core/guards/role.guard';
 import { AdminGuard } from './core/guards/admin.guard';
+import { CorrespondenteGuard } from './core/guards/correspondente.guard';
 
 // Components
 import { LoginComponent } from './features/auth/login/login.component';
@@ -53,6 +54,11 @@ const routes: Routes = [
     path: 'solicitacoes',
     loadChildren: () => import('./features/request-management/request-management.module').then(m => m.RequestManagementModule),
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'minhas-solicitacoes',
+    loadChildren: () => import('./features/correspondent-requests/correspondent-requests.module').then(m => m.CorrespondentRequestsModule),
+    canActivate: [CorrespondenteGuard]
   },
   { path: 'unauthorized', component: UnauthorizedComponent },
   { path: '**', component: NotFoundComponent }

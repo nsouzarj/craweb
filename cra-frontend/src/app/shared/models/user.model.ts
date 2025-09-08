@@ -15,7 +15,7 @@ export interface User {
   
   // Reference to correspondent (for CORRESPONDENTE type users)
   correspondentId?: number;
-  correspondent?: Correspondente;
+  correspondente?: Correspondente;
   
   // Handle potential alternative field names from backend
   emailPrincipal?: string;
@@ -54,6 +54,10 @@ export interface JwtResponse {
   tipo: UserType;
   roles: string[];
   expiresAt: string;
+  
+  // Correspondent data for correspondent users
+  correspondentId?: number;
+  correspondente?: Correspondente;
   
   // Handle potential alternative field names from backend
   emailPrincipal?: string;

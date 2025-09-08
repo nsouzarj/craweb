@@ -74,7 +74,7 @@ public class SecurityConfig {
                         .requestMatchers("/api-docs/**").permitAll()
                         .requestMatchers("/v3/api-docs/**").permitAll()
                         .requestMatchers("/webjars/**").permitAll()
-                        .requestMatchers("/api/usuarios/**").hasAnyRole("ADMIN", "ADVOGADO")
+                        .requestMatchers("/api/usuarios/**").hasAnyRole("ADMIN", "ADVOGADO","CORRESPONDENTE")
                         .requestMatchers("/api/correspondentes/**").hasAnyRole("ADMIN", "ADVOGADO", "CORRESPONDENTE")
                         .requestMatchers("/api/processos/**").hasAnyRole("ADMIN", "ADVOGADO", "CORRESPONDENTE")
                         .requestMatchers("/api/solicitacoes/**").hasAnyRole("ADMIN", "ADVOGADO", "CORRESPONDENTE")

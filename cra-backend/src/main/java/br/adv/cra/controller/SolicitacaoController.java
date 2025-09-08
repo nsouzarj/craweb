@@ -3,13 +3,19 @@ package br.adv.cra.controller;
 import br.adv.cra.entity.Correspondente;
 import br.adv.cra.entity.Solicitacao;
 import br.adv.cra.entity.StatusSolicitacao;
+import br.adv.cra.entity.Usuario;
 import br.adv.cra.service.SolicitacaoService;
 import br.adv.cra.service.StatusSolicitacaoService;
+import br.adv.cra.service.UsuarioService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.GrantedAuthority;
+import br.adv.cra.security.UserDetailsImpl;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -31,6 +37,7 @@ public class SolicitacaoController {
     
     private final SolicitacaoService solicitacaoService;
     private final StatusSolicitacaoService statusSolicitacaoService;
+    private final UsuarioService usuarioService; // Added to fetch usuario by ID
     
     /**
      * Creates a new request.
@@ -74,40 +81,82 @@ public class SolicitacaoController {
         }
     }
     
-    /**
-     * Sets the status of a request by status ID.
-     * 
-     * @param id The ID of the request
-     * @param statusId The ID of the status to set
-     * @return The updated request, or error response
-     */
     @PutMapping("/{id}/status/{statusId}")
     public ResponseEntity<Solicitacao> setStatus(@PathVariable Long id, @PathVariable Long statusId) {
         try {
-            Solicitacao solicitacao = solicitacaoService.setStatus(id, statusId);
-            return ResponseEntity.ok(solicitacao);
+            // Get the current authenticated user
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            
+            // Check if the current user has permission to change the status
+            Solicitacao solicitacao = solicitacaoService.buscarPorId(id)
+                    .orElseThrow(() -> new RuntimeException("Solicitação não encontrada"));
+            
+            // If the solicitacao is already concluded, only ADVOGADO (lawyer) and ADMIN can change the status
+            if (solicitacao.getStatusSolicitacao() != null && 
+                "Concluída".equals(solicitacao.getStatusSolicitacao().getStatus())) {
+                
+                boolean hasPermission = false;
+                for (GrantedAuthority authority : userDetails.getAuthorities()) {
+                    String role = authority.getAuthority();
+                    if ("ROLE_ADMIN".equals(role) || "ROLE_ADVOGADO".equals(role)) {
+                        hasPermission = true;
+                        break;
+                    }
+                }
+                
+                if (!hasPermission) {
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+                }
+            }
+            
+            Solicitacao updatedSolicitacao = solicitacaoService.setStatus(id, statusId);
+            return ResponseEntity.ok(updatedSolicitacao);
         } catch (RuntimeException e) {
+            e.printStackTrace(); // Log the exception for debugging
             return ResponseEntity.notFound().build();
         } catch (Exception e) {
+            e.printStackTrace(); // Log the exception for debugging
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
     
-    /**
-     * Sets the status of a request by status name.
-     * 
-     * @param id The ID of the request
-     * @param statusNome The name of the status to set
-     * @return The updated request, or error response
-     */
     @PutMapping("/{id}/status-nome/{statusNome}")
     public ResponseEntity<Solicitacao> setStatusPorNome(@PathVariable Long id, @PathVariable String statusNome) {
         try {
-            Solicitacao solicitacao = solicitacaoService.setStatusPorNome(id, statusNome);
-            return ResponseEntity.ok(solicitacao);
+            // Get the current authenticated user
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            
+            // Check if the current user has permission to change the status
+            Solicitacao solicitacao = solicitacaoService.buscarPorId(id)
+                    .orElseThrow(() -> new RuntimeException("Solicitação não encontrada"));
+            
+            // If the solicitacao is already concluded, only ADVOGADO (lawyer) and ADMIN can change the status
+            if (solicitacao.getStatusSolicitacao() != null && 
+                "Concluída".equals(solicitacao.getStatusSolicitacao().getStatus())) {
+                
+                boolean hasPermission = false;
+                for (GrantedAuthority authority : userDetails.getAuthorities()) {
+                    String role = authority.getAuthority();
+                    if ("ROLE_ADMIN".equals(role) || "ROLE_ADVOGADO".equals(role)) {
+                        hasPermission = true;
+                        break;
+                    }
+                }
+                
+                if (!hasPermission) {
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+                }
+            }
+            
+            Solicitacao updatedSolicitacao = solicitacaoService.setStatusPorNome(id, statusNome);
+            return ResponseEntity.ok(updatedSolicitacao);
         } catch (RuntimeException e) {
+            e.printStackTrace(); // Log the exception for debugging
             return ResponseEntity.notFound().build();
         } catch (Exception e) {
+            e.printStackTrace(); // Log the exception for debugging
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -220,6 +269,36 @@ public class SolicitacaoController {
     }
     
     /**
+     * Finds requests by user ID, where the user is associated with the correspondente of the requests.
+     * 
+     * @param usuarioId The user ID to search for
+     * @return List of requests for the specified user's correspondente
+     */
+    @GetMapping("/usuario/{usuarioId}/correspondente")
+    public ResponseEntity<List<Solicitacao>> buscarPorUsuarioCorrespondente(@PathVariable Long usuarioId) {
+        try {
+            // First, fetch the usuario by ID
+            Usuario usuario = usuarioService.buscarPorId(usuarioId)
+                    .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+            
+            // Check if the usuario has a correspondente
+            if (usuario.getCorrespondente() == null) {
+                return ResponseEntity.ok(List.of()); // Return empty list if no correspondente
+            }
+            
+            // Fetch solicitacoes by the usuario's correspondente
+            Correspondente correspondente = usuario.getCorrespondente();
+            List<Solicitacao> solicitacoes = solicitacaoService.buscarPorCorrespondente(correspondente);
+            
+            return ResponseEntity.ok(solicitacoes);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    
+    /**
      * Finds requests by user.
      * 
      * @param usuarioId The user ID to search for
@@ -228,12 +307,11 @@ public class SolicitacaoController {
     @GetMapping("/usuario/{usuarioId}")
     public ResponseEntity<List<Solicitacao>> buscarPorUsuario(@PathVariable Long usuarioId) {
         try {
-            // Note: In a real implementation, you would fetch the Usuario first
-            // This is simplified for demonstration
-            List<Solicitacao> solicitacoes = solicitacaoService.listarTodas()
-                    .stream()
-                    .filter(s -> s.getUsuario() != null && s.getUsuario().getId().equals(usuarioId))
-                    .toList();
+            // Create a Usuario object with the ID to pass to the service
+            Usuario usuario = new Usuario();
+            usuario.setId(usuarioId);
+            
+            List<Solicitacao> solicitacoes = solicitacaoService.buscarPorUsuario(usuario);
             return ResponseEntity.ok(solicitacoes);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

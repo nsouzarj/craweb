@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators'; // Adicionando tap
 import { Solicitacao, SolicitacaoStatus } from '../../shared/models/solicitacao.model';
 import { environment } from '../../../environments/environment';
 
@@ -15,7 +15,9 @@ import { environment } from '../../../environments/environment';
 export class SolicitacaoService {
   private apiUrl = `${environment.apiUrl}/api/solicitacoes`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { 
+    console.log('URL da API de solicitações:', this.apiUrl); // Adicionando log para debug
+  }
 
   /**
    * Retrieves all service requests from the system
@@ -23,8 +25,16 @@ export class SolicitacaoService {
    * @returns Observable containing array of service requests
    */
   getSolicitacoes(): Observable<Solicitacao[]> {
+    console.log('Buscando solicitações na URL:', this.apiUrl); // Adicionando log para debug
     return this.http.get<Solicitacao[]>(this.apiUrl)
-      .pipe(catchError(this.handleError));
+      .pipe(
+        catchError(this.handleError),
+        // Adicionando log para debug
+        tap((solicitacoes) => {
+          console.log('Dados das solicitações recebidos do backend:', solicitacoes);
+          console.log('Quantidade de solicitações recebidas:', solicitacoes.length);
+        })
+      );
   }
 
   /**
@@ -34,6 +44,7 @@ export class SolicitacaoService {
    * @returns Observable containing the requested service request
    */
   getSolicitacaoById(id: number): Observable<Solicitacao> {
+    console.log('Buscando solicitação por ID:', id); // Adicionando log para debug
     return this.http.get<Solicitacao>(`${this.apiUrl}/${id}`)
       .pipe(catchError(this.handleError));
   }
@@ -93,6 +104,17 @@ export class SolicitacaoService {
    */
   searchByCorrespondente(correspondenteId: number): Observable<Solicitacao[]> {
     return this.http.get<Solicitacao[]>(`${this.apiUrl}/buscar/correspondente/${correspondenteId}`)
+      .pipe(catchError(this.handleError));
+  }
+
+  /**
+   * Searches for service requests by user's correspondent
+   * 
+   * @param usuarioId The user ID to search for correspondent requests
+   * @returns Observable containing array of matching service requests
+   */
+  searchByUserCorrespondente(usuarioId: number): Observable<Solicitacao[]> {
+    return this.http.get<Solicitacao[]>(`${this.apiUrl}/usuario/${usuarioId}/correspondente`)
       .pipe(catchError(this.handleError));
   }
 

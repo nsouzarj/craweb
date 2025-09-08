@@ -156,6 +156,8 @@ export class AuthService {
     return this.http.post<JwtResponse>(`${this.apiUrl}/login`, credentials, { headers })
       .pipe(
         map(response => {
+          console.log('Raw login response from server:', response);
+          
           // Handle potential case sensitivity or naming differences
           const normalizedResponse = { ...response };
           
@@ -172,6 +174,7 @@ export class AuthService {
             normalizedResponse.nomecompleto = normalizedResponse.login;
           }
           
+          console.log('Normalized login response:', normalizedResponse);
           return normalizedResponse;
         }),
         tap(response => {
@@ -187,8 +190,13 @@ export class AuthService {
             emailprincipal: response.emailprincipal,
             tipo: response.tipo,
             ativo: true,
-            authorities: response.roles
+            authorities: response.roles,
+            // Include correspondent data if available
+            correspondentId: response.correspondentId,
+            correspondente: response.correspondente
           };
+          
+          console.log('User object being stored at login:', user);
           
           // Store user and notify subscribers
           localStorage.setItem('currentUser', JSON.stringify(user));
@@ -257,6 +265,8 @@ export class AuthService {
     return this.http.get<User>(`${this.apiUrl}/me`, { headers })
       .pipe(
         map(user => {
+          console.log('Raw user data from server:', user);
+          
           // Handle potential case sensitivity or naming differences
           const normalizedUser = { ...user };
           
@@ -273,14 +283,47 @@ export class AuthService {
             normalizedUser.nomecompleto = normalizedUser.login || 'Usuário';
           }
           
+          // Ensure correspondent data is preserved
+          if (user.correspondente) {
+            normalizedUser.correspondente = user.correspondente;
+          }
+          
+          console.log('Normalized user data from server:', normalizedUser);
           return normalizedUser;
         }),
         tap(user => {
+          console.log('User data being stored in localStorage:', user);
           localStorage.setItem('currentUser', JSON.stringify(user));
           this.currentUserSubject.next(user);
         }),
         catchError(this.handleError)
       );
+  }
+
+  /**
+   * Updates the current user data in the service and localStorage
+   * 
+   * @param user The updated user data
+   */
+  updateCurrentUser(user: User): void {
+    // Update localStorage
+    localStorage.setItem('currentUser', JSON.stringify(user));
+    // Update the current user subject
+    this.currentUserSubject.next(user);
+  }
+
+  /**
+   * Refreshes the current user's data from the server
+   * 
+   * @returns Observable containing the updated user information
+   */
+  refreshCurrentUser(): Observable<User> {
+    return this.getCurrentUser().pipe(
+      tap(user => {
+        // Update the current user subject with fresh data
+        this.currentUserSubject.next(user);
+      })
+    );
   }
 
   /**
