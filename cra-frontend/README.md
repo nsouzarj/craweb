@@ -2,297 +2,307 @@
 
 Frontend web application for the CRA (Correspondente Responsável por Atos) system built with Angular 18 and Angular Material.
 
-## 🚀 Features
+## 🏢 Visão Geral
 
+O sistema CRA (Correspondente Responsável por Atos) é uma plataforma abrangente de gestão legal que permite que administradores, advogados e correspondentes gerenciem processos legais, usuários e solicitações de serviço. O sistema implementa controle de acesso baseado em funções com autenticação JWT.
 
-- **Authentication & Authorization**: JWT-based authentication with role-based access control
-- **User Management**: Complete CRUD operations for users (Admin/Advogado access)
-- **Correspondent Management**: Manage legal correspondents with search and filtering
-- **Process Management**: Handle legal processes with comprehensive tracking
-- **Request Management**: Manage service requests with status tracking
-- **Responsive Design**: Mobile-friendly interface with Angular Material
-- **Real-time Dashboard**: Statistics and quick actions overview
+Para mais informações sobre o projeto completo, consulte o [README.md](../README.md) principal.
 
-## 🛠️ Technologies
+## 🚀 Principais Recursos
 
-- **Angular 18**: Latest Angular framework
-- **Angular Material**: Modern UI components
-- **TypeScript**: Type-safe development
-- **RxJS**: Reactive programming
-- **SCSS**: Advanced styling
+- **Autenticação & Autorização**: Autenticação baseada em JWT com controle de acesso baseado em funções
+- **Gestão de Usuários**: Operações CRUD completas para usuários (Acesso: Admin/Advogado)
+- **Gestão de Correspondentes**: Gerenciamento de correspondentes legais com pesquisa e filtragem
+- **Gestão de Processos**: Manipulação de processos legais com acompanhamento abrangente
+- **Gestão de Solicitações**: Gerenciamento de solicitações de serviço com acompanhamento de status
+- **Dashboard**: Visão geral de estatísticas em tempo real e ações rápidas
+- **Design Responsivo**: Interface compatível com dispositivos móveis usando Angular Material
+- **Internacionalização**: Interface e documentação em português
 
-## 📋 Prerequisites
+## 🛠️ Tecnologias
 
-Before running this application, make sure you have:
+- **Angular 18**: Framework mais recente com componentes standalone
+- **Angular Material**: Componentes de UI modernos
+- **TypeScript**: Desenvolvimento com segurança de tipos
+- **RxJS**: Programação reativa
+- **SCSS**: Estilização avançada
 
-- **Node.js** (version 18 or higher)
-- **npm** (comes with Node.js)
-- **Angular CLI** (version 18)
-- **CRA Backend** running on `http://localhost:8080`
+## 📋 Pré-requisitos
 
-## 🔧 Installation
+Antes de executar esta aplicação, certifique-se de ter:
 
-1. **Clone or navigate to the frontend directory:**
+- **Node.js** (versão 18 ou superior)
+- **npm** (vem com Node.js)
+- **Angular CLI** (versão 18)
+- **CRA Backend** em execução em `http://localhost:8081`
+
+## 🔧 Instalação
+
+1. **Clone ou navegue até o diretório frontend:**
    ```bash
    cd cra-frontend
    ```
 
-2. **Install dependencies:**
+2. **Instale as dependências:**
    ```bash
    npm install
    ```
 
-3. **Install Angular CLI globally (if not already installed):**
+3. **Instale o Angular CLI globalmente (se ainda não estiver instalado):**
    ```bash
    npm install -g @angular/cli@18
    ```
 
-## 🏃‍♂️ Running the Application
+## 🏃‍♂️ Executando a Aplicação
 
-### Development Mode
+### Modo Desenvolvimento
 
 ```bash
 npm start
-# or
-ng serve
+# ou
+ng serve --host 0.0.0.0 --disable-host-check
 ```
 
-The application will be available at `http://localhost:4200`
+A aplicação estará disponível em:
+- Local: `http://localhost:4200`
+- Rede: `http://[seu-ip]:4200` (para acesso de outros dispositivos)
 
-### Production Build
+### Build de Produção
 
 ```bash
 npm run build
-# or
+# ou
 ng build --configuration production
 ```
 
-Built files will be in the `dist/` directory.
+Os arquivos compilados estarão no diretório `dist/`.
 
-## 🏗️ Project Structure
+## 🏗️ Estrutura do Projeto
 
 ```
 src/
 ├── app/
-│   ├── core/                     # Core functionality
-│   │   ├── guards/               # Route guards
-│   │   ├── interceptors/         # HTTP interceptors
-│   │   └── services/             # Core services
-│   ├── features/                 # Feature modules
-│   │   ├── auth/                 # Authentication
+│   ├── core/                     # Funcionalidade principal
+│   │   ├── guards/               # Guards de rotas
+│   │   ├── interceptors/         # Interceptadores HTTP
+│   │   └── services/             # Serviços principais
+│   ├── features/                 # Módulos de funcionalidades
+│   │   ├── auth/                 # Autenticação
 │   │   ├── dashboard/            # Dashboard
-│   │   ├── user-management/      # User management
-│   │   ├── correspondent-management/  # Correspondent management
-│   │   ├── process-management/   # Process management
-│   │   └── request-management/   # Request management
-│   ├── shared/                   # Shared components and utilities
-│   │   ├── components/           # Reusable components
-│   │   └── models/               # TypeScript interfaces
-│   ├── app-routing.module.ts     # Main routing
-│   ├── app.component.ts          # Root component
-│   └── app.module.ts             # Root module
-├── assets/                       # Static assets
-├── styles.scss                   # Global styles
-└── index.html                    # Main HTML file
+│   │   ├── user-management/      # Gerenciamento de usuários
+│   │   ├── correspondent-management/  # Gerenciamento de correspondentes
+│   │   ├── process-management/   # Gerenciamento de processos
+│   │   └── request-management/   # Gerenciamento de solicitações
+│   ├── shared/                   # Componentes e utilitários compartilhados
+│   │   ├── components/           # Componentes reutilizáveis
+│   │   └── models/               # Interfaces TypeScript
+│   ├── app-routing.module.ts     # Roteamento principal
+│   ├── app.component.ts          # Componente raiz
+│   └── app.module.ts             # Módulo raiz
+├── assets/                       # Recursos estáticos
+├── styles.scss                   # Estilos globais
+└── index.html                    # Arquivo HTML principal
 ```
 
-## 🎯 Key Features
+## 🎯 Funcionalidades Principais
 
-### Authentication System
-- JWT token management with automatic refresh
-- Role-based access control (Admin, Advogado, Correspondente)
-- Protected routes with guards
-- Automatic token expiration handling
+### Sistema de Autenticação
+- Gerenciamento de tokens JWT com atualização automática
+- Controle de acesso baseado em funções (Admin, Advogado, Correspondente)
+- Rotas protegidas com guards
+- Tratamento automático de expiração de tokens
 
-### User Management (Admin/Advogado only)
-- Create, read, update, delete users
-- Search by login, name, or type
-- Activate/deactivate users
-- Role assignment
+### Gestão de Usuários (Apenas Admin/Advogado)
+- Criar, ler, atualizar e excluir usuários
+- Pesquisar por login, nome ou tipo
+- Ativar/desativar usuários
+- Atribuição de funções
 
-### Correspondent Management
-- Full CRUD operations for correspondents
-- Search by OAB, CPF/CNPJ, name, type
-- Address management
-- Active/inactive status control
+### Gestão de Correspondentes
+- Operações CRUD completas para correspondentes
+- Pesquisar por OAB, CPF/CNPJ, nome ou tipo
+- Gerenciamento de endereços
+- Controle de status ativo/inativo
 
-### Process Management
-- Create and manage legal processes
-- Search by number, party, adverse party, subject
-- Filter by status, comarca, or orgao
-- Process statistics
+### Gestão de Processos
+- Criar e gerenciar processos legais
+- Pesquisar por número, parte, parte adversa ou assunto
+- Filtrar por status, comarca ou órgão
+- Estatísticas de processos
 
-### Request Management
-- Create and track service requests
-- Link requests to processes and correspondents
-- Status tracking (Pending, In Progress, Completed, Cancelled)
-- Due date management
+### Gestão de Solicitações
+- Criar e acompanhar solicitações de serviço
+- Vincular solicitações a processos e correspondentes
+- Acompanhamento de status (Pendente, Em Andamento, Finalizada, Cancelada)
+- Gerenciamento de prazos
 
-## 🔧 Configuration
+## 🔧 Configuração
 
-### API Endpoint Configuration
+### Configuração do Endpoint da API
 
-The backend API URL is configured in each service. To change it:
+A URL da API backend é configurada nos arquivos de ambiente:
 
-1. Update the `apiUrl` property in service files:
-   - `src/app/core/services/auth.service.ts`
-   - `src/app/core/services/user.service.ts`
-   - And other service files
+- Desenvolvimento: `http://localhost:8081/cra-api` (ou `http://[seu-ip]:8081/cra-api` para acesso via rede)
+- Produção: `/cra-api` (relativo, para proxy)
 
-2. Default backend URL: `http://localhost:8080`
+### Configuração de Ambiente
 
-### Environment Configuration
-
-Create environment files for different configurations:
+Crie arquivos de ambiente para diferentes configurações:
 
 ```typescript
-// src/environments/environment.ts (development)
+// src/environments/environment.ts (desenvolvimento)
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8080/api'
+  apiUrl: 'http://localhost:8081/cra-api'
 };
 
-// src/environments/environment.prod.ts (production)
+// src/environments/environment.prod.ts (produção)
 export const environment = {
   production: true,
-  apiUrl: 'https://your-production-api.com/api'
+  apiUrl: '/cra-api'
 };
 ```
 
-## ▶️ Running the Application
+## ▶️ Execução com Docker
 
-### Prerequisites
-- Docker and Docker Compose installed
-- At least 4GB of available RAM
+### Pré-requisitos
+- Docker e Docker Compose instalados
+- Pelo menos 4GB de RAM disponível
 
-### Quick Start
-1. Clone the repository:
+### Início Rápido
+1. Clone o repositório:
    ```bash
-   git clone <repository-url>
+   git clone <url-do-repositorio>
    cd cra-frontend
    ```
 
-2. Start the complete application stack:
+2. Inicie todo o stack da aplicação:
    ```bash
    docker-compose up -d
    ```
 
-3. Access the application:
+3. Acesse a aplicação:
    - Frontend: http://localhost:4200
-   - Backend API: http://localhost:8080/api
-   - Database: localhost:5432 (PostgreSQL)
+   - API Backend: http://localhost:8081/cra-api
+   - Banco de Dados: localhost:5432 (PostgreSQL)
 
-### Stopping the Application
+### Parando a Aplicação
 ```bash
 docker-compose down
 ```
 
-### Viewing Logs
+### Visualizando Logs
 ```bash
 docker-compose logs -f
 ```
 
-## 🔐 Default Login Credentials
+Para instruções detalhadas sobre implantação com Docker, consulte:
+- [DOCKER.md](DOCKER.md) (Inglês)
+- [DOCKER.pt.md](DOCKER.pt.md) (Português)
 
-Use the same credentials configured in your backend:
+## 🔐 Credenciais Padrão
+
+Use as mesmas credenciais configuradas no backend:
 
 - **Admin**: admin / admin123
 - **Advogado**: advogado / senha123
 - **Correspondente**: correspondente / senha123
 
-## 🎨 Customization
+## 🎨 Personalização
 
-### Theming
-The application uses Angular Material theming. Customize colors in `src/styles.scss`:
+### Tema
+A aplicação utiliza temas do Angular Material. Personalize as cores em `src/styles.scss`:
 
 ```scss
 $cra-frontend-primary: mat-palette($mat-indigo);
 $cra-frontend-accent: mat-palette($mat-pink, A200, A100, A400);
 ```
 
-### Adding New Features
-1. Create feature modules under `src/app/features/`
-2. Add routing in `src/app/app-routing.module.ts`
-3. Add navigation items in `src/app/shared/components/layout/sidenav/sidenav.component.ts`
+### Adicionando Novos Recursos
+1. Crie módulos de funcionalidades em `src/app/features/`
+2. Adicione roteamento em `src/app/app-routing.module.ts`
+3. Adicione itens de navegação em `src/app/shared/components/layout/sidenav/sidenav.component.ts`
 
-## 📱 Mobile Support
+## 📱 Suporte Mobile
 
-The application is fully responsive and supports mobile devices with:
-- Responsive grid layouts
-- Touch-friendly interface
-- Mobile-optimized navigation
-- Adaptive form layouts
+A aplicação é totalmente responsiva e suporta dispositivos móveis com:
+- Layouts de grade responsivos
+- Interface compatível com toque
+- Navegação otimizada para mobile
+- Formulários adaptativos
 
-## 🐳 Docker Deployment
+## 🐳 Implantação com Docker
 
-This application can be containerized using Docker for easy deployment and scalability.
+Esta aplicação pode ser containerizada usando Docker para fácil implantação e escalabilidade.
 
-For detailed instructions on Docker deployment, please refer to:
-- [DOCKER.md](DOCKER.md) (English)
-- [DOCKER.pt.md](DOCKER.pt.md) (Portuguese)
-
-### Quick Start
+### Início Rápido
 
 ```bash
-# Build the Docker image
+# Construir a imagem Docker
 docker build -t cra-frontend .
 
-# Run the container
+# Executar o container
 docker run -d -p 4200:80 --name cra-frontend-app cra-frontend
 ```
 
-The application will be available at `http://localhost:4200`
+A aplicação estará disponível em `http://localhost:4200`
 
-## 🧪 Testing
+## 🧪 Testes
 
-```
-# Run unit tests
+```bash
+# Executar testes unitários
 npm test
 
-# Run e2e tests
+# Executar testes e2e
 npm run e2e
+
+# Executar testes em modo watch
+npm run test:watch
+
+# Gerar relatório de cobertura
+npm run test:coverage
 ```
 
-## 📦 Dependencies
+## 📦 Dependências
 
-Key dependencies include:
+Principais dependências incluem:
 - **@angular/core**: ^18.0.0
 - **@angular/material**: ^18.0.0
 - **@angular/cdk**: ^18.0.0
 - **rxjs**: ~7.8.0
 - **typescript**: ~5.4.0
 
-## 🤝 Contributing
+## 🤝 Contribuição
 
-1. Follow Angular style guide
-2. Use TypeScript strict mode
-3. Implement proper error handling
-4. Add appropriate comments
-5. Test your changes
+1. Siga o guia de estilo do Angular
+2. Utilize TypeScript em modo estrito
+3. Implemente tratamento adequado de erros
+4. Adicione comentários apropriados
+5. Teste suas alterações
 
-## 📄 License
+## 📄 Licença
 
-This project is part of the CRA system for legal correspondent management.
+Este projeto faz parte do sistema CRA para gestão de correspondentes legais.
 
-## 🆘 Support
+## 🆘 Suporte
 
-For issues and questions:
-1. Check the backend is running and accessible
-2. Verify user permissions and roles
-3. Check browser console for errors
-4. Review network requests in developer tools
+Para problemas e dúvidas:
+1. Verifique se o backend está em execução e acessível
+2. Verifique as permissões e funções dos usuários
+3. Verifique o console do navegador em busca de erros
+4. Revise as requisições de rede nas ferramentas de desenvolvedor
 
-## 🔄 Updates
+## 🔄 Atualizações
 
-To update Angular and dependencies:
+Para atualizar o Angular e as dependências:
 
 ```bash
-# Update Angular
+# Atualizar Angular
 ng update @angular/core @angular/cli
 
-# Update Angular Material
+# Atualizar Angular Material
 ng update @angular/material
 
-# Update all dependencies
+# Atualizar todas as dependências
 npm update
-
+```

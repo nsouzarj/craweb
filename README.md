@@ -53,20 +53,20 @@ O sistema CRA (Correspondente Responsável por Atos) é uma plataforma abrangent
 - **Estilização**: SCSS
 
 ### Backend (Spring Boot 3.2.5)
-- **Linguagem**: Java 17
+- **Linguagem**: Java 23
 - **Framework**: Spring Boot 3.2.5
 - **Segurança**: Spring Security com JWT
 - **Dados**: Spring Data JPA
 - **Banco de Dados**: PostgreSQL (produção), H2 (desenvolvimento)
 - **Ferramenta de Build**: Maven
-- **Documentação da API**: API REST abrangente com JavaDoc
+- **Documentação da API**: API REST abrangente com JavaDoc e Swagger/OpenAPI
 
 ## 📋 Pré-requisitos
 
 ### Backend
-- Java 17 ou superior
+- Java 23 ou superior
 - Maven 3.6 ou superior
-- PostgreSQL 12+ (produção) ou MySQL 8.0 (alternativo)
+- PostgreSQL 17+ (produção) ou MySQL 8.0 (alternativo)
 - Banco de Dados H2 (desenvolvimento/teste)
 
 ### Frontend
@@ -96,8 +96,10 @@ O sistema CRA (Correspondente Responsável por Atos) é uma plataforma abrangent
    ```
 
 3. **Pontos de Acesso**
-   - API: http://localhost:8080/cra-api
-   - Console H2 (apenas desenvolvimento): http://localhost:8080/cra-api/h2-console
+   - API: http://localhost:8081/cra-api
+   - Console H2 (apenas desenvolvimento): http://localhost:8081/cra-api/h2-console
+   - Swagger UI: http://localhost:8081/cra-api/swagger-ui.html
+   - API Docs: http://localhost:8081/cra-api/api-docs
 
 ### Configuração do Frontend
 
@@ -132,7 +134,7 @@ Após executar os scripts de configuração do banco de dados, os seguintes usu�
 
 ## 🔄 Integração com API
 
-O frontend está configurado para se comunicar com o backend através de uma configuração de proxy que encaminha requisições para `http://localhost:8080`. Isso evita problemas de CORS durante o desenvolvimento.
+O frontend está configurado para se comunicar com o backend através de uma configuração de proxy que encaminha requisições para `http://localhost:8081`. Isso evita problemas de CORS durante o desenvolvimento.
 
 ## 📚 Documentação da API
 
@@ -149,6 +151,20 @@ O backend fornece uma API REST abrangente com os seguintes controladores princip
 9. **TipoSolicitacaoController** (`/api/tipos-solicitacao`) - Tipos de solicitação
 
 A documentação detalhada da API está disponível em [cra-backend/docs/controllers.md](cra-backend/docs/controllers.md).
+
+## 🐳 Execução com Docker
+
+O projeto inclui suporte completo para Docker. Para executar todo o stack da aplicação:
+
+```bash
+# Executar todo o stack (frontend, backend e banco de dados)
+docker-compose up -d
+
+# Acessar a aplicação
+# Frontend: http://localhost:4200
+# Backend API: http://localhost:8081/cra-api
+# Swagger: http://localhost:8081/cra-api/swagger-ui.html
+```
 
 ## 🏗️ Estrutura do Projeto
 
