@@ -96,6 +96,7 @@
   word-break: break-word;
 }
 
+// Status styles - consolidated
 .active-status {
   color: #4caf50;
   font-weight: 500;
@@ -168,50 +169,23 @@
   gap: 20px;
 }
 
-/* Status chips */
-.status-active {
-  background-color: #4caf50 !important;
+/* Chips - consolidated */
+.status-active, .status-inactive, .type-admin, .type-advogado, .type-correspondente {
   color: white !important;
 }
 
-.status-inactive {
-  background-color: #f44336 !important;
-  color: white !important;
-}
+.status-active { background-color: #4caf50 !important; }
+.status-inactive { background-color: #f44336 !important; }
+.type-admin { background-color: #3f51b5 !important; }
+.type-advogado { background-color: #ff9800 !important; }
+.type-correspondente { background-color: #009688 !important; }
 
-/* Type chips */
-.type-admin {
-  background-color: #3f51b5 !important;
-  color: white !important;
-}
+/* Type text colors - consolidated */
+.type-admin-text { color: #3f51b5; font-weight: 500; }
+.type-advogado-text { color: #ff9800; font-weight: 500; }
+.type-correspondente-text { color: #009688; font-weight: 500; }
 
-.type-advogado {
-  background-color: #ff9800 !important;
-  color: white !important;
-}
-
-.type-correspondente {
-  background-color: #009688 !important;
-  color: white !important;
-}
-
-/* Type text colors */
-.type-admin-text {
-  color: #3f51b5;
-  font-weight: 500;
-}
-
-.type-advogado-text {
-  color: #ff9800;
-  font-weight: 500;
-}
-
-.type-correspondente-text {
-  color: #009688;
-  font-weight: 500;
-}
-
-/* Responsive adjustments */
+// Consolidated responsive design
 @media (max-width: 768px) {
   .user-detail-container {
     padding: 16px;

@@ -64,7 +64,7 @@
   align-items: center;
   min-height: 300px;
   width: 100%;
-  padding: 20px 0; // Add padding for better vertical centering
+  padding: 20px 0;
 }
 
 .bar-chart {
@@ -254,7 +254,7 @@
   }
 }
 
-// Responsive adjustments
+// Consolidated responsive design
 @media (max-width: 768px) {
   .dashboard-container {
     padding: 15px;
@@ -298,20 +298,16 @@
 }
 
 @media (max-width: 480px) {
-  .pie-chart {
-    .pie-chart-container {
-      width: 200px;
-      height: 200px;
-    }
-    
-    .pie-center {
-      .pie-total {
-        font-size: 2em;
-      }
-      
-      .pie-label {
-        font-size: 0.9em;
-      }
-    }
+  .pie-chart .pie-chart-container {
+    width: 200px;
+    height: 200px;
+  }
+  
+  .pie-chart .pie-center .pie-total {
+    font-size: 2em;
+  }
+  
+  .pie-chart .pie-center .pie-label {
+    font-size: 0.9em;
   }
 }

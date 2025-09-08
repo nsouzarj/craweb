@@ -20,7 +20,7 @@
   margin-bottom: 20px;
 }
 
-.button-align{
+.button-align {
   display: flex !important;
   justify-content: flex-end !important;
   align-items: center !important;
@@ -45,7 +45,7 @@
 }
 
 .filter-actions button {
-  height: 40px; /* Standard button height */
+  height: 40px;
   padding: 0 16px;
   font-size: 14px;
   white-space: nowrap;
@@ -91,18 +91,14 @@
   color: #f44336 !important;
 }
 
-.loading-container {
+.loading-container, .empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 60px 20px;
   gap: 20px;
-}
-
-.empty-state {
   text-align: center;
-  padding: 60px 20px;
 }
 
 .empty-state mat-icon {
@@ -123,32 +119,18 @@
   margin-bottom: 24px;
 }
 
-/* Status chips */
-.status-active {
-  background-color: #4caf50 !important;
+/* Chips - consolidated */
+.status-active, .status-inactive, .type-admin, .type-advogado, .type-correspondente {
   color: white !important;
 }
 
-.status-inactive {
-  background-color: #f44336 !important;
-  color: white !important;
-}
+.status-active { background-color: #4caf50 !important; }
+.status-inactive { background-color: #f44336 !important; }
+.type-admin { background-color: #3f51b5 !important; }
+.type-advogado { background-color: #ff9800 !important; }
+.type-correspondente { background-color: #009688 !important; }
 
-.type-admin {
-  background-color: #3f51b5 !important;
-  color: white !important;
-}
-
-.type-advogado {
-  background-color: #ff9800 !important;
-  color: white !important;
-}
-
-.type-correspondente {
-  background-color: #009688 !important;
-  color: white !important;
-}
-
+// Consolidated responsive design
 @media (max-width: 768px) {
   .user-list-container {
     padding: 16px;
@@ -179,16 +161,10 @@
   }
 }
 
-// Add explicit styling for the paginator to ensure it's visible
-.mat-paginator {
-  display: block !important;
-  margin-top: 20px !important;
-  border-top: 1px solid #e0e0e0 !important;
-  padding-top: 20px !important;
-}
-
-// Ensure paginator is visible
-mat-paginator {
+// Paginator styling - consolidated
+.mat-paginator, mat-paginator {
   display: block;
   margin-top: 20px;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 20px;
 }

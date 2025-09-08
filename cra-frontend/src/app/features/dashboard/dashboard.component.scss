@@ -52,21 +52,11 @@
   color: white;
 }
 
-.stat-icon.users {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
-
-.stat-icon.correspondentes {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-}
-
-.stat-icon.processos {
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-}
-
-.stat-icon.solicitacoes {
-  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-}
+// Status colors using variables to reduce repetition
+.stat-icon.users { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+.stat-icon.correspondentes { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+.stat-icon.processos { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+.stat-icon.solicitacoes { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
 
 .stat-icon mat-icon {
   font-size: 28px;
@@ -138,12 +128,12 @@
   border-bottom: 1px solid #eee;
   border-left: 1px solid #eee;
   position: relative;
-  overflow-x: hidden; /* Hide overflow by default */
+  overflow-x: hidden;
 }
 
 .responsive-bar-chart {
-  overflow-x: auto; /* Enable horizontal scrolling when needed */
-  scrollbar-width: thin; /* Firefox */
+  overflow-x: auto;
+  scrollbar-width: thin;
 }
 
 .responsive-bar-chart::-webkit-scrollbar {
@@ -171,7 +161,7 @@
 
 .responsive-bar-chart .chart-bars {
   min-width: 100%;
-  width: max-content; /* Allow the bars to expand beyond the container width */
+  width: max-content;
   justify-content: flex-start;
 }
 
@@ -198,7 +188,7 @@
   word-break: break-word;
   max-width: 100%;
   line-height: 1.2;
-  hyphens: auto; /* Add hyphenation for better word breaking */
+  hyphens: auto;
 }
 
 .bar-value {
@@ -340,6 +330,7 @@
   padding: 40px 20px;
 }
 
+// Consolidated media queries to reduce repetition
 @media (max-width: 768px) {
   .dashboard-container {
     padding: 16px;
@@ -361,7 +352,7 @@
     padding: 15px;
   }
   
-  .bar-container {
+  .bar-container, .responsive-bar-chart .bar-container {
     min-width: 50px;
     max-width: 70px;
   }
@@ -370,12 +361,7 @@
     font-size: 10px;
   }
   
-  .responsive-bar-chart .bar-container {
-    min-width: 50px;
-    max-width: 70px;
-  }
-  
   .chart-card {
-    min-width: 0; /* Allow cards to shrink on small screens */
+    min-width: 0;
   }
 }

@@ -19,13 +19,12 @@
   font-size: 28px;
 }
 
-.button-align{
+.button-align {
   display: flex !important;
   justify-content: flex-end !important;
   align-items: center !important;
   bottom: 10px !important;
 }
-
 
 .filters-card {
   margin-bottom: 30px;
@@ -49,7 +48,7 @@
 }
 
 .filter-actions button {
-  height: 40px; /* Standard button height */
+  height: 40px;
   padding: 0 16px;
   font-size: 14px;
   white-space: nowrap;
@@ -57,31 +56,32 @@
   border-radius: 4px;
 }
 
-/* Status filter option colors */
-.status-filter-option {
+/* Status filter option colors - consolidated */
+.status-filter-option, .status-chip {
   padding: 4px 8px;
   border-radius: 12px;
   font-size: 14px;
   font-weight: 500;
 }
 
-.status-filter-option.status-em-andamento {
-  background-color: #4caf50 !important; /* Vibrant green */
+// Status colors using class combinations to reduce repetition
+.status-em-andamento {
+  background-color: #4caf50 !important;
   color: #ffffff !important;
 }
 
-.status-filter-option.status-suspenso {
-  background-color: #ffeb3b !important; /* Vibrant yellow */
+.status-suspenso {
+  background-color: #ffeb3b !important;
   color: #000000 !important;
 }
 
-.status-filter-option.status-arquivado {
-  background-color: #9e9e9e !important; /* Vibrant gray */
+.status-arquivado {
+  background-color: #9e9e9e !important;
   color: #ffffff !important;
 }
 
-.status-filter-option.status-finalizado {
-  background-color: #2196f3 !important; /* Vibrant blue */
+.status-finalizado {
+  background-color: #2196f3 !important;
   color: #ffffff !important;
 }
 
@@ -132,55 +132,22 @@
   background-color: #f5f5f5;
 }
 
-/* Status chip colors */
-.status-chip {
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 500;
-}
-
-.status-em-andamento {
-  background-color: #4caf50 !important; /* Vibrant green */
-  color: #ffffff !important;
-}
-
-.status-suspenso {
-  background-color: #ffeb3b !important; /* Vibrant yellow */
-  color: #000000 !important;
-}
-
-.status-arquivado {
-  background-color: #9e9e9e !important; /* Vibrant gray */
-  color: #ffffff !important;
-}
-
-.status-finalizado {
-  background-color: #2196f3 !important; /* Vibrant blue */
-  color: #ffffff !important;
-}
-
 .action-buttons {
   display: flex;
   gap: 8px;
 }
 
-.loading-container {
+.loading-container, .empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 60px 20px;
   gap: 20px;
+  text-align: center;
 }
 
 .empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 60px 20px;
-  text-align: center;
   gap: 16px;
 }
 
@@ -204,6 +171,7 @@
   font-size: 16px;
 }
 
+// Consolidated responsive design
 @media (max-width: 768px) {
   .process-list-container {
     padding: 16px;
@@ -248,16 +216,10 @@
   }
 }
 
-// Add explicit styling for the paginator to ensure it's visible
-.mat-paginator {
-  display: block !important;
-  margin-top: 20px !important;
-  border-top: 1px solid #e0e0e0 !important;
-  padding-top: 20px !important;
-}
-
-// Ensure paginator is visible
-mat-paginator {
+// Paginator styling - consolidated
+.mat-paginator, mat-paginator {
   display: block;
   margin-top: 20px;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 20px;
 }
