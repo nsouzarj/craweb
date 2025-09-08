@@ -17,10 +17,14 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatDialogModule } from '@angular/material/dialog';
 
 // Components
 import { CorrespondentRequestsComponent } from './correspondent-requests.component';
 import { CorrespondentRequestDetailComponent } from './correspondent-request-detail/correspondent-request-detail.component';
+
+// Services
+import { TipoSolicitacaoService } from '../../core/services/tiposolicitacao.service';
 
 // Guards
 import { CorrespondenteGuard } from '../../core/guards/correspondente.guard';
@@ -52,7 +56,11 @@ const routes: Routes = [
     MatSelectModule,
     MatChipsModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatDialogModule
+  ],
+  providers: [
+    TipoSolicitacaoService
   ]
 })
 export class CorrespondentRequestsModule { }

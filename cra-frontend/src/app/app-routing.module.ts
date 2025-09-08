@@ -30,6 +30,11 @@ const routes: Routes = [
     canActivate: [AuthGuard] 
   },
   {
+    path: 'correspondent-dashboard',
+    loadChildren: () => import('./features/correspondent-dashboard/correspondent-dashboard.module').then(m => m.CorrespondentDashboardModule),
+    canActivate: [CorrespondenteGuard]
+  },
+  {
     path: 'profile',
     component: ProfileComponent,
     canActivate: [AuthGuard]

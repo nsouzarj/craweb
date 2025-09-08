@@ -2,10 +2,14 @@ import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
 import { SolicitacaoService } from '../../core/services/solicitacao.service';
 import { AuthService } from '../../core/services/auth.service';
+import { TipoSolicitacaoService } from '../../core/services/tiposolicitacao.service';
 import { Solicitacao, SolicitacaoStatus } from '../../shared/models/solicitacao.model';
+import { TipoSolicitacao } from '../../shared/models/tiposolicitacao.model';
 import { User } from '../../shared/models/user.model';
+import { ConfirmationDialogComponent } from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-correspondent-requests',
@@ -24,18 +28,24 @@ export class CorrespondentRequestsComponent implements OnInit, AfterViewInit {
   filterSearch: string = '';
   filterProcesso: string = '';
   filterCorrespondente: string = '';
-  filterTipo: string = '';
+  filterTipo: string = ''; // This will now hold the tipo ID instead of text
+  
+  // Available tipos de solicitação for the dropdown
+  tiposSolicitacao: TipoSolicitacao[] = [];
   
   currentUser: User | null = null;
 
   constructor(
     private solicitacaoService: SolicitacaoService,
     private authService: AuthService,
-    private snackBar: MatSnackBar
+    private tipoSolicitacaoService: TipoSolicitacaoService,
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
     this.loadCurrentUserAndRequests();
+    this.loadTiposSolicitacao();
   }
 
   ngAfterViewInit(): void {
@@ -62,6 +72,18 @@ export class CorrespondentRequestsComponent implements OnInit, AfterViewInit {
     } else {
       this.loadRequests();
     }
+  }
+
+  loadTiposSolicitacao(): void {
+    this.tipoSolicitacaoService.getTiposSolicitacao().subscribe({
+      next: (tipos) => {
+        this.tiposSolicitacao = tipos;
+      },
+      error: (error) => {
+        console.error('Error loading tipos de solicitação:', error);
+        this.snackBar.open('Erro ao carregar tipos de solicitação', 'Fechar', { duration: 5000 });
+      }
+    });
   }
 
   loadRequests(): void {
@@ -140,9 +162,9 @@ export class CorrespondentRequestsComponent implements OnInit, AfterViewInit {
       const correspondenteMatch = this.filterCorrespondente ? 
         solicitacao.correspondente?.nome?.toLowerCase().includes(this.filterCorrespondente.toLowerCase()) : true;
       
-      // Filter by tipo
+      // Filter by tipo (now comparing ID instead of text)
       const tipoMatch = this.filterTipo ? 
-        solicitacao.tipoSolicitacao?.tipo?.toLowerCase().includes(this.filterTipo.toLowerCase()) : true;
+        solicitacao.tipoSolicitacao?.idtiposolicitacao === Number(this.filterTipo) : true;
       
       return Boolean(statusMatch && searchMatch && processoMatch && correspondenteMatch && tipoMatch);
     };
@@ -204,6 +226,7 @@ export class CorrespondentRequestsComponent implements OnInit, AfterViewInit {
     return this.authService.isAdmin() || this.authService.isAdvogado();
   }
   
+  // Updated method to show confirmation dialog before updating status
   updateStatus(solicitacao: Solicitacao, newStatus: string): void {
     if (!this.canChangeStatus()) {
       this.snackBar.open('Você não tem permissão para alterar o status', 'Fechar', { duration: 5000 });
@@ -237,20 +260,39 @@ export class CorrespondentRequestsComponent implements OnInit, AfterViewInit {
       updatedSolicitacao.dataConclusao = new Date().toISOString().split('T')[0];
     }
     
-    this.solicitacaoService.updateSolicitacao(solicitacao.id!, updatedSolicitacao).subscribe({
-      next: (updated) => {
-        // Update the data source
-        const index = this.dataSource.data.findIndex(s => s.id === solicitacao.id);
-        if (index !== -1) {
-          this.dataSource.data[index] = updated;
-          this.dataSource.data = [...this.dataSource.data];
-        }
-        
-        this.snackBar.open('Status atualizado com sucesso!', 'Fechar', { duration: 3000 });
-      },
-      error: (error) => {
-        console.error('Error updating status:', error);
-        this.snackBar.open('Erro ao atualizar status', 'Fechar', { duration: 5000 });
+    // Show user-friendly status name in confirmation dialog
+    const userFriendlyStatus = newStatus === 'Finalizada' ? 'Concluída' : newStatus;
+    
+    // Show confirmation dialog
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Confirmar Alteração de Status',
+        message: `Tem certeza que deseja alterar o status da solicitação ${solicitacao.id} para "${userFriendlyStatus}"?`,
+        confirmText: 'SIM',
+        cancelText: 'NÃO'
+      }
+    });
+    
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // User confirmed, proceed with status update
+        this.solicitacaoService.updateSolicitacao(solicitacao.id!, updatedSolicitacao).subscribe({
+          next: (updated) => {
+            // Update the data source
+            const index = this.dataSource.data.findIndex(s => s.id === solicitacao.id);
+            if (index !== -1) {
+              this.dataSource.data[index] = updated;
+              this.dataSource.data = [...this.dataSource.data];
+            }
+            
+            this.snackBar.open('Status atualizado com sucesso!', 'Fechar', { duration: 3000 });
+          },
+          error: (error) => {
+            console.error('Error updating status:', error);
+            this.snackBar.open('Erro ao atualizar status', 'Fechar', { duration: 5000 });
+          }
+        });
       }
     });
   }

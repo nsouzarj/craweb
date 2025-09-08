@@ -128,6 +128,15 @@
   margin-top: 2px;
 }
 
+
+.button-align{
+  display: flex !important;
+  justify-content: flex-end !important;
+  align-items: center !important;
+  bottom: 10px !important;
+  color: #1526de;
+}
+
 @media (max-width: 768px) {
   .requests-container {
     padding: 10px;

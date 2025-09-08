@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
 import { SolicitacaoService } from '../../../core/services/solicitacao.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { Solicitacao } from '../../../shared/models/solicitacao.model';
 import { User } from '../../../shared/models/user.model';
 import { ChangeDetectorRef } from '@angular/core';
+import { ConfirmationDialogComponent } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-correspondent-request-detail',
@@ -23,7 +25,8 @@ export class CorrespondentRequestDetailComponent implements OnInit {
     private solicitacaoService: SolicitacaoService,
     public authService: AuthService, // Make it public so it can be accessed from template
     private snackBar: MatSnackBar,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private dialog: MatDialog // Added MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -233,6 +236,7 @@ export class CorrespondentRequestDetailComponent implements OnInit {
     return this.authService.isAdmin() || this.authService.isAdvogado();
   }
   
+  // Updated method to show confirmation dialog before updating status
   updateStatus(newStatus: string): void {
     if (!this.canChangeStatus() || !this.solicitacao) {
       this.snackBar.open('Você não tem permissão para alterar o status', 'Fechar', { duration: 5000 });
@@ -267,14 +271,33 @@ export class CorrespondentRequestDetailComponent implements OnInit {
       updatedSolicitacao.dataConclusao = new Date().toISOString().split('T')[0];
     }
     
-    this.solicitacaoService.updateSolicitacao(this.solicitacao.id!, updatedSolicitacao).subscribe({
-      next: (updated) => {
-        this.solicitacao = updated;
-        this.snackBar.open('Status atualizado com sucesso!', 'Fechar', { duration: 3000 });
-      },
-      error: (error) => {
-        console.error('Error updating status:', error);
-        this.snackBar.open('Erro ao atualizar status', 'Fechar', { duration: 5000 });
+    // Show user-friendly status name in confirmation dialog
+    const userFriendlyStatus = newStatus === 'Finalizada' ? 'Concluída' : newStatus;
+    
+    // Show confirmation dialog
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Confirmar Alteração de Status',
+        message: `Tem certeza que deseja alterar o status para "${userFriendlyStatus}"?`,
+        confirmText: 'SIM',
+        cancelText: 'NÃO'
+      }
+    });
+    
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // User confirmed, proceed with status update
+        this.solicitacaoService.updateSolicitacao(this.solicitacao!.id!, updatedSolicitacao).subscribe({
+          next: (updated) => {
+            this.solicitacao = updated;
+            this.snackBar.open('Status atualizado com sucesso!', 'Fechar', { duration: 3000 });
+          },
+          error: (error) => {
+            console.error('Error updating status:', error);
+            this.snackBar.open('Erro ao atualizar status', 'Fechar', { duration: 5000 });
+          }
+        });
       }
     });
   }

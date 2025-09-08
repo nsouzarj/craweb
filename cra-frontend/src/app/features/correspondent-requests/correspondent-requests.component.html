@@ -48,10 +48,15 @@
         
         <mat-form-field appearance="outline" class="filter-field">
           <mat-label>Tipo</mat-label>
-          <input matInput placeholder="Tipo de solicitação" [(ngModel)]="filterTipo" (input)="applyFilter()">
+          <mat-select [(ngModel)]="filterTipo" (selectionChange)="applyFilter()">
+            <mat-option value="">Todos</mat-option>
+            <mat-option *ngFor="let tipo of tiposSolicitacao" [value]="tipo.idtiposolicitacao">
+              {{ tipo.tipo }} - {{ tipo.especie }}
+            </mat-option>
+          </mat-select>
         </mat-form-field>
         
-        <button mat-button color="primary" (click)="clearFilters()" class="clear-filters-btn">
+        <button mat-raised-button color="primary" (click)="clearFilters()" class="button-align">
           <mat-icon>clear</mat-icon>
           Limpar Filtros
         </button>

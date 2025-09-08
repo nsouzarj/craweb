@@ -126,6 +126,13 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentUser = this.authService.currentUserValue;
+    
+    // Redirect correspondent users to their specific dashboard
+    if (this.authService.isCorrespondente()) {
+      this.router.navigate(['/correspondent-dashboard']);
+      return;
+    }
+    
     this.loadDashboardData();
   }
 
