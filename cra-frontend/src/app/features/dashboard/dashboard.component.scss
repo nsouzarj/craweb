@@ -113,7 +113,7 @@
   min-height: 300px;
   width: 100%;
   padding: 20px 0;
-  overflow: visible;
+  overflow: auto; // Changed to auto to show scrollbars when needed
 }
 
 .bar-chart {
@@ -123,6 +123,7 @@
   border-bottom: 1px solid #eee;
   border-left: 1px solid #eee;
   background-color: #f9f9f9;
+  box-sizing: border-box;
 }
 
 // Ensure responsive bar chart has the same styles
@@ -132,6 +133,7 @@
   border-bottom: 1px solid #eee;
   border-left: 1px solid #eee;
   background-color: #f9f9f9;
+  box-sizing: border-box;
 }
 
 .chart-bars {
@@ -142,6 +144,7 @@
   gap: 15px;
   padding: 0 10px;
   justify-content: center;
+  box-sizing: border-box;
 }
 
 .bar-container {
@@ -150,6 +153,7 @@
   align-items: center;
   min-width: 60px;
   flex: 1;
+  box-sizing: border-box;
 }
 
 .bar {
@@ -158,6 +162,7 @@
   border-radius: 4px 4px 0 0;
   background-color: #4facfe;
   box-shadow: 0 0 1px rgba(0,0,0,0.1);
+  box-sizing: border-box;
 }
 
 .bar-value {
