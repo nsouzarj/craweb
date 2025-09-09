@@ -124,8 +124,8 @@
 
 .pie-chart-container {
   position: relative;
-  width: 200px;
-  height: 200px;
+  width: 250px;
+  height: 250px;
   flex-shrink: 0;
 }
 
@@ -249,8 +249,8 @@
   }
   
   .pie-chart-container {
-    width: 150px;
-    height: 150px;
+    width: 200px;
+    height: 200px;
   }
   
   .actions-grid {
@@ -266,8 +266,8 @@
 
 @media (max-width: 480px) {
   .pie-chart-container {
-    width: 120px;
-    height: 120px;
+    width: 150px;
+    height: 150px;
   }
   
   .pie-total {
