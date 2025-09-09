@@ -24,7 +24,8 @@ export class SidenavComponent implements OnInit {
     {
       label: 'Dashboard',
       icon: 'dashboard',
-      route: '/dashboard'
+      route: '/dashboard',
+      roles: ['ROLE_ADMIN', 'ROLE_ADVOGADO'] // Only Admins and Lawyers use main dashboard
     },
     {
       label: 'Meu Dashboard',
@@ -77,12 +78,10 @@ export class SidenavComponent implements OnInit {
       icon: 'assignment',
       children: [
         {
-          label: 'Listar',
+          label: 'Todas',
           icon: 'list',
           route: '/solicitacoes',
           roles: ['ROLE_ADMIN', 'ROLE_ADVOGADO'] 
-
-          // No roles restriction - all users can view solicitations
         },
         {
           label: 'Minhas Solicitações',
@@ -91,7 +90,7 @@ export class SidenavComponent implements OnInit {
           roles: ['ROLE_CORRESPONDENTE'] // Only Correspondents can view their own requests
         },
         {
-          label: 'Cadastrar',
+          label: 'Criar Nova',
           icon: 'add',
           route: '/solicitacoes/novo',
           roles: ['ROLE_ADMIN', 'ROLE_ADVOGADO'] // Only Admins and Lawyers can create

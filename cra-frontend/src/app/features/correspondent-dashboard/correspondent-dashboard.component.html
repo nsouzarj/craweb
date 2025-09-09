@@ -7,37 +7,7 @@
   <!-- Charts Section -->
   <div class="charts-section" *ngIf="!loading">
     <h2>Minhas Solicitações</h2>
-    <div class="charts-grid vertical-layout">
-      <!-- Solicitações por Status Chart (Bar Chart) -->
-      <mat-card class="chart-card">
-        <mat-card-header>
-          <mat-card-title>Solicitações por Status</mat-card-title>
-          <mat-card-subtitle>Distribuição das suas solicitações por status</mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-content>
-          <div class="chart-container">
-            <div class="bar-chart responsive-bar-chart">
-              <div class="chart-bars">
-                <div 
-                  *ngFor="let value of solicitacoesPorStatusChart.values; let i = index" 
-                  class="bar-container"
-                >
-                  <div 
-                    class="bar" 
-                    [ngStyle]="{
-                      'height': getBarHeight(value, getMaxValue(solicitacoesPorStatusChart.values)),
-                      'background-color': solicitacoesPorStatusChart.colors[i]
-                    }"
-                  ></div>
-                  <div class="bar-label">{{ solicitacoesPorStatusChart.labels[i] }}</div>
-                  <div class="bar-value">{{ value }}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </mat-card-content>
-      </mat-card>
-
+    <div class="charts-grid">
       <!-- Solicitações por Status Chart (Pie Chart) -->
       <mat-card class="chart-card">
         <mat-card-header>
@@ -80,6 +50,40 @@
                     [ngStyle]="{'background-color': solicitacoesPorStatusChart.colors[i]}"
                   ></div>
                   <div class="legend-label">{{ label }}: {{ solicitacoesPorStatusChart.values[i] }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Solicitações por Status Chart (Bar Chart) -->
+      <mat-card class="chart-card">
+        <mat-card-header>
+          <mat-card-title>Solicitações por Status</mat-card-title>
+          <mat-card-subtitle>Distribuição das suas solicitações por status</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="chart-container">
+            <div class="bar-chart responsive-bar-chart">
+              <div class="chart-bars">
+                <div 
+                  *ngFor="let value of solicitacoesPorStatusChart.values; let i = index" 
+                  class="bar-container"
+                  [attr.data-index]="i"
+                  [attr.data-value]="value"
+                >
+                  <div 
+                    class="bar" 
+                    [ngStyle]="{
+                      'height': getBarHeight(value, getMaxValue(solicitacoesPorStatusChart.values)),
+                      'background-color': solicitacoesPorStatusChart.colors[i]
+                    }"
+                    [attr.data-color]="solicitacoesPorStatusChart.colors[i]"
+                    [attr.data-height]="getBarHeight(value, getMaxValue(solicitacoesPorStatusChart.values))"
+                  ></div>
+                  <div class="bar-label">{{ solicitacoesPorStatusChart.labels[i] }}</div>
+                  <div class="bar-value">{{ value }}</div>
                 </div>
               </div>
             </div>

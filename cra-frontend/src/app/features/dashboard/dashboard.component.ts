@@ -218,6 +218,9 @@ export class DashboardComponent implements OnInit {
         // Load solicitacoes by status data
         this.loadSolicitacoesPorStatusData(solicitacaoStatuses);
 
+        // Log chart data for debugging
+        this.logBarChartData();
+
         this.loading = false;
       },
       error: (error) => {
@@ -367,6 +370,9 @@ export class DashboardComponent implements OnInit {
       this.stats.totalSolicitacoes
     ];
 
+    // Log chart data for debugging
+    console.log('Entity Type Chart Data:', this.entityTypeChart);
+
     // Update entity status chart
     this.entityStatusChart.values = [
       this.stats.activeUsers + this.stats.activeCorrespondentes,
@@ -374,6 +380,43 @@ export class DashboardComponent implements OnInit {
       this.stats.processosEmAndamento,
       this.stats.solicitacoesPendentes
     ];
+    
+    // Log chart data for debugging
+    console.log('Entity Status Chart Data:', this.entityStatusChart);
+  }
+
+  // Debug method to log bar chart data
+  logBarChartData(): void {
+    console.log('Entity Type Chart:', this.entityTypeChart);
+    console.log('Solicitações Por Status Chart:', this.solicitacoesPorStatusChart);
+    
+    // Log individual bar data
+    this.entityTypeChart.values.forEach((value, index) => {
+      console.log(`Entity Bar ${index}: value=${value}, color=${this.entityTypeChart.colors[index]}`);
+    });
+    
+    this.solicitacoesPorStatusChart.values.forEach((value, index) => {
+      console.log(`Solicitações Bar ${index}: value=${value}, color=${this.solicitacoesPorStatusChart.colors[index]}`);
+    });
+  }
+
+  // Helper method to get color for a status with fallback to generated colors
+  private getStatusColor(status: string, index: number): string {
+    // First check if we have a predefined color
+    if (this.statusColors[status]) {
+      return this.statusColors[status];
+    }
+    
+    // Generate a distinct color based on the index
+    const colors = [
+      '#FF6B6B', '#4ECDC4', '#45B7D1', '#FFBE0B', '#FB5607', 
+      '#8338EC', '#3A86FF', '#38B000', '#9EF01A', '#FF006E',
+      '#8338EC', '#0077B6', '#00B4D8', '#90E0EF', '#007F5F',
+      '#2A9D8F', '#E9C46A', '#F4A261', '#E76F51', '#264653'
+    ];
+    
+    // Return a color from our palette, cycling if necessary
+    return colors[index % colors.length];
   }
 
   // Chart helper methods
@@ -411,24 +454,5 @@ export class DashboardComponent implements OnInit {
   // Method to calculate total solicitacoes for pie chart center
   getTotalSolicitacoes(): number {
     return this.solicitacoesPorStatusChart.values.reduce((sum, value) => sum + value, 0);
-  }
-
-  // Helper method to get color for a status with fallback to generated colors
-  private getStatusColor(status: string, index: number): string {
-    // First check if we have a predefined color
-    if (this.statusColors[status]) {
-      return this.statusColors[status];
-    }
-    
-    // Generate a distinct color based on the index
-    const colors = [
-      '#FF6B6B', '#4ECDC4', '#45B7D1', '#FFBE0B', '#FB5607', 
-      '#8338EC', '#3A86FF', '#38B000', '#9EF01A', '#FF006E',
-      '#8338EC', '#0077B6', '#00B4D8', '#90E0EF', '#007F5F',
-      '#2A9D8F', '#E9C46A', '#F4A261', '#E76F51', '#264653'
-    ];
-    
-    // Return a color from our palette, cycling if necessary
-    return colors[index % colors.length];
   }
 }

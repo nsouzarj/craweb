@@ -95,6 +95,8 @@
                 <div 
                   *ngFor="let value of entityTypeChart.values; let i = index" 
                   class="bar-container"
+                  [attr.data-index]="i"
+                  [attr.data-value]="value"
                 >
                   <div 
                     class="bar" 
@@ -102,6 +104,8 @@
                       'height': getBarHeight(value, getMaxValue(entityTypeChart.values)),
                       'background-color': entityTypeChart.colors[i]
                     }"
+                    [attr.data-color]="entityTypeChart.colors[i]"
+                    [attr.data-height]="getBarHeight(value, getMaxValue(entityTypeChart.values))"
                   ></div>
                   <div class="bar-label">{{ entityTypeChart.labels[i] }}</div>
                   <div class="bar-value">{{ value }}</div>
@@ -181,6 +185,8 @@
                       'height': getBarHeight(value, getMaxValue(solicitacoesPorStatusChart.values)),
                       'background-color': solicitacoesPorStatusChart.colors[i]
                     }"
+                    [attr.data-color]="solicitacoesPorStatusChart.colors[i]"
+                    [attr.data-height]="getBarHeight(value, getMaxValue(solicitacoesPorStatusChart.values))"
                   ></div>
                   <div class="bar-label">{{ solicitacoesPorStatusChart.labels[i] }}</div>
                   <div class="bar-value">{{ value }}</div>
