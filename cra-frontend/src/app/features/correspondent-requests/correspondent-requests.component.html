@@ -125,28 +125,23 @@
               <ng-container *ngIf="canChangeStatus()">
                 <!-- Show buttons for correspondents only if status is not "Finalizada" -->
                 <ng-container *ngIf="canCorrespondentChangeStatus(solicitacao) || canAdminOrLawyerChangeStatus()">
-                  <button mat-icon-button color="accent" 
-                          *ngIf="solicitacao.statusSolicitacao?.status !== 'Em Andamento'"
-                          (click)="updateStatus(solicitacao, 'Em Andamento')"
-                          matTooltip="Iniciar">
-                    <mat-icon>play_arrow</mat-icon>
-                  </button>
-                  
+                 
                   <button mat-icon-button color="warn" 
                           *ngIf="solicitacao.statusSolicitacao?.status === 'Em Andamento'"
                           (click)="updateStatus(solicitacao, 'Finalizada')"
                           matTooltip="Finalizar">
                     <mat-icon>check</mat-icon>
                   </button>
-                </ng-container>
+                </ng-container> 
                 
                 <!-- Special case: Show "Reabrir" button for admins/lawyers when status is "Finalizada" -->
+              
                 <button mat-icon-button color="primary" 
                         *ngIf="canAdminOrLawyerChangeStatus() && solicitacao.statusSolicitacao?.status === 'Finalizada'"
                         (click)="updateStatus(solicitacao, 'Em Andamento')"
                         matTooltip="Reabrir">
                   <mat-icon>replay</mat-icon>
-                </button>
+                </button> 
               </ng-container>
             </td>
           </ng-container>
