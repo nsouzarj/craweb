@@ -12,7 +12,7 @@
 -- isomina123 -> Generated with BCryptPasswordEncoder
 
 -- Update existing users with correct BCrypt password hashes
-UPDATE usuario SET senha = '$2a$10$LPx4BKvmEOXY0kEdyWqatOSV03tZ/lNkLgxhe7wGFv.Epou8CXbdq' WHERE login = 'admin';
+UPDATE usuario SET senha = '$2a$10$ADgK7UlVrDS0GPDB/O83C.jMEPU2HOI8xrDQD8lp0Df3xRSDTRTj2' WHERE login = 'admin';
 UPDATE usuario SET senha = '$2a$10$JpPeZInDHdnvpe/vYW6S4.GkHmmFL91H12wLRY9rAj0PTRO1IQIMG' WHERE login = 'advogado1';
 UPDATE usuario SET senha = '$2a$10$nFNLee4A0j4RI/9w7Hv4KuD2yVIXhYEFZmI7piiLiWDiC5s1HOx6m' WHERE login = 'corresp1';
 UPDATE usuario SET senha = '$2a$10$1NyPaIM3figee0VzjkFnn.i6DBhsZXWR/Wn9mu36NcOsGqzF4XWrG' WHERE login = 'isomina';
